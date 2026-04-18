@@ -15,6 +15,7 @@ var _state: State = State.GROUND
 
 var _facing_right := true
 var _shoot_timer := 0.0
+var _gun_local_x := 16.0
 
 var _current_ladder: Area2D = null
 var _ladder_top_y: float = 0.0
@@ -27,6 +28,8 @@ var _ladder_bottom_y: float = 0.0
 
 func _ready() -> void:
 	super._ready()
+	_gun_local_x = absf(_gun_point.position.x)
+	_sync_gun_point()
 	_apply_collision(_state)
 
 func _physics_process(delta: float) -> void:
@@ -43,9 +46,6 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("shoot") and _shoot_timer == 0.0:
 		_shoot()
 
-	if Input.is_action_just_pressed("kick"):
-		_try_kick()
-
 func _process_ground(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += GRAVITY * delta
@@ -57,7 +57,7 @@ func _process_ground(delta: float) -> void:
 
 	_move_x()
 
-	if _current_ladder and Input.is_action_pressed("ui_up") and is_on_floor():
+	if _current_ladder and Input.is_action_pressed("move_up") and is_on_floor():
 		_set_state(State.CLIMBING)
 		return
 
@@ -66,7 +66,7 @@ func _process_ground(delta: float) -> void:
 func _process_climbing() -> void:
 	velocity = Vector2.ZERO
 
-	var dir_y := Input.get_axis("ui_up", "ui_down")
+	var dir_y := Input.get_axis("move_up", "move_down")
 	velocity.y = dir_y * CLIMB_SPEED
 
 	if _current_ladder:
@@ -89,7 +89,7 @@ func _process_roof(delta: float) -> void:
 
 	_move_x()
 
-	if _current_ladder and Input.is_action_pressed("ui_down") and is_on_floor():
+	if _current_ladder and Input.is_action_pressed("move_down") and is_on_floor():
 		velocity.y = CLIMB_SPEED
 		_set_state(State.CLIMBING)
 		return
@@ -97,14 +97,19 @@ func _process_roof(delta: float) -> void:
 	move_and_slide()
 
 func _move_x() -> void:
-	var dir := Input.get_axis("ui_left", "ui_right")
+	var dir := Input.get_axis("move_left", "move_right")
 	velocity.x = dir * WALK_SPEED
 	if dir > 0.0:
 		_facing_right = true
 		_sprite.scale.x = 1.0
+		_sync_gun_point()
 	elif dir < 0.0:
 		_facing_right = false
 		_sprite.scale.x = -1.0
+		_sync_gun_point()
+
+func _sync_gun_point() -> void:
+	_gun_point.position.x = _gun_local_x if _facing_right else -_gun_local_x
 
 func _set_state(s: State) -> void:
 	_state = s
@@ -130,8 +135,9 @@ func _shoot() -> void:
 	_shoot_timer = SHOOT_COOLDOWN
 	var bullet: Node2D = bullet_scene.instantiate()
 	get_tree().current_scene.add_child(bullet)
-	bullet.global_position = _gun_point.global_position
-	bullet.direction = Vector2.RIGHT if _facing_right else Vector2.LEFT
+	var shoot_dir := Vector2.RIGHT if _facing_right else Vector2.LEFT
+	bullet.direction = shoot_dir
+	bullet.global_position = _gun_point.global_position + shoot_dir * 10.0
 
 func _on_ladder_detector_area_entered(area: Area2D) -> void:
 	if not area.is_in_group("ladder"):
@@ -150,6 +156,3 @@ func _on_ladder_detector_area_exited(area: Area2D) -> void:
 	_current_ladder = null
 	if _state == State.CLIMBING:
 		_set_state(State.GROUND)
-
-func _try_kick() -> void:
-	pass
