@@ -27,7 +27,6 @@ func _spawn_wagons() -> void:
 		push_error("Train: wagon_scene не назначен в инспекторе")
 		return
 
-	# Чистим контейнер перед спавном
 	for child in _wagon_container.get_children():
 		child.queue_free()
 
