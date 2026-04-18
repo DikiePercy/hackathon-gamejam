@@ -2,6 +2,7 @@ extends Node2D
 
 # Текущий уровень вагона (1, 2 или 3)
 var wagon_level = 1
+var passengers = 0
 
 # Настройки доходности для каждого уровня
 var money_per_level = {
@@ -44,4 +45,5 @@ signal clicked(wagon_instance)
 
 func _on_area_2d_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		emit_signal("clicked", self) # Отправляем сигнал, что нажали именно на ЭТОТ вагон
+		emit_signal("clicked", self)
+		print("нажатие") # Отправляем сигнал, что нажали именно на ЭТОТ вагон	

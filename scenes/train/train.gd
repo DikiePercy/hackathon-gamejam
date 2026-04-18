@@ -1,45 +1,40 @@
 extends Node2D
 
-# Ссылка на контейнер, где лежат вагоны
 @onready var wagons_container = $Wagons
-
-# Ширина вагона (расстояние между точками крепления)
 @export var wagon_width: float = 480.0
-
-# Правильный способ указать путь к сцене через @export
 @export var wagon_scene: PackedScene = preload("res://scenes/wagon/wagon.tscn")
 
 var speed = 200.0
-var passengers = 0
-
-# Массив для быстрого доступа к объектам вагонов
 var wagons = [] 
 
 func _ready():
-	# Обновляем список вагонов при старте
+	# При старте уровня строим поезд по данным из GameManager
+	pass
+
+func build_train_from_data():
+	# Очищаем, если что-то было
+	for child in wagons_container.get_children():
+		child.queue_free()
+	
+	# Создаем вагоны на основе списка списков [уровень, люди]
+	for i in range(GameManager.train_data.size()):
+		var stats = GameManager.train_data[i]
+		
+		var new_wagon = wagon_scene.instantiate()
+		wagons_container.add_child(new_wagon)
+		
+		# Передаем данные
+		new_wagon.wagon_level = stats[0]
+		new_wagon.passengers = stats[1]
+		
+		# Позиция (смещение за локомотив)
+		new_wagon.position.x = -(i + 1) * wagon_width
+		
+		# Обновляем статы
+		if new_wagon.has_method("update_wagon_stats"):
+			new_wagon.update_wagon_stats()
+	
 	update_wagon_list()
-	add_wagon()
 
-
-
-func add_wagon():
-	# 1. Создаем экземпляр нового вагона
-	var new_wagon = wagon_scene.instantiate()
-	
-	# 2. Считаем, сколько вагонов уже есть
-	var current_wagon_count = wagons_container.get_child_count()
-	
-	# 3. Рассчитываем позицию по X
-	# Если локомотив в 0, первый вагон будет в -400, второй в -800 и т.д.
-	var offset_x = -(current_wagon_count + 1) * wagon_width
-	new_wagon.position = Vector2(offset_x, 0)
-	
-	# 4. Добавляем вагон в сцену
-	wagons_container.add_child(new_wagon)
-	
-	# Обновляем наш массив после добавления
-	update_wagon_list()
-
-# Функция для обновления массива (пригодится для разбойников)
 func update_wagon_list():
 	wagons = wagons_container.get_children()
