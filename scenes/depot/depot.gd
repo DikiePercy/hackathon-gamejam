@@ -57,8 +57,9 @@ func _on_upgrade_button_pressed():
 		# Находим индекс в массиве (индекс узла - 1, т.к. локо на 0 месте)
 		var idx = selected_wagon.get_index() - 1
 		
-		GameManager.total_gold -= price
-		GameManager.train_data[idx][0] += 1 # Повышаем уровень в данных
+		if GameManager.train_data[idx][0] < 3:
+			GameManager.total_gold -= price
+			GameManager.train_data[idx][0] += 1 # Повышаем уровень в данных
 		
 		# Сразу обновляем визуал вагона, на который смотрим
 		selected_wagon.wagon_level = GameManager.train_data[idx][0]
@@ -68,5 +69,30 @@ func _on_upgrade_button_pressed():
 	else:
 		print("Недостаточно золота!")
 
+
+
+func _on_buy_button_pressed() -> void:
+	var wagon_price = 200
+	if GameManager.total_gold >= wagon_price:
+		# 1. Списываем золото
+		GameManager.total_gold -= wagon_price
+		
+		# 2. Создаем "пакет данных" для нового вагона: [уровень 1, 0 человек]
+		var new_wagon_data = [1, 0]
+		
+		# 3. Добавляем эти данные в наш глобальный список в GameManager
+		GameManager.train_data.append(new_wagon_data)
+		
+		# 4. ПОЛНОСТЬЮ перерисовываем поезд в Депо, чтобы увидеть новый вагон
+		draw_depot_train()
+		
+		# 5. Обновляем текст с золотом
+		update_ui()
+		
+		print("Куплен новый вагон! Всего вагонов: ", GameManager.train_data.size())
+	else:
+		print("Недостаточно золота!")
+	
+	
 func update_ui():
 	gold_label.text = "Золото: " + str(GameManager.total_gold)
