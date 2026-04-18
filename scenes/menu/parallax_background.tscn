@@ -1,13 +1,27 @@
+<<<<<<< HEAD
 [gd_scene format=3 uid="uid://dxp165yiker3p"]
 
 [ext_resource type="Script" uid="uid://1lhr32yx2uiy" path="res://scenes/menu/parallax_background.gd" id="1_f6t8o"]
 [ext_resource type="Texture2D" uid="uid://bayg45woc467y" path="res://assets/sprites/parallax/1.png" id="1_yptfp"]
 [ext_resource type="Texture2D" uid="uid://bmdhgb2vngkff" path="res://assets/sprites/parallax/2.png" id="2_idseg"]
 [ext_resource type="Texture2D" uid="uid://bniuf4equcjwg" path="res://assets/sprites/parallax/3.png" id="3_f6t8o"]
+=======
+[gd_scene format=3]
 
-[node name="ParallaxBackground" type="ParallaxBackground" unique_id=1199465007]
-script = ExtResource("1_f6t8o")
+[ext_resource type="Script" path="res://scenes/menu/parallax_background.gd" id="1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/parallax/1.png" id="2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/parallax/2.png" id="3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/parallax/3.png" id="4"]
 
+[node name="ParallaxBackground" type="ParallaxBackground"]
+script = ExtResource("1")
+>>>>>>> main
+
+[node name="LayerFar" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.2, 1.0)
+motion_mirroring = Vector2(1150, 0)
+
+<<<<<<< HEAD
 [node name="ParallaxLayer" type="ParallaxLayer" parent="." unique_id=999101791]
 motion_scale = Vector2(0.4, 1)
 motion_mirroring = Vector2(480, 0)
@@ -34,3 +48,26 @@ motion_mirroring = Vector2(480, 0)
 position = Vector2(239.00002, 138.50002)
 scale = Vector2(0.8368056, 0.81790113)
 texture = ExtResource("3_f6t8o")
+=======
+[node name="FarSprite" type="Sprite2D" parent="LayerFar"]
+position = Vector2(575, 324)
+scale = Vector2(2, 2)
+texture = ExtResource("2")
+
+[node name="LayerMid" type="ParallaxLayer" parent="."]
+motion_scale = Vector2(0.5, 1.0)
+motion_mirroring = Vector2(1150, 0)
+
+[node name="MidSprite" type="Sprite2D" parent="LayerMid"]
+position = Vector2(575, 327)
+scale = Vector2(2, 2)
+texture = ExtResource("3")
+
+[node name="LayerNear" type="ParallaxLayer" parent="."]
+motion_mirroring = Vector2(1150, 0)
+
+[node name="NearSprite" type="Sprite2D" parent="LayerNear"]
+position = Vector2(575, 330)
+scale = Vector2(2, 2)
+texture = ExtResource("4")
+>>>>>>> main

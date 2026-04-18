@@ -1,29 +1,28 @@
 extends Person
 class_name MainPerson
 
-const WALK_SPEED     := 220.0   
-const JUMP_VELOCITY  := -460.0  
-const GRAVITY        := 1000.0 
-const CLIMB_SPEED    := 160.0 
-const SHOOT_COOLDOWN := 0.25   
-const KICK_FORCE_X   := 500.0   # горизонтальная сила удара
-const KICK_FORCE_Y   := -150.0  # вертикальная составляющая удара
+const WALK_SPEED     := 220.0
+const JUMP_VELOCITY  := -460.0
+const GRAVITY        := 1000.0
+const CLIMB_SPEED    := 160.0
+const SHOOT_COOLDOWN := 0.25
 
-const LAYER_INSIDE := 1   
-const LAYER_ROOF   := 2   
+const LAYER_INSIDE := 1
+const LAYER_ROOF   := 2
 
 enum State { GROUND, CLIMBING, ROOF }
 var _state: State = State.GROUND
 
-var _facing_right  := true
-var _shoot_timer   := 0.0
+var _facing_right := true
+var _shoot_timer := 0.0
 
-var _current_ladder  : Area2D = null
-var _ladder_top_y    : float  = 0.0
-var _ladder_bottom_y : float  = 0.0
+var _current_ladder: Area2D = null
+var _ladder_top_y: float = 0.0
+var _ladder_bottom_y: float = 0.0
 
 @export var bullet_scene: PackedScene
 
+<<<<<<< HEAD
 var _shoot_sound: AudioStream = preload("res://assets/sounds/player_shoot.wav")
 var _jump_sound: AudioStream = preload("res://assets/sounds/player_jump.wav")
 var _hurt_sound: AudioStream = preload("res://assets/sounds/playerhurt1.wav")
@@ -32,6 +31,10 @@ var _hurt_sound: AudioStream = preload("res://assets/sounds/playerhurt1.wav")
 @onready var _gun_point       : Marker2D  = $GunPoint
 @onready var _ladder_detector : Area2D    = $LadderDetector
 @onready var _audio           : AudioStreamPlayer2D = $Audio
+=======
+@onready var _sprite: ColorRect = $Sprite
+@onready var _gun_point: Marker2D = $GunPoint
+>>>>>>> main
 
 func _ready() -> void:
 	super._ready()
@@ -40,18 +43,13 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	_shoot_timer = maxf(_shoot_timer - delta, 0.0)
 
-	# Пока действует кнокбэк — управление заблокировано,
-	# но гравитация продолжает тянуть вниз.
-	if is_knocked_back():
-		if not is_on_floor():
-			velocity.y += GRAVITY * delta
-		move_and_slide()
-		return
-
 	match _state:
-		State.GROUND:   _process_ground(delta)
-		State.CLIMBING: _process_climbing()
-		State.ROOF:     _process_roof(delta)
+		State.GROUND:
+			_process_ground(delta)
+		State.CLIMBING:
+			_process_climbing()
+		State.ROOF:
+			_process_roof(delta)
 
 	if Input.is_action_just_pressed("shoot") and _shoot_timer == 0.0:
 		_shoot()
@@ -70,7 +68,7 @@ func _process_ground(delta: float) -> void:
 		_play_sound(_jump_sound)
 
 	_move_x()
-	
+
 	if _current_ladder and Input.is_action_pressed("ui_up") and is_on_floor():
 		_set_state(State.CLIMBING)
 		return
@@ -80,7 +78,7 @@ func _process_ground(delta: float) -> void:
 func _process_climbing() -> void:
 	velocity = Vector2.ZERO
 
-	var dir_y := Input.get_axis("ui_up", "ui_down")  # -1=вверх, +1=вниз
+	var dir_y := Input.get_axis("ui_up", "ui_down")
 	velocity.y = dir_y * CLIMB_SPEED
 
 	if _current_ladder:
@@ -91,7 +89,6 @@ func _process_climbing() -> void:
 	if global_position.y <= _ladder_top_y:
 		global_position.y = _ladder_top_y
 		_set_state(State.ROOF)
-
 	elif _current_ladder and global_position.y >= _ladder_bottom_y:
 		global_position.y = _ladder_bottom_y
 		_set_state(State.GROUND)
@@ -104,7 +101,6 @@ func _process_roof(delta: float) -> void:
 
 	_move_x()
 
-	# S / Вниз у лестницы → слезть
 	if _current_ladder and Input.is_action_pressed("ui_down") and is_on_floor():
 		velocity.y = CLIMB_SPEED
 		_set_state(State.CLIMBING)
@@ -130,20 +126,21 @@ func _apply_collision(s: State) -> void:
 	match s:
 		State.GROUND:
 			set_collision_mask_value(LAYER_INSIDE, true)
-			set_collision_mask_value(LAYER_ROOF,   false)
+			set_collision_mask_value(LAYER_ROOF, false)
 		State.CLIMBING:
 			set_collision_mask_value(LAYER_INSIDE, false)
-			set_collision_mask_value(LAYER_ROOF,   false)
+			set_collision_mask_value(LAYER_ROOF, false)
 		State.ROOF:
 			set_collision_mask_value(LAYER_INSIDE, false)
-			set_collision_mask_value(LAYER_ROOF,   true)
+			set_collision_mask_value(LAYER_ROOF, true)
 
 func _shoot() -> void:
 	if not bullet_scene:
 		push_warning("MainPerson: назначь bullet_scene в инспекторе!")
 		return
+
 	_shoot_timer = SHOOT_COOLDOWN
-	var bullet : Node2D = bullet_scene.instantiate()
+	var bullet: Node2D = bullet_scene.instantiate()
 	get_tree().current_scene.add_child(bullet)
 	bullet.global_position = _gun_point.global_position
 	bullet.direction = Vector2.RIGHT if _facing_right else Vector2.LEFT
@@ -153,11 +150,11 @@ func _on_ladder_detector_area_entered(area: Area2D) -> void:
 	if not area.is_in_group("ladder"):
 		return
 	_current_ladder = area
-	var col  := area.get_node("CollisionShape2D") as CollisionShape2D
+	var col := area.get_node("CollisionShape2D") as CollisionShape2D
 	var rect := col.shape as RectangleShape2D
-	var cy   := area.global_position.y
-	var hh   := rect.size.y * 0.5
-	_ladder_top_y    = cy - hh + 16.0 
+	var cy := area.global_position.y
+	var hh := rect.size.y * 0.5
+	_ladder_top_y = cy - hh + 16.0
 	_ladder_bottom_y = cy + hh - 16.0
 
 func _on_ladder_detector_area_exited(area: Area2D) -> void:
@@ -167,6 +164,7 @@ func _on_ladder_detector_area_exited(area: Area2D) -> void:
 	if _state == State.CLIMBING:
 		_set_state(State.GROUND)
 
+<<<<<<< HEAD
 func take_damage(amount: int) -> void:
 	_play_sound(_hurt_sound)
 	super.take_damage(amount)
@@ -176,3 +174,7 @@ func _play_sound(sound: AudioStream) -> void:
 		return
 	_audio.stream = sound
 	_audio.play()
+=======
+func _try_kick() -> void:
+	pass
+>>>>>>> main
