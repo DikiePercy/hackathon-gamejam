@@ -20,6 +20,8 @@ func _ready():
 	update_wagon_list()
 	add_wagon()
 
+
+
 func add_wagon():
 	# 1. Создаем экземпляр нового вагона
 	var new_wagon = wagon_scene.instantiate()
@@ -37,8 +39,6 @@ func add_wagon():
 	
 	# Обновляем наш массив после добавления
 	update_wagon_list()
-	
-	print("Вагон прицеплен! Всего вагонов: ", wagons.size())
 
 # Функция для обновления массива (пригодится для разбойников)
 func update_wagon_list():
