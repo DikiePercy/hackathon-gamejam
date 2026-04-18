@@ -10,11 +10,11 @@ signal health_changed(new_health: int)
 signal died
 
 func _process(delta: float) -> void:
-	var position = global_position
-	var x = global_position.x
-	var y = global_position.y
 	if global_position.y > death_y:
 		die()
+
+func _physics_process(delta: float) -> void:
+	_process(delta)
 
 func _ready() -> void:
 	health = max_health

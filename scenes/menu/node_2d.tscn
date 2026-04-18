@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cufm2x8mw3448" path="res://scenes/menu/node_2d.gd" id="1_wtcfe"]
 [ext_resource type="PackedScene" uid="uid://cstym1tc7epq6" path="res://scenes/menu/parallax_background.tscn" id="2_w52i0"]
+[ext_resource type="AudioStream" uid="uid://xm78mdk3pzc" path="res://assets/music/Spring-Flowers(chosic.com).mp3" id="3_spring_flowers"]
 
 [node name="Node2D" type="Node2D" unique_id=622073271]
 script = ExtResource("1_wtcfe")
@@ -23,6 +24,11 @@ theme_override_font_sizes/font_size = 50
 text = "Quit"
 
 [node name="ParallaxBackground" parent="." unique_id=1199465007 instance=ExtResource("2_w52i0")]
+
+[node name="MenuMusic" type="AudioStreamPlayer" parent="." unique_id=712345678]
+stream = ExtResource("3_spring_flowers")
+autoplay = true
+volume_db = -6.0
 
 [connection signal="pressed" from="Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]

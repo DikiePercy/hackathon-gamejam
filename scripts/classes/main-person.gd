@@ -24,16 +24,20 @@ var _ladder_bottom_y : float  = 0.0
 
 @export var bullet_scene: PackedScene
 
+var _shoot_sound: AudioStream = preload("res://assets/sounds/player_shoot.wav")
+var _jump_sound: AudioStream = preload("res://assets/sounds/player_jump.wav")
+var _hurt_sound: AudioStream = preload("res://assets/sounds/playerhurt1.wav")
+
 @onready var _sprite          : ColorRect = $Sprite
 @onready var _gun_point       : Marker2D  = $GunPoint
 @onready var _ladder_detector : Area2D    = $LadderDetector
+@onready var _audio           : AudioStreamPlayer2D = $Audio
 
 func _ready() -> void:
 	super._ready()
 	_apply_collision(_state)
 
 func _physics_process(delta: float) -> void:
-	super._physics_process(delta)   # обновляет _knockback_timer в Person
 	_shoot_timer = maxf(_shoot_timer - delta, 0.0)
 
 	# Пока действует кнокбэк — управление заблокировано,
@@ -63,6 +67,7 @@ func _process_ground(delta: float) -> void:
 
 	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
+		_play_sound(_jump_sound)
 
 	_move_x()
 	
@@ -142,6 +147,7 @@ func _shoot() -> void:
 	get_tree().current_scene.add_child(bullet)
 	bullet.global_position = _gun_point.global_position
 	bullet.direction = Vector2.RIGHT if _facing_right else Vector2.LEFT
+	_play_sound(_shoot_sound)
 
 func _on_ladder_detector_area_entered(area: Area2D) -> void:
 	if not area.is_in_group("ladder"):
@@ -160,3 +166,13 @@ func _on_ladder_detector_area_exited(area: Area2D) -> void:
 	_current_ladder = null
 	if _state == State.CLIMBING:
 		_set_state(State.GROUND)
+
+func take_damage(amount: int) -> void:
+	_play_sound(_hurt_sound)
+	super.take_damage(amount)
+
+func _play_sound(sound: AudioStream) -> void:
+	if sound == null:
+		return
+	_audio.stream = sound
+	_audio.play()
