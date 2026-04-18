@@ -1,0 +1,2 @@
+class_name Person
+extends CharacterBody2D
