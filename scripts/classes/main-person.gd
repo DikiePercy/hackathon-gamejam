@@ -57,7 +57,7 @@ func _physics_process(delta: float) -> void:
 		_shoot()
 
 	if Input.is_action_just_pressed("kick"):
-		_try_kick()
+		pass
 
 func _process_ground(delta: float) -> void:
 	if not is_on_floor():

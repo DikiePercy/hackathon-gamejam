@@ -5,6 +5,8 @@ extends CharacterBody2D
 var health: int = 100 
 
 var death_y = 1000
+var _knockback_timer: float = 0.0
+const KNOCKBACK_DURATION: float = 0.3
 
 signal health_changed(new_health: int)
 signal died
@@ -15,14 +17,11 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	_process(delta)
+	if _knockback_timer > 0.0:
+		_knockback_timer -= delta
 
 func _ready() -> void:
 	health = max_health
-
-
-func _physics_process(delta: float) -> void:
-	if _knockback_timer > 0.0:
-		_knockback_timer -= delta
 
 ## Применяет импульс отброса.
 ## [param force] — вектор скорости в глобальных координатах,
