@@ -1,9 +1,18 @@
+<<<<<<< HEAD
 [gd_scene format=3 uid="uid://cstym1tc7epq6"]
 
 [ext_resource type="Script" uid="uid://1lhr32yx2uiy" path="res://scenes/menu/parallax_background.gd" id="1_f6t8o"]
 [ext_resource type="Texture2D" uid="uid://bayg45woc467y" path="res://assets/sprites/parallax/1.png" id="1_yptfp"]
 [ext_resource type="Texture2D" uid="uid://bmdhgb2vngkff" path="res://assets/sprites/parallax/2.png" id="2_idseg"]
 [ext_resource type="Texture2D" uid="uid://bniuf4equcjwg" path="res://assets/sprites/parallax/3.png" id="3_f6t8o"]
+=======
+[gd_scene format=3 uid="uid://dxp165yiker3p"]
+
+[ext_resource type="Script" path="res://scenes/menu/parallax_background.gd" id="1_f6t8o"]
+[ext_resource type="Texture2D" path="res://assets/sprites/parallax/1.png" id="1_yptfp"]
+[ext_resource type="Texture2D" path="res://assets/sprites/parallax/2.png" id="2_idseg"]
+[ext_resource type="Texture2D" path="res://assets/sprites/parallax/3.png" id="3_f6t8o"]
+>>>>>>> 5cb6a93c7783cb58735b477908b3b52c62e46389
 
 [node name="ParallaxBackground" type="ParallaxBackground" unique_id=1199465007]
 script = ExtResource("1_f6t8o")

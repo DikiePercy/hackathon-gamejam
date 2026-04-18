@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 [gd_scene format=3 uid="uid://eik6ck4y34bd"]
+=======
+[gd_scene format=3 uid="uid://s68gcwgdq686"]
+>>>>>>> 5cb6a93c7783cb58735b477908b3b52c62e46389
 
 [ext_resource type="PackedScene" uid="uid://dc0isej32hjlm" path="res://scenes/menu/node_2d.tscn" id="1_i64sc"]
 [ext_resource type="PackedScene" uid="uid://diackrq52cn" path="res://scenes/menu/level_1.tscn" id="2_2e2t2"]
