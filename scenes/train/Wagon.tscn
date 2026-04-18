@@ -58,3 +58,17 @@ collision_mask = 0
 shape = SubResource("Shape_ladder")
 
 [node name="EnemySpawnPoint" type="Marker2D" parent="." unique_id=61403353]
+
+[node name="Seats" type="Node2D" parent="." unique_id=189114006]
+
+[node name="Seat01" type="Marker2D" parent="Seats" unique_id=1082722102]
+position = Vector2(-70, -8)
+
+[node name="Seat02" type="Marker2D" parent="Seats" unique_id=621982264]
+position = Vector2(-25, -8)
+
+[node name="Seat03" type="Marker2D" parent="Seats" unique_id=976993822]
+position = Vector2(20, -8)
+
+[node name="Seat04" type="Marker2D" parent="Seats" unique_id=336231480]
+position = Vector2(65, -8)

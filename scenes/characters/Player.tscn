@@ -26,10 +26,6 @@ shape = SubResource("Shape_body")
 [node name="GunPoint" type="Marker2D" parent="." unique_id=713230383]
 position = Vector2(16, -20)
 
-[node name="Audio" type="AudioStreamPlayer2D" parent="." unique_id=1912345678]
-position = Vector2(0, -16)
-volume_db = -4.0
-
 [node name="LadderDetector" type="Area2D" parent="." unique_id=755396173]
 collision_layer = 0
 collision_mask = 4
@@ -41,8 +37,8 @@ shape = SubResource("Shape_ladder_det")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1330608836]
 zoom = Vector2(1.5, 1.5)
 process_callback = 0
-limit_left = -500
-limit_right = 5000
+limit_left = -6000
+limit_right = 6000
 position_smoothing_enabled = true
 
 [connection signal="area_entered" from="LadderDetector" to="." method="_on_ladder_detector_area_entered"]

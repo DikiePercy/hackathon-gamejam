@@ -1,32 +1,28 @@
 [gd_scene format=3 uid="uid://dc0isej32hjlm"]
 
 [ext_resource type="Script" uid="uid://cufm2x8mw3448" path="res://scenes/menu/node_2d.gd" id="1_wtcfe"]
-[ext_resource type="PackedScene" uid="uid://dxp165yiker3p" path="res://scenes/menu/parallax_background.tscn" id="2_w52i0"]
-[ext_resource type="AudioStream" uid="uid://cbfs8yshc14is" path="res://assets/music/Spring-Flowers(chosic.com).mp3" id="3_spring_flowers"]
+[ext_resource type="PackedScene" uid="uid://7fh1qvxbd856" path="res://scenes/menu/parallax_background.tscn" id="2_w52i0"]
 
 [node name="Node2D" type="Node2D" unique_id=622073271]
 script = ExtResource("1_wtcfe")
 
 [node name="Play" type="Button" parent="." unique_id=5078425]
-offset_left = 188.0
-offset_top = 90.0
-offset_right = 281.0
-offset_bottom = 144.0
+offset_left = 111.0
+offset_top = 41.0
+offset_right = 386.0
+offset_bottom = 118.0
+theme_override_font_sizes/font_size = 50
 text = "Play"
 
 [node name="Quit" type="Button" parent="." unique_id=2022056419]
-offset_left = 188.0
-offset_top = 185.0
-offset_right = 282.0
-offset_bottom = 227.0
+offset_left = 97.0
+offset_top = 163.0
+offset_right = 403.0
+offset_bottom = 240.0
+theme_override_font_sizes/font_size = 50
 text = "Quit"
 
 [node name="ParallaxBackground" parent="." unique_id=1199465007 instance=ExtResource("2_w52i0")]
-
-[node name="MenuMusic" type="AudioStreamPlayer" parent="." unique_id=712345678]
-stream = ExtResource("3_spring_flowers")
-volume_db = -6.0
-autoplay = true
 
 [connection signal="pressed" from="Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
