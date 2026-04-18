@@ -3,6 +3,9 @@ extends Node2D
 # Текущий уровень вагона (1, 2 или 3)
 var wagon_level = 1
 var passengers = 0
+var is_in_depot = false
+
+
 
 # Настройки доходности для каждого уровня
 var money_per_level = {
@@ -41,6 +44,8 @@ func update_wagon_stats():
 		3:
 			sprite.modulate = Color(1, 0.9, 0.4) # Золотистый (богатый)
 
+signal mouse_hovered(wagon_instance)
+signal mouse_unhovered(wagon_instance)
 signal clicked(wagon_instance)
 
 func _on_area_2d_input_event(viewport, event, shape_idx):
@@ -50,8 +55,8 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 
 
 func _on_area_2d_mouse_entered() -> void:
-	modulate = Color(0.5, 1, 0.5) # Подсвечиваем зеленым
+	mouse_hovered.emit(self)
 
 
 func _on_area_2d_mouse_exited() -> void:
-	modulate = Color(1, 1, 1) # Снимаем цвет с прошлого
+	mouse_unhovered.emit(self)

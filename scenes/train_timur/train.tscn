@@ -1,22 +1,92 @@
 [gd_scene format=3 uid="uid://bf52gpgg0aftq"]
 
-[ext_resource type="Script" uid="uid://oma1c3jv7md6" path="res://scenes/train_timur/train.gd" id="1_tnona"]
-[ext_resource type="Texture2D" uid="uid://b76ve2m614pki" path="res://assets/sprites/train/head-train.jpg" id="2_0i8p1"]
+[ext_resource type="Script" uid="uid://i1maoo85bww7" path="res://scenes/train_timur/train.gd" id="1_tnona"]
+[ext_resource type="Texture2D" uid="uid://cauxar5y3bxuq" path="res://assets/Kooky - Pixel Train assets - v0.0.1/main/train_v18.png" id="2_xe8ww"]
+[ext_resource type="Texture2D" uid="uid://d1tyhw47agtvk" path="res://assets/Kooky - Pixel Train assets - v0.0.1/main/train_v19.png" id="3_5pwy5"]
+[ext_resource type="Texture2D" uid="uid://pm3ieyhkns1o" path="res://assets/Kooky - Pixel Train assets - v0.0.1/main/train_v20.png" id="4_gvt7j"]
+[ext_resource type="Texture2D" uid="uid://vmvyvn6k2dmp" path="res://assets/Kooky - Pixel Train assets - v0.0.1/main/train_v21.png" id="5_kp3aa"]
+[ext_resource type="Texture2D" uid="uid://cxxtnjqtuxxt2" path="res://assets/Kooky - Pixel Train assets - v0.0.1/main/train_v22.png" id="6_tg1w3"]
+[ext_resource type="Texture2D" uid="uid://66xc2e8e5fsc" path="res://assets/Kooky - Pixel Train assets - v0.0.1/main/train_v23.png" id="7_fm1lu"]
+[ext_resource type="Texture2D" uid="uid://b4f7pge4tl3rr" path="res://assets/Kooky - Pixel Train assets - v0.0.1/main/train_v24.png" id="8_mt6ck"]
+[ext_resource type="Texture2D" uid="uid://d31a3o7r4weow" path="res://assets/Kooky - Pixel Train assets - v0.0.1/main/train_v25.png" id="9_etwtx"]
+[ext_resource type="Texture2D" uid="uid://dukl1yop3p2qr" path="res://assets/Kooky - Pixel Train assets - v0.0.1/main/train_v26.png" id="10_6ohy2"]
+[ext_resource type="Texture2D" uid="uid://ci13032jl83kg" path="res://assets/Kooky - Pixel Train assets - v0.0.1/main/train_v27.png" id="11_1mbfm"]
+[ext_resource type="Texture2D" uid="uid://bdcuuykir2jj1" path="res://assets/Kooky - Pixel Train assets - v0.0.1/main/train_v28.png" id="12_oj1mf"]
+[ext_resource type="Texture2D" uid="uid://dyh7wt2b4imm2" path="res://assets/Kooky - Pixel Train assets - v0.0.1/main/train_v29.png" id="13_cl8r5"]
+[ext_resource type="Texture2D" uid="uid://vm4qrkskcbbl" path="res://assets/Kooky - Pixel Train assets - v0.0.1/main/train_v30.png" id="14_x8fgt"]
+[ext_resource type="Texture2D" uid="uid://bq6ftbji0mbkk" path="res://assets/Kooky - Pixel Train assets - v0.0.1/main/train_v31.png" id="15_n6tvo"]
+[ext_resource type="Texture2D" uid="uid://c5135a2kgtt5a" path="res://assets/Kooky - Pixel Train assets - v0.0.1/main/train_v32.png" id="16_yjaen"]
+[ext_resource type="Texture2D" uid="uid://31a1i7nr3dum" path="res://assets/Kooky - Pixel Train assets - v0.0.1/main/train_v33.png" id="17_yjsom"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_0i8p1"]
-size = Vector2(391, 217)
+[sub_resource type="SpriteFrames" id="SpriteFrames_6gcda"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_xe8ww")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_5pwy5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_gvt7j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_kp3aa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_tg1w3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_fm1lu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_mt6ck")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_etwtx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_6ohy2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_1mbfm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_oj1mf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_cl8r5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_x8fgt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_n6tvo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_yjaen")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_yjsom")
+}],
+"loop": true,
+"name": &"default",
+"speed": 20.0
+}]
 
 [node name="Train" type="Node2D" unique_id=2065298570]
 script = ExtResource("1_tnona")
 
 [node name="Locomotive" type="StaticBody2D" parent="." unique_id=417793605]
 
-[node name="I" type="Sprite2D" parent="Locomotive" unique_id=1158147453]
-scale = Vector2(1.24, 1.24)
-texture = ExtResource("2_0i8p1")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Locomotive" unique_id=1494287094]
+position = Vector2(2, 47.999996)
+scale = Vector2(1.8906249, 2.703125)
+sprite_frames = SubResource("SpriteFrames_6gcda")
+autoplay = "default"
+frame_progress = 0.28943527
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Locomotive" unique_id=632855370]
-scale = Vector2(1.24, 1.24)
-shape = SubResource("RectangleShape2D_0i8p1")
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Locomotive" unique_id=550240857]
+polygon = PackedVector2Array(-84, -39, -84, -25, -67, -18, -66, 79, -72, 91, -89, 91, -86, 25, -228, 26, -224, 91, -240, 91, -240, 113, 215, 110, 225, 63, 205, 20, 190, 0, 200, -14, 191, -35, 146, -35, 139, -15, 153, 6, 152, 20, 137, 21, 138, -3, 120, -2, 120, 22, 99, 19, 100, -3, 92, -15, 83, 0, 83, 22, 34, 19, 34, -39)
 
 [node name="Wagons" type="Node2D" parent="." unique_id=1935057295]

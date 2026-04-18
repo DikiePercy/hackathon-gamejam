@@ -6,10 +6,12 @@ extends Node2D
 
 var speed = 200.0
 var wagons = [] 
+var is_in_depot = false
 
 func _ready():
 	# При старте уровня строим поезд по данным из GameManager
-	pass
+	if !is_in_depot:
+		build_train_from_data()
 
 func build_train_from_data():
 	# Очищаем, если что-то было
