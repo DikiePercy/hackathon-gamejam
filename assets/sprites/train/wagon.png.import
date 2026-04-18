@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bqydh8epmgpa1"
-path="res://.godot/imported/4db8a4fcdb51d7f95bd26baa099be99d.png-e3fe3d1894984ddb4360a8f79154cd4d.ctex"
+path="res://.godot/imported/wagon.png-8843210eefc9ec4636536b0782bfc4a1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/4db8a4fcdb51d7f95bd26baa099be99d.png"
-dest_files=["res://.godot/imported/4db8a4fcdb51d7f95bd26baa099be99d.png-e3fe3d1894984ddb4360a8f79154cd4d.ctex"]
+source_file="res://assets/sprites/train/wagon.png"
+dest_files=["res://.godot/imported/wagon.png-8843210eefc9ec4636536b0782bfc4a1.ctex"]
 
 [params]
 

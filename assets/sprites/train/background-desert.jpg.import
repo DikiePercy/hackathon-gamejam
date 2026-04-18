@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b76ve2m614pki"
-path="res://.godot/imported/i.jpg-a10ea60562d52d34de2c1ade5e212e75.ctex"
+uid="uid://otx3wpa248hm"
+path="res://.godot/imported/background-desert.jpg-aca1fb3932a9ee2af2ea64722b1ec32a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/i.jpg"
-dest_files=["res://.godot/imported/i.jpg-a10ea60562d52d34de2c1ade5e212e75.ctex"]
+source_file="res://assets/sprites/train/background-desert.jpg"
+dest_files=["res://.godot/imported/background-desert.jpg-aca1fb3932a9ee2af2ea64722b1ec32a.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://otx3wpa248hm"
-path="res://.godot/imported/retro-8-bit-pixel-desert-road-landscape-background-vector.jpg-b9a403f0a0b8b14867acc20eada403eb.ctex"
+uid="uid://b76ve2m614pki"
+path="res://.godot/imported/head-train.jpg-28b1966e194558a75fa921ba5f53759c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/retro-8-bit-pixel-desert-road-landscape-background-vector.jpg"
-dest_files=["res://.godot/imported/retro-8-bit-pixel-desert-road-landscape-background-vector.jpg-b9a403f0a0b8b14867acc20eada403eb.ctex"]
+source_file="res://assets/sprites/train/head-train.jpg"
+dest_files=["res://.godot/imported/head-train.jpg-28b1966e194558a75fa921ba5f53759c.ctex"]
 
 [params]
 
