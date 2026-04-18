@@ -12,9 +12,11 @@ script = ExtResource("1_tnona")
 [node name="Locomotive" type="StaticBody2D" parent="." unique_id=417793605]
 
 [node name="I" type="Sprite2D" parent="Locomotive" unique_id=1158147453]
-position = Vector2(548, 318)
+scale = Vector2(1.24, 1.24)
 texture = ExtResource("2_0i8p1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Locomotive" unique_id=632855370]
-position = Vector2(547.5, 319.5)
+scale = Vector2(1.24, 1.24)
 shape = SubResource("RectangleShape2D_0i8p1")
+
+[node name="Wagons" type="Node2D" parent="." unique_id=1935057295]

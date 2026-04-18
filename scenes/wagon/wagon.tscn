@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://dqrec2lefjx28"]
+
+[ext_resource type="Texture2D" uid="uid://dt1ssewxx3qkv" path="res://assets/sprites/train/4db8a4fcdb51d7f95bd26baa099be99d.png" id="1_hugb8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b8fnn"]
+size = Vector2(454, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mm4mv"]
+size = Vector2(480, 20)
+
+[node name="wagon" type="Node2D" unique_id=194281729]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1309619088]
+
+[node name="4Db8a4Fcdb51d7f95Bd26Baa099Be99d" type="Sprite2D" parent="StaticBody2D" unique_id=1154758702]
+scale = Vector2(0.18, 0.18)
+texture = ExtResource("1_hugb8")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1041975752]
+position = Vector2(2, -101)
+shape = SubResource("RectangleShape2D_b8fnn")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D" unique_id=1035372555]
+position = Vector2(-3, 72)
+shape = SubResource("RectangleShape2D_mm4mv")
