@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://diackrq52cn"]
+[gd_scene format=3]
 
-<<<<<<< HEAD
-[node name="level1" type="Node2D" unique_id=1569875106]
-=======
-[node name="Level" type="Node2D" unique_id=1780881876]
->>>>>>> origin/Abdazim
+[node name="Level1" type="Node2D"]
+
+[node name="Label" type="Label" parent="."]
+position = Vector2(400, 300)
+text = "Level 1 (заглушка)"
