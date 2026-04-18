@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://dc0isej32hjlm"]
+
+[ext_resource type="Script" uid="uid://cufm2x8mw3448" path="res://scenes/menu/node_2d.gd" id="1_wtcfe"]
+
+[node name="Node2D" type="Node2D" unique_id=622073271]
+script = ExtResource("1_wtcfe")
+
+[node name="Play" type="Button" parent="." unique_id=5078425]
+offset_left = 346.0
+offset_top = 166.0
+offset_right = 839.0
+offset_bottom = 305.0
+theme_override_font_sizes/font_size = 50
+text = "Play"
+
+[node name="Quit" type="Button" parent="." unique_id=2022056419]
+offset_left = 346.0
+offset_top = 365.0
+offset_right = 839.0
+offset_bottom = 504.0
+theme_override_font_sizes/font_size = 50
+text = "Quit"
+
+[connection signal="pressed" from="Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="Quit" to="." method="_on_quit_pressed"]
