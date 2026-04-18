@@ -1,20 +1,18 @@
+# res://scenes/characters/bullet.gd
 extends Area2D
 class_name Bullet
 
-# Летит по прямой, наносит урон при попадании
-
 const SPEED := 650.0
-var direction := Vector2.RIGHT  # устанавливается из MainPerson._shoot()
+var direction: Vector2 = Vector2.RIGHT
 
-@onready var _timer : Timer = $LifetimeTimer
+@onready var _timer: Timer = $LifetimeTimer
 
 func _ready() -> void:
 	_timer.wait_time = 2.5
-	_timer.one_shot  = true
+	_timer.one_shot = true
 	_timer.start()
 	_timer.timeout.connect(queue_free)
 	body_entered.connect(_on_body_entered)
-	# Поворачиваем визуал по направлению
 	$Sprite.rotation = direction.angle()
 
 func _physics_process(delta: float) -> void:

@@ -1,25 +1,51 @@
-extends CharacterBody2D
+# res://scenes/characters/enemy.gd
+extends Person
 
+@export var _move_speed: float = 80.0
+@export var _contact_damage: int = 10
+@export var _contact_damage_cooldown: float = 0.7
+@export var _left_limit: float = -90.0
+@export var _right_limit: float = 90.0
 
-const SPEED = 300.0
-const JUMP_VELOCITY = -400.0
+var _direction: int = 1
+var _damage_timer: float = 0.0
+var _player_in_contact: MainPerson = null
 
 
 func _physics_process(delta: float) -> void:
-	# Add the gravity.
-	if not is_on_floor():
-		velocity += get_gravity() * delta
-
-	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
-
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var direction := Input.get_axis("ui_left", "ui_right")
-	if direction:
-		velocity.x = direction * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-
+	velocity.x = _direction * _move_speed
 	move_and_slide()
+
+	if global_position.x <= _left_limit_global():
+		_direction = 1
+	elif global_position.x >= _right_limit_global():
+		_direction = -1
+
+	if _damage_timer > 0.0:
+		_damage_timer -= delta
+
+	if _player_in_contact != null and _damage_timer <= 0.0:
+		_player_in_contact.take_damage(_contact_damage)
+		_damage_timer = _contact_damage_cooldown
+
+
+func _left_limit_global() -> float:
+	if get_parent() != null:
+		return get_parent().global_position.x + _left_limit
+	return global_position.x - 100.0
+
+
+func _right_limit_global() -> float:
+	if get_parent() != null:
+		return get_parent().global_position.x + _right_limit
+	return global_position.x + 100.0
+
+
+func _on_hitbox_body_entered(body: Node) -> void:
+	if body is MainPerson:
+		_player_in_contact = body as MainPerson
+
+
+func _on_hitbox_body_exited(body: Node) -> void:
+	if body == _player_in_contact:
+		_player_in_contact = null

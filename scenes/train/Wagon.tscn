@@ -9,43 +9,48 @@ size = Vector2(216, 10)
 [sub_resource type="RectangleShape2D" id="Shape_ladder"]
 size = Vector2(28, 88)
 
-[node name="Wagon" type="Node2D"]
+[node name="Wagon" type="Node2D" unique_id=1006291350]
 
-[node name="Visual" type="ColorRect" parent="."]
-position = Vector2(-110, -100)
-size = Vector2(220, 100)
+[node name="Visual" type="ColorRect" parent="." unique_id=352505188]
+offset_left = -110.0
+offset_top = -100.0
+offset_right = 110.0
 color = Color(0.28, 0.32, 0.42, 1)
 
-[node name="WheelLeft" type="ColorRect" parent="."]
-position = Vector2(-90, 2)
-size = Vector2(20, 20)
+[node name="WheelLeft" type="ColorRect" parent="." unique_id=827608917]
+offset_left = -90.0
+offset_top = 2.0
+offset_right = -70.0
+offset_bottom = 22.0
 color = Color(0.15, 0.15, 0.15, 1)
 
-[node name="WheelRight" type="ColorRect" parent="."]
-position = Vector2(70, 2)
-size = Vector2(20, 20)
+[node name="WheelRight" type="ColorRect" parent="." unique_id=1136196186]
+offset_left = 70.0
+offset_top = 2.0
+offset_right = 90.0
+offset_bottom = 22.0
 color = Color(0.15, 0.15, 0.15, 1)
 
-[node name="InsideFloor" type="StaticBody2D" parent="."]
-collision_layer = 1
+[node name="InsideFloor" type="StaticBody2D" parent="." unique_id=557214271]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="InsideFloor"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InsideFloor" unique_id=1964911931]
 shape = SubResource("Shape_floor")
 
-[node name="RoofSurface" type="StaticBody2D" parent="."]
+[node name="RoofSurface" type="StaticBody2D" parent="." unique_id=1982752535]
 position = Vector2(0, -100)
 collision_layer = 2
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RoofSurface"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoofSurface" unique_id=1007373064]
 shape = SubResource("Shape_roof")
 
-[node name="LadderZone" type="Area2D" parent="."]
+[node name="LadderZone" type="Area2D" parent="." unique_id=1315070827]
 position = Vector2(0, -50)
 collision_layer = 4
 collision_mask = 0
-groups = ["ladder"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="LadderZone"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LadderZone" unique_id=2009923142]
 shape = SubResource("Shape_ladder")
+
+[node name="EnemySpawnPoint" type="Marker2D" parent="." unique_id=61403353]
