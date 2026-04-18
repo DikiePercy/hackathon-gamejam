@@ -23,6 +23,7 @@ func build_train_from_data():
 		var stats = GameManager.train_data[i]
 		
 		var new_wagon = wagon_scene.instantiate()
+		new_wagon.vagon_type = stats[2]
 		wagons_container.add_child(new_wagon)
 		
 		# Передаем данные
@@ -31,6 +32,7 @@ func build_train_from_data():
 		
 		# Позиция (смещение за локомотив)
 		new_wagon.position.x = -(i + 1) * wagon_width
+		new_wagon.position.y = position.y - 75
 		
 		# Обновляем статы
 		if new_wagon.has_method("update_wagon_stats"):

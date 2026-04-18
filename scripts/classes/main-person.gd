@@ -1,8 +1,8 @@
 extends Person
 class_name MainPerson
 
-const WALK_SPEED     := 220.0
-const JUMP_VELOCITY  := -460.0
+const WALK_SPEED     := 150.0
+const JUMP_VELOCITY  := -450.0
 const GRAVITY        := 1000.0
 const CLIMB_SPEED    := 160.0
 const SHOOT_COOLDOWN := 0.25
@@ -23,7 +23,7 @@ var _ladder_bottom_y: float = 0.0
 
 @export var bullet_scene: PackedScene
 
-@onready var _sprite: ColorRect = $Sprite
+@onready var _sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var _gun_point: Marker2D = $GunPoint
 
 func _ready() -> void:

@@ -2,37 +2,94 @@
 
 [ext_resource type="Script" uid="uid://d0ppuq5eq8pf6" path="res://scripts/classes/main-person.gd" id="1_mainperson"]
 [ext_resource type="PackedScene" uid="uid://8wrtibmowea" path="res://scenes/characters/Bullet.tscn" id="2_gin2a"]
+[ext_resource type="Texture2D" uid="uid://m6ulqg4l508m" path="res://assets/Cowboy (Animated Pixel Art)/Animation Sprite Sheets (PNG)/CowBoyIdle.png" id="3_7n8ao"]
 
-[sub_resource type="RectangleShape2D" id="Shape_body"]
-size = Vector2(24, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_7wym0"]
+atlas = ExtResource("3_7n8ao")
+region = Rect2(0, 0, 48, 48)
 
-[sub_resource type="RectangleShape2D" id="Shape_ladder_det"]
-size = Vector2(22, 60)
+[sub_resource type="AtlasTexture" id="AtlasTexture_gj1sn"]
+atlas = ExtResource("3_7n8ao")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rpfb3"]
+atlas = ExtResource("3_7n8ao")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_miirx"]
+atlas = ExtResource("3_7n8ao")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m6phi"]
+atlas = ExtResource("3_7n8ao")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oihyf"]
+atlas = ExtResource("3_7n8ao")
+region = Rect2(240, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7lms1"]
+atlas = ExtResource("3_7n8ao")
+region = Rect2(288, 0, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ufbvs"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7wym0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gj1sn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rpfb3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_miirx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m6phi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oihyf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7lms1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mqro2"]
+height = 32.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bpxo2"]
+height = 40.0
 
 [node name="Player" type="CharacterBody2D" unique_id=857582357]
 script = ExtResource("1_mainperson")
 bullet_scene = ExtResource("2_gin2a")
 
-[node name="Sprite" type="ColorRect" parent="." unique_id=763093045]
-offset_left = -12.0
-offset_top = -32.0
-offset_right = 12.0
-color = Color(0.2, 0.55, 1, 1)
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1428740918]
+sprite_frames = SubResource("SpriteFrames_ufbvs")
+autoplay = "default"
+frame_progress = 0.9653088
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1130724925]
-position = Vector2(0, -16)
-shape = SubResource("Shape_body")
+position = Vector2(0, 4)
+shape = SubResource("CapsuleShape2D_mqro2")
 
 [node name="GunPoint" type="Marker2D" parent="." unique_id=713230383]
-position = Vector2(16, -20)
+position = Vector2(15, 3)
 
 [node name="LadderDetector" type="Area2D" parent="." unique_id=755396173]
 collision_layer = 0
 collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LadderDetector" unique_id=992185920]
-position = Vector2(0, -16)
-shape = SubResource("Shape_ladder_det")
+position = Vector2(0, 4)
+shape = SubResource("CapsuleShape2D_bpxo2")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1330608836]
 process_callback = 0

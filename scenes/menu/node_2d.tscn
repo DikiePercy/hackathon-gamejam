@@ -38,4 +38,4 @@ text = "Depot"
 
 [connection signal="pressed" from="Panel/VBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="Panel/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
-[connection signal="pressed" from="Panel/VBoxContainer/Depot" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/Depot" to="." method="_on_depot_pressed"]

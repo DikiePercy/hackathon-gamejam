@@ -4,7 +4,7 @@ extends Node2D
 var wagon_level = 1
 var passengers = 0
 var is_in_depot = false
-
+var vagon_type = 1
 
 
 # Настройки доходности для каждого уровня
@@ -15,10 +15,12 @@ var money_per_level = {
 }
 
 # Ссылка на спрайт, чтобы менять вид вагона
-@onready var sprite = $"StaticBody2D/4Db8a4Fcdb51d7f95Bd26Baa099Be99d"
+@onready var sprite = $StaticBody2D/AnimatedSprite2D
 
 func _ready():
 	update_wagon_stats()
+	sprite.play("v" + str(vagon_type))
+	
 
 # Функция для повышения уровня вагона
 func upgrade_wagon():

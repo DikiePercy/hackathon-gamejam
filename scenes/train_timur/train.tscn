@@ -80,13 +80,13 @@ script = ExtResource("1_tnona")
 [node name="Locomotive" type="StaticBody2D" parent="." unique_id=417793605]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Locomotive" unique_id=1494287094]
-position = Vector2(2, 47.999996)
 scale = Vector2(1.8906249, 2.703125)
 sprite_frames = SubResource("SpriteFrames_6gcda")
 autoplay = "default"
-frame_progress = 0.28943527
+frame_progress = 0.92807525
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Locomotive" unique_id=550240857]
+position = Vector2(-2, -46)
 polygon = PackedVector2Array(-84, -39, -84, -25, -67, -18, -66, 79, -72, 91, -89, 91, -86, 25, -228, 26, -224, 91, -240, 91, -240, 113, 215, 110, 225, 63, 205, 20, 190, 0, 200, -14, 191, -35, 146, -35, 139, -15, 153, 6, 152, 20, 137, 21, 138, -3, 120, -2, 120, 22, 99, 19, 100, -3, 92, -15, 83, 0, 83, 22, 34, 19, 34, -39)
 
 [node name="Wagons" type="Node2D" parent="." unique_id=1935057295]

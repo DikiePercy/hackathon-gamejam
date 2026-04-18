@@ -46,6 +46,7 @@ func draw_depot_train():
 		var stats = GameManager.train_data[i]
 		var new_wagon = wagon_scene.instantiate()
 		new_wagon.is_in_depot = true
+		new_wagon.vagon_type = stats[2]
 		train_preview.add_child(new_wagon)
 		
 		new_wagon.wagon_level = stats[0]
@@ -108,7 +109,8 @@ func _on_buy_button_pressed() -> void:
 		GameManager.total_gold -= wagon_price
 		
 		# 2. Создаем "пакет данных" для нового вагона: [уровень 1, 0 человек]
-		var new_wagon_data = [1, 0]
+		var randomv = randi_range(1, 3)
+		var new_wagon_data = [1, 0, randomv]
 		
 		# 3. Добавляем эти данные в наш глобальный список в GameManager
 		GameManager.train_data.append(new_wagon_data)
