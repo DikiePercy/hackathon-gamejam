@@ -1,3 +1,7 @@
 [gd_scene format=3 uid="uid://diackrq52cn"]
 
+<<<<<<< HEAD
 [node name="level1" type="Node2D" unique_id=1569875106]
+=======
+[node name="Level" type="Node2D" unique_id=1780881876]
+>>>>>>> origin/Abdazim

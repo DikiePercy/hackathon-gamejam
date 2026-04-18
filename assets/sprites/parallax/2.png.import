@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://otx3wpa248hm"
-path="res://.godot/imported/retro-8-bit-pixel-desert-road-landscape-background-vector.jpg-b9a403f0a0b8b14867acc20eada403eb.ctex"
+uid="uid://bmdhgb2vngkff"
+path="res://.godot/imported/2.png-a1a7341bf9c128eea959665c0567f52f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/retro-8-bit-pixel-desert-road-landscape-background-vector.jpg"
-dest_files=["res://.godot/imported/retro-8-bit-pixel-desert-road-landscape-background-vector.jpg-b9a403f0a0b8b14867acc20eada403eb.ctex"]
+source_file="res://assets/sprites/parallax/2.png"
+dest_files=["res://.godot/imported/2.png-a1a7341bf9c128eea959665c0567f52f.ctex"]
 
 [params]
 
