@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bmdhgb2vngkff"
-path="res://.godot/imported/2.png-69b86b07ce1e40fb97dc8ac5c03ce645.ctex"
+path="res://.godot/imported/2.png-a1a7341bf9c128eea959665c0567f52f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://nature 1/2.png"
-dest_files=["res://.godot/imported/2.png-69b86b07ce1e40fb97dc8ac5c03ce645.ctex"]
+source_file="res://assets/sprites/parallax/2.png"
+dest_files=["res://.godot/imported/2.png-a1a7341bf9c128eea959665c0567f52f.ctex"]
 
 [params]
 

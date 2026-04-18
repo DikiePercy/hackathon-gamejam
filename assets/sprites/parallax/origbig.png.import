@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bqeytaybh0tox"
-path="res://.godot/imported/2.png-90f4e58308851c6bd4b7976bcc4d1d4c.ctex"
+uid="uid://cm6injoh4fnot"
+path="res://.godot/imported/origbig.png-6da9fd36d2144ceb99ad4c6c5de7bfbd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://nature 3/2.png"
-dest_files=["res://.godot/imported/2.png-90f4e58308851c6bd4b7976bcc4d1d4c.ctex"]
+source_file="res://assets/sprites/parallax/origbig.png"
+dest_files=["res://.godot/imported/origbig.png-6da9fd36d2144ceb99ad4c6c5de7bfbd.ctex"]
 
 [params]
 
