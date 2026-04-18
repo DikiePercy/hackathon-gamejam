@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://qbej13o38ef5" path="res://scenes/train/train.tscn" id="1_train"]
 [ext_resource type="Script" uid="uid://kggtcrnmw3fy" path="res://scenes/main/main.gd" id="2_maingd"]
 [ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://scenes/characters/Player.tscn" id="3_player"]
-[ext_resource type="AudioStream" uid="uid://bx4t8z9rq72s" path="res://assets/music/Darkling.mp3" id="4_game_music"]
+[ext_resource type="AudioStream" uid="uid://cln3bj31b3y8i" path="res://assets/music/Darkling.mp3" id="4_game_music"]
 
 [node name="Main" type="Node2D" unique_id=1038197434]
 script = ExtResource("2_maingd")
@@ -13,9 +13,8 @@ position = Vector2(0, 400)
 
 [node name="Player" parent="." unique_id=1025993540 instance=ExtResource("3_player")]
 position = Vector2(200, 280)
-max_health = null
 
 [node name="GameMusic" type="AudioStreamPlayer" parent="." unique_id=712345679]
 stream = ExtResource("4_game_music")
-autoplay = true
 volume_db = -6.0
+autoplay = true

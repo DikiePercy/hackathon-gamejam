@@ -22,7 +22,6 @@ var _ladder_bottom_y: float = 0.0
 
 @export var bullet_scene: PackedScene
 
-<<<<<<< HEAD
 var _shoot_sound: AudioStream = preload("res://assets/sounds/player_shoot.wav")
 var _jump_sound: AudioStream = preload("res://assets/sounds/player_jump.wav")
 var _hurt_sound: AudioStream = preload("res://assets/sounds/playerhurt1.wav")
@@ -31,10 +30,6 @@ var _hurt_sound: AudioStream = preload("res://assets/sounds/playerhurt1.wav")
 @onready var _gun_point       : Marker2D  = $GunPoint
 @onready var _ladder_detector : Area2D    = $LadderDetector
 @onready var _audio           : AudioStreamPlayer2D = $Audio
-=======
-@onready var _sprite: ColorRect = $Sprite
-@onready var _gun_point: Marker2D = $GunPoint
->>>>>>> main
 
 func _ready() -> void:
 	super._ready()
@@ -164,17 +159,15 @@ func _on_ladder_detector_area_exited(area: Area2D) -> void:
 	if _state == State.CLIMBING:
 		_set_state(State.GROUND)
 
-<<<<<<< HEAD
 func take_damage(amount: int) -> void:
-	_play_sound(_hurt_sound)
-	super.take_damage(amount)
+		_play_sound(_hurt_sound)
+		super.take_damage(amount)
 
 func _play_sound(sound: AudioStream) -> void:
-	if sound == null:
-		return
-	_audio.stream = sound
-	_audio.play()
-=======
+		if sound == null:
+				return
+		_audio.stream = sound
+		_audio.play()
+
 func _try_kick() -> void:
-	pass
->>>>>>> main
+		pass
