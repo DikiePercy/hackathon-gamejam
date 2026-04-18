@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://b5qie8yafkesc"]
+
+[sub_resource type="RectangleShape2D" id="Shape_floor"]
+size = Vector2(216, 10)
+
+[sub_resource type="RectangleShape2D" id="Shape_roof"]
+size = Vector2(216, 10)
+
+[sub_resource type="RectangleShape2D" id="Shape_ladder"]
+size = Vector2(28, 88)
+
+[node name="Wagon" type="Node2D"]
+
+[node name="Visual" type="ColorRect" parent="."]
+position = Vector2(-110, -100)
+size = Vector2(220, 100)
+color = Color(0.28, 0.32, 0.42, 1)
+
+[node name="WheelLeft" type="ColorRect" parent="."]
+position = Vector2(-90, 2)
+size = Vector2(20, 20)
+color = Color(0.15, 0.15, 0.15, 1)
+
+[node name="WheelRight" type="ColorRect" parent="."]
+position = Vector2(70, 2)
+size = Vector2(20, 20)
+color = Color(0.15, 0.15, 0.15, 1)
+
+[node name="InsideFloor" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InsideFloor"]
+shape = SubResource("Shape_floor")
+
+[node name="RoofSurface" type="StaticBody2D" parent="."]
+position = Vector2(0, -100)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoofSurface"]
+shape = SubResource("Shape_roof")
+
+[node name="LadderZone" type="Area2D" parent="."]
+position = Vector2(0, -50)
+collision_layer = 4
+collision_mask = 0
+groups = ["ladder"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LadderZone"]
+shape = SubResource("Shape_ladder")

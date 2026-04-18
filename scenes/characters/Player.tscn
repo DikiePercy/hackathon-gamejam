@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://ckj5li5e8puw3"]
+
+[ext_resource type="Script" uid="uid://d0ppuq5eq8pf6" path="res://scripts/classes/main-person.gd" id="1_mainperson"]
+[ext_resource type="PackedScene" path="res://scenes/characters/Bullet.tscn" id="2_gin2a"]
+
+[sub_resource type="RectangleShape2D" id="Shape_body"]
+size = Vector2(24, 32)
+
+[sub_resource type="RectangleShape2D" id="Shape_ladder_det"]
+size = Vector2(22, 60)
+
+[node name="Player" type="CharacterBody2D" unique_id=857582357]
+script = ExtResource("1_mainperson")
+bullet_scene = ExtResource("2_gin2a")
+
+[node name="Sprite" type="ColorRect" parent="." unique_id=763093045]
+offset_left = -12.0
+offset_top = -32.0
+offset_right = 12.0
+color = Color(0.2, 0.55, 1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1130724925]
+position = Vector2(0, -16)
+shape = SubResource("Shape_body")
+
+[node name="GunPoint" type="Marker2D" parent="." unique_id=713230383]
+position = Vector2(16, -20)
+
+[node name="LadderDetector" type="Area2D" parent="." unique_id=755396173]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LadderDetector" unique_id=992185920]
+position = Vector2(0, -16)
+shape = SubResource("Shape_ladder_det")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1330608836]
+zoom = Vector2(1.5, 1.5)
+limit_left = -500
+limit_right = 5000
+position_smoothing_enabled = true
+
+[connection signal="area_entered" from="LadderDetector" to="." method="_on_ladder_detector_area_entered"]
+[connection signal="area_exited" from="LadderDetector" to="." method="_on_ladder_detector_area_exited"]
