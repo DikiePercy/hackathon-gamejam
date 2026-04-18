@@ -6,6 +6,8 @@ const JUMP_VELOCITY  := -460.0
 const GRAVITY        := 1000.0 
 const CLIMB_SPEED    := 160.0 
 const SHOOT_COOLDOWN := 0.25   
+const KICK_FORCE_X   := 500.0   # горизонтальная сила удара
+const KICK_FORCE_Y   := -150.0  # вертикальная составляющая удара
 
 const LAYER_INSIDE := 1   
 const LAYER_ROOF   := 2   
@@ -31,7 +33,16 @@ func _ready() -> void:
 	_apply_collision(_state)
 
 func _physics_process(delta: float) -> void:
+	super._physics_process(delta)   # обновляет _knockback_timer в Person
 	_shoot_timer = maxf(_shoot_timer - delta, 0.0)
+
+	# Пока действует кнокбэк — управление заблокировано,
+	# но гравитация продолжает тянуть вниз.
+	if is_knocked_back():
+		if not is_on_floor():
+			velocity.y += GRAVITY * delta
+		move_and_slide()
+		return
 
 	match _state:
 		State.GROUND:   _process_ground(delta)
@@ -40,6 +51,9 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("shoot") and _shoot_timer == 0.0:
 		_shoot()
+
+	if Input.is_action_just_pressed("kick"):
+		_try_kick()
 
 func _process_ground(delta: float) -> void:
 	if not is_on_floor():
