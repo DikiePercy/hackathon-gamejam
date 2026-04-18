@@ -8,6 +8,7 @@ height = 10.0
 
 [node name="Bullet" type="Area2D" unique_id=1196037254]
 collision_layer = 8
+collision_mask = 1
 script = ExtResource("1_bullet")
 
 [node name="Sprite" type="ColorRect" parent="." unique_id=1406714396]
