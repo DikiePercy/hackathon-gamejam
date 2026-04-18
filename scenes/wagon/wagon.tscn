@@ -40,3 +40,5 @@ shape = SubResource("RectangleShape2D_6wpp6")
 
 [connection signal="clicked" from="." to="." method="_on_clicked"]
 [connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]

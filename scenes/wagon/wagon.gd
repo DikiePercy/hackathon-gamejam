@@ -47,3 +47,11 @@ func _on_area_2d_input_event(viewport, event, shape_idx):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		emit_signal("clicked", self)
 		print("нажатие") # Отправляем сигнал, что нажали именно на ЭТОТ вагон	
+
+
+func _on_area_2d_mouse_entered() -> void:
+	modulate = Color(0.5, 1, 0.5) # Подсвечиваем зеленым
+
+
+func _on_area_2d_mouse_exited() -> void:
+	modulate = Color(1, 1, 1) # Снимаем цвет с прошлого

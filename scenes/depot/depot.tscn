@@ -10,42 +10,38 @@ offset_bottom = 40.0
 mouse_filter = 2
 script = ExtResource("1_fxm1y")
 
-[node name="Label" type="Label" parent="." unique_id=1782002680]
-layout_mode = 0
-offset_left = -186.0
-offset_top = -281.0
-offset_right = -74.0
-offset_bottom = -258.0
-text = "выбор вагона"
-
 [node name="TrainPreviewContent" type="Node2D" parent="." unique_id=491198593]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1311003508]
 
-[node name="UpgradeButton" type="Button" parent="." unique_id=1880673813]
-layout_mode = 0
+[node name="UpgradeButton" type="Button" parent="Camera2D" unique_id=1880673813]
 offset_left = -512.0
 offset_top = -252.0
 offset_right = -427.0
 offset_bottom = -194.0
 text = "update"
 
-[node name="GoldLabel" type="Label" parent="." unique_id=317279582]
-layout_mode = 0
+[node name="GoldLabel" type="Label" parent="Camera2D" unique_id=317279582]
 offset_left = 418.0
 offset_top = -266.0
 offset_right = 458.0
 offset_bottom = -243.0
 
-[node name="TrainPreview" type="Node2D" parent="." unique_id=478105875]
-
-[node name="BuyButton" type="Button" parent="." unique_id=2076212567]
-layout_mode = 0
+[node name="BuyButton" type="Button" parent="Camera2D" unique_id=2076212567]
 offset_left = 480.0
 offset_top = -411.0
 offset_right = 597.0
 offset_bottom = -346.0
 text = "купить"
 
-[connection signal="pressed" from="UpgradeButton" to="." method="_on_upgrade_button_pressed"]
-[connection signal="pressed" from="BuyButton" to="." method="_on_buy_button_pressed"]
+[node name="Label" type="Label" parent="Camera2D" unique_id=1782002680]
+offset_left = -186.0
+offset_top = -281.0
+offset_right = -74.0
+offset_bottom = -258.0
+text = "выбор вагона"
+
+[node name="TrainPreview" type="Node2D" parent="." unique_id=478105875]
+
+[connection signal="pressed" from="Camera2D/UpgradeButton" to="." method="_on_upgrade_button_pressed"]
+[connection signal="pressed" from="Camera2D/BuyButton" to="." method="_on_buy_button_pressed"]

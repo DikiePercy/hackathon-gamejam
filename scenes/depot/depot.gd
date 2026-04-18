@@ -4,7 +4,10 @@ extends Control
 @export var locomotive_scene: PackedScene = preload("res://scenes/train/train.tscn")
 
 @onready var train_preview = $TrainPreview
-@onready var gold_label = $GoldLabel
+@onready var gold_label = $Camera2D/GoldLabel
+
+@onready var camera = $Camera2D
+var camera_speed = 500.0
 
 var wagon_width = 480
 var selected_wagon = null # Храним, какой вагон сейчас нажат
@@ -12,6 +15,20 @@ var selected_wagon = null # Храним, какой вагон сейчас н�
 func _ready():
 	draw_depot_train()
 	update_ui()
+
+func _process(delta):
+	# Создаем вектор направления движения
+	var direction = 0
+	
+	# Проверяем нажатие клавиш A и D
+	if Input.is_key_pressed(KEY_D):
+		direction += 1
+	if Input.is_key_pressed(KEY_A):
+		direction -= 1
+	
+	# Двигаем камеру
+	if direction != 0:
+		camera.position.x += direction * camera_speed * delta
 
 func draw_depot_train():
 	# Очистка старых спрайтов
@@ -21,7 +38,7 @@ func draw_depot_train():
 	# 1. Сначала рисуем Локомотив
 	var loco = locomotive_scene.instantiate()
 	train_preview.add_child(loco)
-	loco.position = Vector2(600, 0) # В депо локомотив в центре
+	loco.position = Vector2.ZERO # В депо локомотив в центре
 	
 	# 2. Рисуем вагоны из GameManager
 	for i in range(GameManager.train_data.size()):
@@ -31,7 +48,7 @@ func draw_depot_train():
 		
 		new_wagon.wagon_level = stats[0]
 		new_wagon.passengers = stats[1]
-		new_wagon.position.x = (-(i + 1) * wagon_width) + 600
+		new_wagon.position.x = -(i + 1) * wagon_width
 		
 		# ВАЖНО: В депо подключаем сигнал, чтобы ловить клики
 		if new_wagon.has_signal("clicked"):
@@ -45,7 +62,7 @@ func _on_wagon_selected(wagon_node):
 		selected_wagon.modulate = Color(1, 1, 1) # Снимаем цвет с прошлого
 	
 	selected_wagon = wagon_node
-	selected_wagon.modulate = Color(0.5, 1, 0.5) # Подсвечиваем зеленым
+	selected_wagon.modulate = Color(0.839, 0.93, 0.143, 1.0) # Подсвечиваем зеленым
 	print("Выбран вагон с уровнем: ", selected_wagon.wagon_level)
 
 # Кнопка улучшения в UI (подключи через сигнал pressed)
