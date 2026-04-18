@@ -6,5 +6,3 @@ func _on_quit_pressed():
 
 func _on_play_pressed():
 	get_tree().change_scene_to_file("res://scenes/menu/level_1.tscn")
-
-"res://scenes/train/Wagon.tscn"
