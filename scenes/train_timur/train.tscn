@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bf52gpgg0aftq"]
 
-[ext_resource type="Script" uid="uid://oma1c3jv7md6" path="res://scenes/train/train.gd" id="1_tnona"]
+[ext_resource type="Script" uid="uid://oma1c3jv7md6" path="res://scenes/train_timur/train.gd" id="1_tnona"]
 [ext_resource type="Texture2D" uid="uid://b76ve2m614pki" path="res://assets/sprites/train/head-train.jpg" id="2_0i8p1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0i8p1"]

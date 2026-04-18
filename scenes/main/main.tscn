@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://xpa2retjrs0g"]
 
-[ext_resource type="PackedScene" uid="uid://bf52gpgg0aftq" path="res://scenes/train/train.tscn" id="1_hyk8p"]
+[ext_resource type="PackedScene" uid="uid://bf52gpgg0aftq" path="res://scenes/train_timur/train.tscn" id="1_hyk8p"]
 
 [node name="Main" type="Node2D" unique_id=907356086]
 
