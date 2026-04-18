@@ -1,4 +1,3 @@
-# res://scenes/characters/enemy.gd
 extends Person
 
 @export var _move_speed: float = 80.0
