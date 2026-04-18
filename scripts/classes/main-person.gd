@@ -6,23 +6,16 @@ class_name MainPerson
 # ════════════════════════════════
 const WALK_SPEED     := 220.0   # ходьба
 const JUMP_VELOCITY  := -460.0  # прыжок (отрицательный = вверх)
-const GRAVITY        := 1000.0  # сила тяжести
-const CLIMB_SPEED    := 160.0   # скорость по лестнице
-const SHOOT_COOLDOWN := 0.25    # секунды между выстрелами
+const GRAVITY        := 1000.0 
+const CLIMB_SPEED    := 160.0 
+const SHOOT_COOLDOWN := 0.25   
 
-# Номера слоёв коллизий (совпадают с Wagon.tscn)
 const LAYER_INSIDE := 1   # пол внутри вагона
 const LAYER_ROOF   := 2   # крыша вагона
 
-# ════════════════════════════════
-#  Состояния персонажа
-# ════════════════════════════════
 enum State { GROUND, CLIMBING, ROOF }
 var _state: State = State.GROUND
 
-# ════════════════════════════════
-#  Служебные переменные
-# ════════════════════════════════
 var _facing_right  := true
 var _shoot_timer   := 0.0
 
@@ -30,19 +23,11 @@ var _current_ladder  : Area2D = null
 var _ladder_top_y    : float  = 0.0
 var _ladder_bottom_y : float  = 0.0
 
-# ════════════════════════════════
-#  Назначается в инспекторе
-# ════════════════════════════════
 @export var bullet_scene: PackedScene
 
-# ════════════════════════════════
-#  Дочерние узлы сцены Player.tscn
-# ════════════════════════════════
 @onready var _sprite          : ColorRect = $Sprite
 @onready var _gun_point       : Marker2D  = $GunPoint
 @onready var _ladder_detector : Area2D    = $LadderDetector
-
-# ════════════════════════════════
 
 func _ready() -> void:
 	super._ready()
@@ -59,9 +44,6 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("shoot") and _shoot_timer == 0.0:
 		_shoot()
 
-# ──────────────────────────────────────
-#  GROUND: ходьба и прыжки внутри вагона
-# ──────────────────────────────────────
 func _process_ground(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += GRAVITY * delta
@@ -80,22 +62,17 @@ func _process_ground(delta: float) -> void:
 
 	move_and_slide()
 
-# ──────────────────────────────────────
-#  CLIMBING: лазанье по лестнице
-# ──────────────────────────────────────
 func _process_climbing() -> void:
 	velocity = Vector2.ZERO
 
 	var dir_y := Input.get_axis("ui_up", "ui_down")  # -1=вверх, +1=вниз
 	velocity.y = dir_y * CLIMB_SPEED
 
-	# Держим X по центру лестницы
 	if _current_ladder:
 		global_position.x = _current_ladder.global_position.x
 
 	move_and_slide()
 
-	# Добрались до верха → на крышу
 	if global_position.y <= _ladder_top_y:
 		global_position.y = _ladder_top_y
 		_set_state(State.ROOF)
@@ -105,9 +82,6 @@ func _process_climbing() -> void:
 		global_position.y = _ladder_bottom_y
 		_set_state(State.GROUND)
 
-# ──────────────────────────────────────
-#  ROOF: ходьба по крышам вагонов
-# ──────────────────────────────────────
 func _process_roof(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += GRAVITY * delta
@@ -124,9 +98,6 @@ func _process_roof(delta: float) -> void:
 
 	move_and_slide()
 
-# ──────────────────────────────────────
-#  Горизонтальное движение
-# ──────────────────────────────────────
 func _move_x() -> void:
 	var dir := Input.get_axis("ui_left", "ui_right")
 	velocity.x = dir * WALK_SPEED
@@ -137,9 +108,6 @@ func _move_x() -> void:
 		_facing_right = false
 		_sprite.scale.x = -1.0
 
-# ──────────────────────────────────────
-#  Переключение состояния + коллизий
-# ──────────────────────────────────────
 func _set_state(s: State) -> void:
 	_state = s
 	_apply_collision(s)

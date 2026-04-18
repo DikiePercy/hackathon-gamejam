@@ -2,13 +2,13 @@
 
 [ext_resource type="PackedScene" uid="uid://qbej13o38ef5" path="res://scenes/train/train.tscn" id="1_train"]
 [ext_resource type="Script" uid="uid://kggtcrnmw3fy" path="res://scenes/main/main.gd" id="2_maingd"]
-[ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://characters/Player.tscn" id="3_player"]
+[ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://scenes/characters/Player.tscn" id="3_player"]
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" unique_id=1038197434]
 script = ExtResource("2_maingd")
 
-[node name="Train" parent="." instance=ExtResource("1_train")]
+[node name="Train" parent="." unique_id=702240966 instance=ExtResource("1_train")]
 position = Vector2(0, 400)
 
-[node name="Player" parent="." instance=ExtResource("3_player")]
+[node name="Player" parent="." unique_id=1025993540 instance=ExtResource("3_player")]
 position = Vector2(200, 280)
