@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://diackrq52cn"]
+
+[node name="Level" type="Node2D" unique_id=1780881876]
+
+[node name="Label" type="Label" parent="." unique_id=827720825]
+offset_right = 1152.0
+offset_bottom = 641.0
+text = "sffsffs
+"
