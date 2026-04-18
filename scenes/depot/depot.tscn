@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://be00ylwiwetr2"]
 
 [ext_resource type="Script" uid="uid://du4t2o4qn7xr0" path="res://scenes/depot/depot.gd" id="1_fxm1y"]
+[ext_resource type="Texture2D" uid="uid://otx3wpa248hm" path="res://assets/sprites/train/background-desert.jpg" id="2_j3mw0"]
 
 [node name="Depot" type="Control" unique_id=1590991496]
 layout_mode = 3
@@ -15,31 +16,29 @@ script = ExtResource("1_fxm1y")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1311003508]
 zoom = Vector2(0.4, 0.4)
 
+[node name="BackgroundDesert" type="Sprite2D" parent="Camera2D" unique_id=1989465728]
+position = Vector2(85, -154)
+texture = ExtResource("2_j3mw0")
+
 [node name="UpgradeButton" type="Button" parent="Camera2D" unique_id=1880673813]
-offset_left = -323.0
-offset_top = -242.0
-offset_right = -238.0
-offset_bottom = -184.0
+offset_right = 63.0
+offset_bottom = 90.0
 text = "update"
 
 [node name="GoldLabel" type="Label" parent="Camera2D" unique_id=317279582]
-offset_left = 418.0
-offset_top = -266.0
-offset_right = 458.0
-offset_bottom = -243.0
+offset_top = 33.0
+offset_right = 1.0
+offset_bottom = 56.0
 
 [node name="BuyButton" type="Button" parent="Camera2D" unique_id=2076212567]
-offset_left = 90.0
-offset_top = -250.0
-offset_right = 207.0
-offset_bottom = -185.0
+offset_right = 65.0
+offset_bottom = 90.0
 text = "купить"
 
 [node name="Label" type="Label" parent="Camera2D" unique_id=1782002680]
-offset_left = -179.0
-offset_top = -229.0
-offset_right = -67.0
-offset_bottom = -206.0
+offset_top = 33.0
+offset_right = 112.0
+offset_bottom = 56.0
 text = "выбор вагона"
 
 [node name="TrainPreview" type="Node2D" parent="." unique_id=478105875]
