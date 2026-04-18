@@ -12,7 +12,7 @@ var money_per_level = {
 }
 
 # Ссылка на спрайт, чтобы менять вид вагона
-@onready var sprite = $Sprite2D
+@onready var sprite = $"StaticBody2D/4Db8a4Fcdb51d7f95Bd26Baa099Be99d"
 
 func _ready():
 	update_wagon_stats()

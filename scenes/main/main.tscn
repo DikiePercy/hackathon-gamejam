@@ -1,8 +1,18 @@
 [gd_scene format=3 uid="uid://xpa2retjrs0g"]
 
 [ext_resource type="PackedScene" uid="uid://bf52gpgg0aftq" path="res://scenes/train_timur/train.tscn" id="1_hyk8p"]
+[ext_resource type="PackedScene" uid="uid://qbej13o38ef5" path="res://scenes/train/train.tscn" id="1_train"]
+[ext_resource type="Script" uid="uid://kggtcrnmw3fy" path="res://scenes/main/main.gd" id="2_maingd"]
+[ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://scenes/characters/Player.tscn" id="3_player"]
 
-[node name="Main" type="Node2D" unique_id=907356086]
+[node name="Main" type="Node2D" unique_id=1038197434]
+script = ExtResource("2_maingd")
 
 [node name="Train" parent="." unique_id=2065298570 instance=ExtResource("1_hyk8p")]
 position = Vector2(1140, 338)
+
+[node name="Train2" parent="." unique_id=702240966 instance=ExtResource("1_train")]
+position = Vector2(-1, 402)
+
+[node name="Player" parent="." unique_id=1025993540 instance=ExtResource("3_player")]
+position = Vector2(50, 257)
