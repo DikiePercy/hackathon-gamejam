@@ -1,12 +1,14 @@
 [gd_scene format=3 uid="uid://xpa2retjrs0g"]
 
-[ext_resource type="PackedScene" uid="uid://bf52gpgg0aftq" path="res://scenes/train/train.tscn" id="1_hyk8p"]
-[ext_resource type="Script" uid="uid://kggtcrnmw3fy" path="res://scenes/main/main.gd" id="1_k2fmo"]
-[ext_resource type="PackedScene" uid="uid://eik6ck4y34bd" path="res://scenes/menu/great-menu-screen.tscn" id="3_l3cfh"]
+[ext_resource type="PackedScene" uid="uid://qbej13o38ef5" path="res://scenes/train/train.tscn" id="1_train"]
+[ext_resource type="Script" uid="uid://kggtcrnmw3fy" path="res://scenes/main/main.gd" id="2_maingd"]
+[ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://scenes/characters/Player.tscn" id="3_player"]
 
-[node name="Main" type="Node2D" unique_id=907356086]
-script = ExtResource("1_k2fmo")
+[node name="Main" type="Node2D" unique_id=1038197434]
+script = ExtResource("2_maingd")
 
-[node name="Train" parent="." unique_id=2065298570 instance=ExtResource("1_hyk8p")]
+[node name="Train" parent="." unique_id=702240966 instance=ExtResource("1_train")]
+position = Vector2(0, 400)
 
-[node name="GreatMenuScreen" parent="." unique_id=1212696548 instance=ExtResource("3_l3cfh")]
+[node name="Player" parent="." unique_id=1025993540 instance=ExtResource("3_player")]
+position = Vector2(200, 280)

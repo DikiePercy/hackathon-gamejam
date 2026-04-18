@@ -1,3 +1,7 @@
-[gd_scene format=3 uid="uid://diackrq52cn"]
+[gd_scene format=3]
 
-[node name="Level" type="Node2D" unique_id=1780881876]
+[node name="Level1" type="Node2D"]
+
+[node name="Label" type="Label" parent="."]
+position = Vector2(400, 300)
+text = "Level 1 (заглушка)"
