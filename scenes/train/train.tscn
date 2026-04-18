@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://bf52gpgg0aftq"]
+
+[ext_resource type="Script" uid="uid://oma1c3jv7md6" path="res://scenes/train/train.gd" id="1_tnona"]
+[ext_resource type="Texture2D" uid="uid://b76ve2m614pki" path="res://assets/sprites/i.jpg" id="2_0i8p1"]
+
+[node name="Train" type="Node2D" unique_id=2065298570]
+script = ExtResource("1_tnona")
+
+[node name="Locomotive" type="StaticBody2D" parent="." unique_id=417793605]
+
+[node name="I" type="Sprite2D" parent="." unique_id=1158147453]
+position = Vector2(548, 318)
+texture = ExtResource("2_0i8p1")
