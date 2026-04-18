@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://qbej13o38ef5"]
 
 [ext_resource type="Script" uid="uid://i1maoo85bww7" path="res://scenes/train/train.gd" id="1_tnona"]
-[ext_resource type="PackedScene" path="res://scenes/train/Wagon.tscn" id="2_0i8p1"]
+[ext_resource type="PackedScene" uid="uid://b5qie8yafkesc" path="res://scenes/train/Wagon.tscn" id="2_0i8p1"]
+[ext_resource type="PackedScene" uid="uid://cw3d38st6wllx" path="res://scenes/characters/enemy.tscn" id="3_fxk1r"]
 
 [sub_resource type="RectangleShape2D" id="Shape_loco_floor"]
 size = Vector2(136, 10)
@@ -9,6 +10,7 @@ size = Vector2(136, 10)
 [node name="Train" type="Node2D" unique_id=931045708]
 script = ExtResource("1_tnona")
 wagon_scene = ExtResource("2_0i8p1")
+enemy_scene = ExtResource("3_fxk1r")
 
 [node name="Locomotive" type="Node2D" parent="." unique_id=124460981]
 
@@ -17,6 +19,7 @@ offset_left = -70.0
 offset_top = -110.0
 offset_right = 70.0
 color = Color(0.45, 0.12, 0.12, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="LocoCabin" type="ColorRect" parent="Locomotive" unique_id=1372633937]
 offset_left = -30.0
@@ -24,6 +27,7 @@ offset_top = -140.0
 offset_right = 30.0
 offset_bottom = -110.0
 color = Color(0.35, 0.1, 0.1, 1)
+metadata/_edit_use_anchors_ = true
 
 [node name="LocoWheelL" type="ColorRect" parent="Locomotive" unique_id=203306091]
 offset_left = -60.0

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ckj5li5e8puw3"]
 
 [ext_resource type="Script" uid="uid://d0ppuq5eq8pf6" path="res://scripts/classes/main-person.gd" id="1_mainperson"]
-[ext_resource type="PackedScene" path="res://scenes/characters/Bullet.tscn" id="2_gin2a"]
+[ext_resource type="PackedScene" uid="uid://8wrtibmowea" path="res://scenes/characters/Bullet.tscn" id="2_gin2a"]
 
 [sub_resource type="RectangleShape2D" id="Shape_body"]
 size = Vector2(24, 32)
@@ -36,6 +36,7 @@ shape = SubResource("Shape_ladder_det")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1330608836]
 zoom = Vector2(1.5, 1.5)
+process_callback = 0
 limit_left = -500
 limit_right = 5000
 position_smoothing_enabled = true
