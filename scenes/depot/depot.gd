@@ -5,6 +5,9 @@ extends Control
 
 @onready var train_preview = $TrainPreview
 @onready var gold_label = $Camera2D/GoldLabel
+@onready var weapon_label = $Camera2D.get_node_or_null("WeaponLabel")
+
+@export var shotgun_price: int = 600
 
 @onready var camera = $Camera2D
 var camera_speed = 500.0
@@ -124,7 +127,22 @@ func _on_buy_button_pressed() -> void:
 		print("Куплен новый вагон! Всего вагонов: ", GameManager.train_data.size())
 	else:
 		print("Недостаточно золота!")
+
+func _on_buy_weapon_button_pressed() -> void:
+	if GameManager.has_shotgun:
+		print("Уже куплено ружье")
+		return
+
+	if GameManager.total_gold >= shotgun_price:
+		GameManager.total_gold -= shotgun_price
+		GameManager.has_shotgun = true
+		update_ui()
+		print("Куплено ружье!")
+	else:
+		print("Недостаточно золота для ружья!")
 	
 	
 func update_ui():
 	gold_label.text = "Золото: " + str(GameManager.total_gold)
+	if weapon_label != null:
+		weapon_label.text = "Оружие: " + ("Ружье" if GameManager.has_shotgun else "Пистолет")

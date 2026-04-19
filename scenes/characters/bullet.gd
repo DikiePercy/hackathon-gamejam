@@ -4,6 +4,7 @@ class_name Bullet
 
 const SPEED := 650.0
 var direction: Vector2 = Vector2.RIGHT
+@export var damage: int = 25
 
 @onready var _timer: Timer = $LifetimeTimer
 
@@ -20,5 +21,5 @@ func _physics_process(delta: float) -> void:
 
 func _on_body_entered(body: Node) -> void:
 	if body is Person:
-		body.take_damage(25)
+		body.take_damage(damage)
 	queue_free()
