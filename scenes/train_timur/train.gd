@@ -9,7 +9,8 @@ extends Node2D
 @export var enemy_spawn_interval: float = 7.0
 @export var enemy_spawn_max_active: int = 3
 
-
+signal stop_trein()
+signal go_trein()
 
 enum State {DRIVING, AT_STATION, SLOW, FAST}
 var current_state = State.DRIVING
@@ -57,12 +58,14 @@ func _process(delta: float) -> void:
 		$Locomotive/AnimatedSprite2D.stop()
 
 func slow_logic(delta):
+	emit_signal("stop_trein")
 	if GameManager.train_speed > 0:
 		GameManager.train_speed -= 1
 	else:
 		current_state = State.AT_STATION
 
 func fast_logic(delta):
+	emit_signal("go_trein")
 	if GameManager.train_speed < max_speed:
 		GameManager.train_speed += 1
 	else:
@@ -84,11 +87,10 @@ func _on_timer_timeout() -> void:
 func _input(event):
 	# "ui_accept" — это стандартное действие для Пробела (и Enter)
 	if event.is_action_pressed("ui_accept") and current_state == State.AT_STATION:
-		current_state = State.FAST
+		current_state = State.FAST 
 
 func build_train_from_data():
 	# Очищаем, если что-то было
-	
 	for child in wagons_container.get_children():
 		child.queue_free()
 	
