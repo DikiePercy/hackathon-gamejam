@@ -41,6 +41,8 @@ enum RaidState {
 @export var dismount_jump_velocity: float = -300.0
 @export var roof_switch_cooldown: float = 3.0
 @export var roof_player_height_threshold: float = 42.0
+@export var train_damage_per_tick: int = 3
+@export var train_damage_cooldown: float = 1.6
 
 var _direction: int = 1
 var _damage_timer: float = 0.0
@@ -66,6 +68,7 @@ var _interior_target: Vector2 = Vector2.ZERO
 var _roof_target: Vector2 = Vector2.ZERO
 var _roof_mode: bool = false
 var _roof_switch_timer: float = 0.0
+var _train_damage_timer: float = 0.0
 
 var dst_shoot_sound: AudioStream = preload("res://assets/sounds/128300__xenonn__layered-gunshot-4.wav")
 
@@ -147,6 +150,8 @@ func _physics_process(delta: float) -> void:
 		_board_hold_timer = maxf(_board_hold_timer - delta, 0.0)
 	if _roof_switch_timer > 0.0:
 		_roof_switch_timer = maxf(_roof_switch_timer - delta, 0.0)
+	if _train_damage_timer > 0.0:
+		_train_damage_timer = maxf(_train_damage_timer - delta, 0.0)
 
 	_update_visual_animation()
 	_update_raid_mount_visual()
@@ -166,7 +171,10 @@ func _process_approach_train() -> void:
 	velocity.x = _direction * _move_speed
 	if is_on_floor() and velocity.y > 0.0:
 		velocity.y = 0.0
-	if absf(global_position.x - _boarding_target.x) <= approach_reach_threshold:
+	var reach_threshold: float = approach_reach_threshold * 4.0
+	var reached_by_distance := absf(global_position.x - _boarding_target.x) <= reach_threshold
+	var passed_target := (_direction > 0 and global_position.x >= _boarding_target.x - approach_reach_threshold) or (_direction < 0 and global_position.x <= _boarding_target.x + approach_reach_threshold)
+	if reached_by_distance or passed_target:
 		_apply_boarding_jump(_boarding_target)
 		_raid_state = RaidState.BOARD_TRAIN
 
@@ -299,6 +307,7 @@ func _process_attack_state(delta: float) -> void:
 				_weapon_state = WeaponState.KNIFE
 	else:
 		_patrol_near_train()
+		_try_damage_train_objective()
 		if is_on_floor() and velocity.y > 0.0:
 			velocity.y = 0.0
 
@@ -317,6 +326,7 @@ func _process_roof_assault(_delta: float) -> void:
 
 	var target := _player if _player != null and _player.is_inside_tree() else null
 	if target == null:
+		_try_damage_train_objective()
 		return
 
 	_update_direction_toward(target.global_position)
@@ -492,6 +502,23 @@ func _shoot_at_target(target: Person) -> void:
 		_audio.stop()
 		_audio.stream = dst_shoot_sound
 		_audio.play()
+
+func _try_damage_train_objective() -> void:
+	if _train_damage_timer > 0.0:
+		return
+	if _train_node == null or not is_instance_valid(_train_node):
+		return
+	if not _train_node.has_method("damage_train"):
+		return
+
+	var guard_x := global_position.x
+	if _train_node.has_method("get_rear_guard_x"):
+		guard_x = float(_train_node.call("get_rear_guard_x"))
+	if global_position.x > guard_x + 70.0:
+		return
+
+	_train_node.call("damage_train", train_damage_per_tick)
+	_train_damage_timer = train_damage_cooldown
 
 func _play_shot_feedback() -> void:
 	if _sprite == null:

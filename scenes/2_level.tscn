@@ -1,0 +1,65 @@
+[gd_scene format=3 uid="uid://bf2xepcbhx7hn"]
+
+[ext_resource type="Script" uid="uid://kggtcrnmw3fy" path="res://scenes/main/main.gd" id="1_yqsdl"]
+[ext_resource type="Script" uid="uid://jc4w1dsn0371" path="res://scenes/main/pause.gd" id="2_dg7rk"]
+[ext_resource type="PackedScene" uid="uid://bf52gpgg0aftq" path="res://scenes/train_timur/train.tscn" id="3_fgy15"]
+[ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://scenes/characters/Player.tscn" id="4_ap4t8"]
+[ext_resource type="PackedScene" uid="uid://dkxqe6ywm556q" path="res://scenes/paralaxes/parallax_background_2.tscn" id="5_dg7rk"]
+[ext_resource type="PackedScene" uid="uid://b03tildsg3ynj" path="res://scenes/UI/menupause.tscn" id="6_u52ew"]
+[ext_resource type="PackedScene" uid="uid://2qsupeeowy0u" path="res://scenes/rels/parallax_background.tscn" id="7_8a3qx"]
+
+[node name="2 level" type="Node2D" unique_id=1038197434]
+script = ExtResource("1_yqsdl")
+
+[node name="pause" type="Node" parent="." unique_id=1423032809]
+process_mode = 3
+script = ExtResource("2_dg7rk")
+
+[node name="Train" parent="." unique_id=2065298570 instance=ExtResource("3_fgy15")]
+position = Vector2(285, 154)
+
+[node name="Player" parent="." unique_id=1025993540 instance=ExtResource("4_ap4t8")]
+position = Vector2(161, 125)
+scale = Vector2(1, 1)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1979060732]
+
+[node name="menupause" parent="CanvasLayer" unique_id=1981241334 instance=ExtResource("6_u52ew")]
+process_mode = 2
+
+[node name="menubutton" type="Button" parent="CanvasLayer" unique_id=1693978820]
+offset_left = 412.0
+offset_top = 41.0
+offset_right = 475.0
+offset_bottom = 72.0
+text = "Menu"
+
+[node name="ParallaxBackground" parent="." unique_id=1808317350 instance=ExtResource("7_8a3qx")]
+
+[node name="relses" type="Node2D" parent="." unique_id=1365972844]
+visible = false
+
+[node name="Rels" parent="relses" unique_id=1089401706 instance=ExtResource("7_8a3qx")]
+visible = false
+
+[node name="Rels3" parent="relses" unique_id=1755232666 instance=ExtResource("7_8a3qx")]
+
+[node name="Rels4" parent="relses" unique_id=1919392374 instance=ExtResource("7_8a3qx")]
+
+[node name="Rels2" parent="relses" unique_id=1817454489 instance=ExtResource("7_8a3qx")]
+
+[node name="Rels5" parent="relses" unique_id=193359381 instance=ExtResource("7_8a3qx")]
+
+[node name="Rels6" parent="relses" unique_id=1136167340 instance=ExtResource("7_8a3qx")]
+
+[node name="Rels7" parent="relses" unique_id=73579383 instance=ExtResource("7_8a3qx")]
+
+[node name="Rels8" parent="relses" unique_id=183978961 instance=ExtResource("7_8a3qx")]
+
+[node name="ParallaxBackground2" parent="." unique_id=686670080 instance=ExtResource("5_dg7rk")]
+
+[connection signal="pressed" from="CanvasLayer/menupause/Panel/VBoxContainer/Button" to="pause" method="_on_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/menupause/Panel/VBoxContainer/Button4" to="pause" method="_on_button_4_pressed"]
+[connection signal="pressed" from="CanvasLayer/menubutton" to="pause" method="_on_menubutton_pressed"]
+
+[editable path="CanvasLayer/menupause"]

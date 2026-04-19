@@ -17,9 +17,12 @@ extends Node2D
 
 signal stop_trein
 signal go_trein
+signal train_integrity_changed(current_value)
+signal train_objective_broken
+signal passengers_changed(current_alive)
 
 enum State {DRIVING, AT_STATION, SLOW, FAST}
-var current_state = State.DRIVING
+var current_state = State.AT_STATION
 
 @export var max_speed: float = 300.0
 @export var braking_distance: float = 500.0 # Дистанция начала торможения
@@ -30,6 +33,7 @@ var is_in_depot = false
 var _active_enemies: Array[Node2D] = []
 var _enemy_spawn_timer: Timer = null
 var _last_lane_id: int = -1
+var _train_integrity: int = 0
 
 
 const ENEMY_BULLET_SCENE := preload("res://scenes/characters/Bullet.tscn")
@@ -56,36 +60,55 @@ func _ready():
 			dst_train_horn_audio.stop()
 		return
 	build_train_from_data()
+	_train_integrity = clampi(GameManager.train_integrity_current, 0, GameManager.train_integrity_max)
 	_play_train_horn()
 	if speed > 0.0 and dst_train_engine_audio != null:
 		dst_train_engine_audio.play()
 	_setup_enemy_spawner()
+	passengers_changed.emit(get_total_alive_passengers())
+	train_integrity_changed.emit(_train_integrity)
 
 func _process(_delta: float) -> void:
 	if is_in_depot:
 		$Locomotive/AnimatedSprite2D.stop()
+		return
+
+	match current_state:
+		State.SLOW:
+			slow_logic(_delta)
+		State.FAST:
+			fast_logic(_delta)
+		State.DRIVING:
+			drive_logic(_delta)
+		State.AT_STATION:
+			station_logic(_delta)
 
 func slow_logic(delta):
 	emit_signal("stop_trein")
+	var step := maxi(int(round(60.0 * delta)), 1)
 	if GameManager.train_speed > 0:
-		GameManager.train_speed -= 1
+		GameManager.train_speed = maxi(GameManager.train_speed - step, 0)
 	else:
 		current_state = State.AT_STATION
 
 func fast_logic(delta):
 	emit_signal("go_trein")
+	var step := maxi(int(round(60.0 * delta)), 1)
 	if GameManager.train_speed < max_speed:
-		GameManager.train_speed += 1
+		GameManager.train_speed = mini(GameManager.train_speed + step, int(max_speed))
 	else:
 		current_state = State.DRIVING
 
 func drive_logic(delta):
+	if delta < 0.0:
+		return
 	if !$Timer.is_stopped():
 		print($Timer.time_left)
 	else:
 		$Timer.start(5)
 
 func station_logic(_delta):
+	_delta += 0.0
 	pass
 	
 func _on_timer_timeout() -> void:
@@ -127,6 +150,7 @@ func build_train_from_data():
 
 func update_wagon_list():
 	wagons = wagons_container.get_children()
+	passengers_changed.emit(get_total_alive_passengers())
 
 func _play_train_horn() -> void:
 	if dst_train_horn_audio != null:
@@ -172,8 +196,9 @@ func _spawn_enemy_member(lane_id: int, delay_seconds: float) -> void:
 		return
 
 	var board_target: Vector2 = get_enemy_boarding_target(lane_id)
+	var rear_anchor: Vector2 = get_enemy_boarding_target(LANE_REAR)
 	var spawn_offset_x: float = randf_range(ENEMY_SPAWN_OFFSET_X_MIN, ENEMY_SPAWN_OFFSET_X_MAX)
-	var spawn_position := Vector2(board_target.x - spawn_offset_x, get_rail_level_y() - ENEMY_SPAWN_HEIGHT_ABOVE_RAIL)
+	var spawn_position := Vector2(rear_anchor.x - spawn_offset_x, get_rail_level_y() - ENEMY_SPAWN_HEIGHT_ABOVE_RAIL)
 	var enemy_instance := enemy_scene.instantiate()
 	if enemy_instance == null:
 		return
@@ -280,9 +305,36 @@ func get_rear_guard_x() -> float:
 
 func get_rail_level_y() -> float:
 	var rail_shape := get_node_or_null("EnemyRaidRail/CollisionShape2D") as CollisionShape2D
+	if rail_shape != null and rail_shape.shape is RectangleShape2D:
+		var rect := rail_shape.shape as RectangleShape2D
+		var half_height: float = rect.size.y * 0.5 * absf(rail_shape.global_scale.y)
+		return rail_shape.global_position.y - half_height
 	if rail_shape != null:
 		return rail_shape.global_position.y
 	return global_position.y + 60.0
+
+func get_total_alive_passengers() -> int:
+	var alive := 0
+	for wagon_node in wagons_container.get_children():
+		if wagon_node != null and wagon_node.has_method("get_alive_passenger_count"):
+			alive += int(wagon_node.call("get_alive_passenger_count"))
+	if alive == 0:
+		var fallback := get_tree().get_nodes_in_group("passenger")
+		alive = fallback.size()
+	return alive
+
+func get_train_integrity() -> int:
+	return _train_integrity
+
+func damage_train(amount: int) -> int:
+	if amount <= 0:
+		return _train_integrity
+	_train_integrity = maxi(_train_integrity - amount, 0)
+	GameManager.train_integrity_current = _train_integrity
+	train_integrity_changed.emit(_train_integrity)
+	if _train_integrity <= 0:
+		train_objective_broken.emit()
+	return _train_integrity
 
 func _has_property(node: Object, property_name: String) -> bool:
 	for property in node.get_property_list():

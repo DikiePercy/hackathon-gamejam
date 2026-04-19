@@ -39,65 +39,23 @@ func _on_menubutton_pressed() -> void:
 
 
 func _on_save_button_pressed() -> void:
-	_ensure_save_dir()
-
 	if GameManager.current_save_slot_id.is_empty():
 		GameManager.current_save_slot_id = _new_slot_id()
-
-	var save_time_text := Time.get_datetime_string_from_system().replace("T", " ")
-	var save_time_unix := int(Time.get_unix_time_from_system())
-	var save_payload := {
-		"meta": {
-			"slot_id": GameManager.current_save_slot_id,
-			"saved_at_text": save_time_text,
-			"saved_at_unix": save_time_unix
-		},
-		"game_manager": GameManager.to_save_dict(),
-		"player": _collect_player_state(),
-		"scene_path": get_tree().current_scene.scene_file_path
-	}
-
-	var save_path := _slot_path(GameManager.current_save_slot_id)
-	var file := FileAccess.open(save_path, FileAccess.WRITE)
-	if file == null:
-		push_warning("Save failed: cannot open save file")
+	if not GameManager.autosave_current_state():
+		push_warning("Save failed")
 		return
-
-	file.store_string(JSON.stringify(save_payload))
-	file.close()
 	print("Save completed")
 
 
 func _on_load_button_pressed() -> void:
-	if GameManager.current_save_slot_id.is_empty():
-		push_warning("Load failed: no active save slot")
+	if not GameManager.load_latest_save_into_pending():
+		push_warning("Load failed: no valid saves")
 		return
-
-	var save_path := _slot_path(GameManager.current_save_slot_id)
-	if not FileAccess.file_exists(save_path):
-		push_warning("Load failed: save file not found")
-		return
-
-	var file := FileAccess.open(save_path, FileAccess.READ)
-	if file == null:
-		push_warning("Load failed: cannot open save file")
-		return
-
-	var raw_text := file.get_as_text()
-	file.close()
-
-	var parsed = JSON.parse_string(raw_text)
-	if parsed == null or not (parsed is Dictionary):
-		push_warning("Load failed: invalid save JSON")
-		return
-
-	var data: Dictionary = parsed
-	if data.has("game_manager") and data["game_manager"] is Dictionary:
-		GameManager.apply_save_dict(data["game_manager"])
-
-	if data.has("player") and data["player"] is Dictionary:
-		_apply_player_state(data["player"])
-
+	game_paused = false
+	get_tree().paused = false
+	var payload := GameManager.pending_load_data
+	var scene_path := String(payload.get("scene_path", get_tree().current_scene.scene_file_path))
+	get_tree().change_scene_to_file(scene_path)
 	print("Load completed")
 
 

@@ -37,12 +37,13 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b8fnn"]
-size = Vector2(428, 13)
+size = Vector2(420, 13)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_mm4mv"]
-size = Vector2(482, 6)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qwgqn"]
+size = Vector2(478, 13)
 
-[sub_resource type="SegmentShape2D" id="SegmentShape2D_qwgqn"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rail_side"]
+size = Vector2(56, 6)
 
 [node name="wagon" type="Node2D" unique_id=194281729]
 scale = Vector2(0.5, 0.5)
@@ -65,30 +66,31 @@ sprite_frames = SubResource("SpriteFrames_n4enn")
 animation = &"v3"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1041975752]
-position = Vector2(0, -53.5)
+position = Vector2(2, -52)
 shape = SubResource("RectangleShape2D_b8fnn")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D" unique_id=1035372555]
-position = Vector2(1, 39)
-shape = SubResource("RectangleShape2D_mm4mv")
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D" unique_id=901349933]
+position = Vector2(1, 38)
+scale = Vector2(0.99999994, 0.99999994)
+shape = SubResource("RectangleShape2D_qwgqn")
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="StaticBody2D" unique_id=136032556]
-position = Vector2(-222, 0)
-scale = Vector2(5.1822934, -0.91476876)
-shape = SubResource("SegmentShape2D_qwgqn")
-one_way_collision = true
-one_way_collision_margin = 0.0
+[node name="RailingsBody" type="StaticBody2D" parent="." unique_id=1229175093]
+collision_layer = 4
 
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="StaticBody2D" unique_id=416257193]
-position = Vector2(219.99997, -2.000001)
-scale = Vector2(6.092509, -0.52145463)
-shape = SubResource("SegmentShape2D_qwgqn")
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="RailingsBody" unique_id=136032556]
+position = Vector2(-222, -2)
+shape = SubResource("RectangleShape2D_rail_side")
 one_way_collision = true
-one_way_collision_margin = 0.0
+one_way_collision_margin = 4.0
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="RailingsBody" unique_id=416257193]
+position = Vector2(220, -2)
+shape = SubResource("RectangleShape2D_rail_side")
+one_way_collision = true
+one_way_collision_margin = 4.0
 
 [node name="Marker2D" type="Marker2D" parent="." unique_id=1777439383]
 z_index = 1
-position = Vector2(-218, 26)
 
 [node name="InteriorEntry" type="Marker2D" parent="." unique_id=149785621]
 position = Vector2(-96, 26)

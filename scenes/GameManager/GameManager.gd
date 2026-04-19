@@ -5,6 +5,12 @@ const DEFAULT_HAS_SHOTGUN := false
 const DEFAULT_TOTAL_P := 100
 const DEFAULT_TRAIN_SPEED := 250
 const DEFAULT_TRAIN_LEVEL := 1
+const DEFAULT_TRAIN_INTEGRITY_MAX := 300
+const DEFAULT_MISSION_TARGET_DISTANCE := 4200.0
+const DEFAULT_MISSION_TIME_LIMIT := 180.0
+const DEFAULT_REWARD_BASE := 220
+const DEFAULT_REWARD_PER_PASSENGER := 40
+const DEFAULT_FAIL_PENALTY := 60
 const SAVE_DIR_PATH := "user://saves"
 const AUTOSAVE_SLOT_ID := "autosave"
 const DEFAULT_TRAIN_DATA := [
@@ -15,10 +21,19 @@ const DEFAULT_TRAIN_DATA := [
 var total_gold = 5000
 var has_shotgun: bool = false
 var total_p = 100
-var train_speed = 250
+var train_speed = DEFAULT_TRAIN_SPEED
+var train_integrity_max: int = DEFAULT_TRAIN_INTEGRITY_MAX
+var train_integrity_current: int = DEFAULT_TRAIN_INTEGRITY_MAX
+var mission_target_distance: float = DEFAULT_MISSION_TARGET_DISTANCE
+var mission_time_limit: float = DEFAULT_MISSION_TIME_LIMIT
+var mission_reward_base: int = DEFAULT_REWARD_BASE
+var mission_reward_per_passenger: int = DEFAULT_REWARD_PER_PASSENGER
+var mission_fail_penalty: int = DEFAULT_FAIL_PENALTY
+var pending_mission_reward: int = 0
+var last_mission_result: Dictionary = {}
 
 # Структура: [ [уровень, люди, hp], [уровень, люди, hp] ]
-var train_data = [
+var train_data: Array = [
 	[1, 5, 1], # Первый вагон
 	[1, 3, 2]  # Второй вагон
 ]
@@ -41,6 +56,15 @@ func reset_to_defaults() -> void:
 	train_speed = DEFAULT_TRAIN_SPEED
 	train_level = DEFAULT_TRAIN_LEVEL
 	train_data = DEFAULT_TRAIN_DATA.duplicate(true)
+	train_integrity_max = DEFAULT_TRAIN_INTEGRITY_MAX
+	train_integrity_current = train_integrity_max
+	mission_target_distance = DEFAULT_MISSION_TARGET_DISTANCE
+	mission_time_limit = DEFAULT_MISSION_TIME_LIMIT
+	mission_reward_base = DEFAULT_REWARD_BASE
+	mission_reward_per_passenger = DEFAULT_REWARD_PER_PASSENGER
+	mission_fail_penalty = DEFAULT_FAIL_PENALTY
+	pending_mission_reward = 0
+	last_mission_result = {}
 
 func to_save_dict() -> Dictionary:
 	return {
@@ -49,7 +73,16 @@ func to_save_dict() -> Dictionary:
 		"total_p": total_p,
 		"train_speed": train_speed,
 		"train_level": train_level,
-		"train_data": train_data.duplicate(true)
+		"train_data": train_data.duplicate(true),
+		"train_integrity_max": train_integrity_max,
+		"train_integrity_current": train_integrity_current,
+		"mission_target_distance": mission_target_distance,
+		"mission_time_limit": mission_time_limit,
+		"mission_reward_base": mission_reward_base,
+		"mission_reward_per_passenger": mission_reward_per_passenger,
+		"mission_fail_penalty": mission_fail_penalty,
+		"pending_mission_reward": pending_mission_reward,
+		"last_mission_result": last_mission_result.duplicate(true)
 	}
 
 func apply_save_dict(data: Dictionary) -> void:
@@ -58,10 +91,55 @@ func apply_save_dict(data: Dictionary) -> void:
 	total_p = int(data.get("total_p", total_p))
 	train_speed = int(data.get("train_speed", train_speed))
 	train_level = int(data.get("train_level", train_level))
+	train_integrity_max = int(data.get("train_integrity_max", train_integrity_max))
+	train_integrity_current = int(data.get("train_integrity_current", train_integrity_current))
+	mission_target_distance = float(data.get("mission_target_distance", mission_target_distance))
+	mission_time_limit = float(data.get("mission_time_limit", mission_time_limit))
+	mission_reward_base = int(data.get("mission_reward_base", mission_reward_base))
+	mission_reward_per_passenger = int(data.get("mission_reward_per_passenger", mission_reward_per_passenger))
+	mission_fail_penalty = int(data.get("mission_fail_penalty", mission_fail_penalty))
+	pending_mission_reward = int(data.get("pending_mission_reward", pending_mission_reward))
+	var loaded_result = data.get("last_mission_result", {})
+	if loaded_result is Dictionary:
+		last_mission_result = (loaded_result as Dictionary).duplicate(true)
 
 	var loaded_train_data = data.get("train_data", train_data)
 	if loaded_train_data is Array and loaded_train_data.size() > 0:
 		train_data = loaded_train_data.duplicate(true)
+
+	_clamp_integrity_values()
+
+func begin_mission_run() -> void:
+	train_integrity_current = train_integrity_max
+	pending_mission_reward = 0
+
+func apply_train_damage(amount: int) -> int:
+	train_integrity_current = clampi(train_integrity_current - maxi(amount, 0), 0, train_integrity_max)
+	return train_integrity_current
+
+func apply_mission_result(success: bool, passengers_alive: int, time_left: float, distance_ratio: float) -> Dictionary:
+	var clamped_passengers: int = maxi(passengers_alive, 0)
+	var clamped_ratio: float = clampf(distance_ratio, 0.0, 1.5)
+	var reward: int = 0
+
+	if success:
+		reward = mission_reward_base + clamped_passengers * mission_reward_per_passenger + int(round(80.0 * clamped_ratio))
+		total_gold += reward
+	else:
+		reward = -mission_fail_penalty
+		total_gold = maxi(total_gold + reward, 0)
+
+	pending_mission_reward = reward
+	last_mission_result = {
+		"success": success,
+		"reward": reward,
+		"passengers_alive": clamped_passengers,
+		"time_left": maxf(time_left, 0.0),
+		"distance_ratio": clamped_ratio,
+		"train_integrity": train_integrity_current,
+		"saved_at_unix": int(Time.get_unix_time_from_system())
+	}
+	return last_mission_result.duplicate(true)
 
 func autosave_current_state() -> bool:
 	var payload := _build_save_payload()
@@ -87,7 +165,7 @@ func _build_save_payload() -> Dictionary:
 	var now_unix := int(Time.get_unix_time_from_system())
 	var now_text := Time.get_datetime_string_from_system().replace("T", " ")
 
-	var slot_id := current_save_slot_id if not current_save_slot_id.is_empty() else AUTOSAVE_SLOT_ID
+	var slot_id := _resolved_target_slot_id()
 	return {
 		"meta": {
 			"slot_id": slot_id,
@@ -120,6 +198,8 @@ func _collect_player_state() -> Dictionary:
 	}
 
 func _write_slot(slot_id: String, payload: Dictionary) -> bool:
+	if slot_id.is_empty():
+		return false
 	DirAccess.make_dir_recursive_absolute(SAVE_DIR_PATH)
 	var file := FileAccess.open(_slot_path(slot_id), FileAccess.WRITE)
 	if file == null:
@@ -201,3 +281,10 @@ func _read_slot_payload(slot_id: String) -> Dictionary:
 		return {}
 
 	return parsed as Dictionary
+
+func _resolved_target_slot_id() -> String:
+	return current_save_slot_id if not current_save_slot_id.is_empty() else AUTOSAVE_SLOT_ID
+
+func _clamp_integrity_values() -> void:
+	train_integrity_max = maxi(train_integrity_max, 1)
+	train_integrity_current = clampi(train_integrity_current, 0, train_integrity_max)

@@ -3,11 +3,14 @@ extends Node2D
 signal clicked(wagon_node)
 signal mouse_hovered(wagon_node)
 signal mouse_unhovered(wagon_node)
+signal wagon_damaged(wagon_node, remaining_hp)
+signal wagon_destroyed(wagon_node)
 
 var wagon_level = 1
 var vagon_type = 1
 var passengers = 0
 var is_in_depot = false
+var wagon_hp: int = 120
 
 const INTERIOR_Z_INDEX := 0
 const PLAYER_INSIDE_Z_INDEX := 5
@@ -31,6 +34,7 @@ var _spawned_passengers: Array[Node2D] = []
 
 func _ready():
 	update_wagon_stats()
+	wagon_hp = get_wagon_max_hp()
 	# Настройка слоев "пирога" программно для надежности
 	if interior_sprite:
 		interior_sprite.z_as_relative = false
@@ -78,11 +82,48 @@ func sync_passengers() -> void:
 		var passenger_node := passenger_scene.instantiate()
 		add_child(passenger_node)
 		if passenger_node is Passenger:
-			(passenger_node as Passenger).sit_at_global(seat.global_position)
+			var passenger := passenger_node as Passenger
+			passenger.sit_at_global(seat.global_position)
+			if not passenger.died.is_connected(_on_passenger_died):
+				passenger.died.connect(_on_passenger_died)
 		else:
 			push_warning("wagon.gd: passenger_scene должен создавать Passenger")
 			passenger_node.global_position = seat.global_position
 		_spawned_passengers.append(passenger_node)
+
+func get_wagon_max_hp() -> int:
+	match wagon_level:
+		1:
+			return 120
+		2:
+			return 170
+		3:
+			return 230
+	return 120
+
+func get_alive_passenger_count() -> int:
+	var alive := 0
+	for passenger_node in _spawned_passengers:
+		if not is_instance_valid(passenger_node):
+			continue
+		if passenger_node is Passenger:
+			var passenger := passenger_node as Passenger
+			if passenger.health > 0:
+				alive += 1
+		else:
+			alive += 1
+	return alive
+
+func damage_wagon(amount: int) -> void:
+	if amount <= 0:
+		return
+	wagon_hp = maxi(wagon_hp - amount, 0)
+	wagon_damaged.emit(self, wagon_hp)
+	if wagon_hp <= 0:
+		wagon_destroyed.emit(self)
+
+func _on_passenger_died() -> void:
+	passengers = get_alive_passenger_count()
 
 # ЭФФЕКТ НАРЕЗКИ
 func _on_area_2d_body_entered(body: Node2D) -> void:
