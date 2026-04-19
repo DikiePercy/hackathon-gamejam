@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://be00ylwiwetr2"]
+
+[ext_resource type="Script" uid="uid://du4t2o4qn7xr0" path="res://scenes/depot/depot.gd" id="1_fxm1y"]
+[ext_resource type="Texture2D" uid="uid://otx3wpa248hm" path="res://assets/sprites/train/background-desert.jpg" id="2_j3mw0"]
+
+[node name="Depot" type="Control" unique_id=1590991496]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+script = ExtResource("1_fxm1y")
+
+[node name="TrainPreviewContent" type="Node2D" parent="." unique_id=491198593]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1311003508]
+zoom = Vector2(0.4, 0.4)
+
+[node name="BackgroundDesert" type="Sprite2D" parent="Camera2D" unique_id=1989465728]
+position = Vector2(85, -154)
+texture = ExtResource("2_j3mw0")
+
+[node name="UpgradeButton" type="Button" parent="Camera2D" unique_id=1880673813]
+offset_right = 63.0
+offset_bottom = 90.0
+text = "update"
+
+[node name="GoldLabel" type="Label" parent="Camera2D" unique_id=317279582]
+offset_top = 33.0
+offset_right = 1.0
+offset_bottom = 56.0
+
+[node name="BuyButton" type="Button" parent="Camera2D" unique_id=2076212567]
+offset_right = 65.0
+offset_bottom = 90.0
+text = "купить"
+
+[node name="Label" type="Label" parent="Camera2D" unique_id=1782002680]
+offset_top = 33.0
+offset_right = 112.0
+offset_bottom = 56.0
+text = "выбор вагона"
+
+[node name="TrainPreview" type="Node2D" parent="." unique_id=478105875]
+
+[connection signal="pressed" from="Camera2D/UpgradeButton" to="." method="_on_upgrade_button_pressed"]
+[connection signal="pressed" from="Camera2D/BuyButton" to="." method="_on_buy_button_pressed"]

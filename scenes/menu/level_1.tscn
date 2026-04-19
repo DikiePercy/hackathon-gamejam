@@ -1,7 +1,22 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://crj4xsne0navu"]
 
-[node name="Level1" type="Node2D"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_pilge"]
+animations = [{
+"frames": [],
+"loop": false,
+"name": &"default",
+"speed": 5.0
+}]
 
-[node name="Label" type="Label" parent="."]
-position = Vector2(400, 300)
+[node name="Level1" type="Node2D" unique_id=649912722]
+
+[node name="Label" type="Label" parent="." unique_id=588916043]
+offset_left = 400.0
+offset_top = 300.0
+offset_right = 400.0
+offset_bottom = 300.0
 text = "Level 1 (заглушка)"
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=494310860]
+sprite_frames = SubResource("SpriteFrames_pilge")
+frame_progress = 1.0
