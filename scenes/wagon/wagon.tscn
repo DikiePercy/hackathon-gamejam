@@ -37,7 +37,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b8fnn"]
-size = Vector2(428, 12)
+size = Vector2(428, 13)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mm4mv"]
 size = Vector2(482, 6)
@@ -63,7 +63,7 @@ sprite_frames = SubResource("SpriteFrames_n4enn")
 animation = &"v3"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1041975752]
-position = Vector2(0, -53)
+position = Vector2(0, -53.5)
 shape = SubResource("RectangleShape2D_b8fnn")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D" unique_id=1035372555]
@@ -74,18 +74,18 @@ shape = SubResource("RectangleShape2D_mm4mv")
 z_index = 1
 position = Vector2(-218, 26)
 
-[node name="SeatMarkers" type="Node2D" parent="."]
+[node name="SeatMarkers" type="Node2D" parent="." unique_id=1027939667]
 
-[node name="Seat1" type="Marker2D" parent="SeatMarkers"]
+[node name="Seat1" type="Marker2D" parent="SeatMarkers" unique_id=1142518832]
 position = Vector2(-118, 25)
 
-[node name="Seat2" type="Marker2D" parent="SeatMarkers"]
+[node name="Seat2" type="Marker2D" parent="SeatMarkers" unique_id=930528597]
 position = Vector2(-38, 25)
 
-[node name="Seat3" type="Marker2D" parent="SeatMarkers"]
+[node name="Seat3" type="Marker2D" parent="SeatMarkers" unique_id=939536957]
 position = Vector2(42, 25)
 
-[node name="Seat4" type="Marker2D" parent="SeatMarkers"]
+[node name="Seat4" type="Marker2D" parent="SeatMarkers" unique_id=2008213736]
 position = Vector2(122, 25)
 
 [node name="Interiorsprite" type="Sprite2D" parent="." unique_id=54981861]
