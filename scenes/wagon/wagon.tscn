@@ -74,6 +74,12 @@ shape = SubResource("RectangleShape2D_mm4mv")
 z_index = 1
 position = Vector2(-218, 26)
 
+[node name="InteriorEntry" type="Marker2D" parent="." unique_id=149785621]
+position = Vector2(-96, 26)
+
+[node name="RoofMarker" type="Marker2D" parent="." unique_id=212636325]
+position = Vector2(-6, -54)
+
 [node name="SeatMarkers" type="Node2D" parent="." unique_id=1027939667]
 
 [node name="Seat1" type="Marker2D" parent="SeatMarkers" unique_id=1142518832]

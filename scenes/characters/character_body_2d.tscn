@@ -140,6 +140,28 @@ sprite_frames = SubResource("SpriteFrames_gcqgy")
 animation = &"idle"
 autoplay = "idle"
 
+[node name="Drezina" type="Node2D" parent="." unique_id=193517224]
+visible = false
+position = Vector2(0, 24)
+
+[node name="Base" type="Polygon2D" parent="Drezina" unique_id=1041152337]
+color = Color(0.28, 0.22, 0.16, 1)
+polygon = PackedVector2Array(-18, -6, 18, -6, 22, 2, -22, 2)
+
+[node name="Plate" type="Polygon2D" parent="Drezina" unique_id=1513276688]
+color = Color(0.42, 0.42, 0.42, 1)
+polygon = PackedVector2Array(-16, -10, 16, -10, 16, -6, -16, -6)
+
+[node name="WheelL" type="Polygon2D" parent="Drezina" unique_id=1449857658]
+position = Vector2(-12, 4)
+color = Color(0.12, 0.12, 0.12, 1)
+polygon = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+
+[node name="WheelR" type="Polygon2D" parent="Drezina" unique_id=1447057800]
+position = Vector2(12, 4)
+color = Color(0.12, 0.12, 0.12, 1)
+polygon = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+
 [node name="Hitbox" type="Area2D" parent="." unique_id=1697824541]
 collision_layer = 0
 

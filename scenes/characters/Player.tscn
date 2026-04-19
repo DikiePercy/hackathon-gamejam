@@ -300,7 +300,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"walking",
-"speed": 10.0
+"speed": 17.0
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mqro2"]
@@ -318,10 +318,8 @@ bullet_scene = ExtResource("2_bulletscene")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1428740918]
 z_index = 1
 sprite_frames = SubResource("SpriteFrames_ufbvs")
-animation = &"shoot"
+animation = &"walking"
 autoplay = "idle"
-frame = 10
-frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1130724925]
 position = Vector2(0, 4)

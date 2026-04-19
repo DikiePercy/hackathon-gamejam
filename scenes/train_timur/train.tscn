@@ -76,6 +76,9 @@ animations = [{
 "speed": 20.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_enemy_raid_rail"]
+size = Vector2(4000, 20)
+
 [node name="Train" type="Node2D" unique_id=2065298570]
 scale = Vector2(2, 2)
 script = ExtResource("1_tnona")
@@ -94,6 +97,14 @@ frame_progress = 0.92807525
 polygon = PackedVector2Array(-94, -42, -94, -34, -78, -28, -76, 2, -97, 1, -230, 0, -230, 44, -242, 44, -242, 58, 204, 60, 190, 10, 178, -4, 174, -26, 164, -40, 124, -40, 116, -26, 130, -12, 132, -2, 116, -2, 112, -16, 102, -16, 98, -4, 80, -4, 80, -18, 72, -26, 64, -20, 64, -4, 18, -4, 18, -42)
 
 [node name="Wagons" type="Node2D" parent="." unique_id=1935057295]
+
+[node name="Ladders" type="Node2D" parent="." unique_id=185903172]
+
+[node name="EnemyRaidRail" type="StaticBody2D" parent="." unique_id=1186243342]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyRaidRail" unique_id=1773201341]
+position = Vector2(-1, 46)
+shape = SubResource("RectangleShape2D_enemy_raid_rail")
 
 [node name="TrainEngine" type="AudioStreamPlayer" parent="." unique_id=2100313225]
 stream = ExtResource("18_train_engine")

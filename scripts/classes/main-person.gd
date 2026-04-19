@@ -164,7 +164,7 @@ func _apply_collision(s: State) -> void:
 			set_collision_mask_value(LAYER_INSIDE, false)
 			set_collision_mask_value(LAYER_ROOF, false)
 		State.ROOF:
-			set_collision_mask_value(LAYER_INSIDE, false)
+			set_collision_mask_value(LAYER_INSIDE, true)
 			set_collision_mask_value(LAYER_ROOF, true)
 
 func _shoot() -> void:
@@ -195,9 +195,20 @@ func _shoot() -> void:
 func _on_ladder_detector_area_entered(area: Area2D) -> void:
 	if not area.is_in_group("ladder"):
 		return
-	_current_ladder = area
-	var col := area.get_node("CollisionShape2D") as CollisionShape2D
+	var col := area.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if col == null:
+		for child in area.get_children():
+			if child is CollisionShape2D:
+				col = child as CollisionShape2D
+				break
+	if col == null:
+		return
+
 	var rect := col.shape as RectangleShape2D
+	if rect == null:
+		return
+
+	_current_ladder = area
 	var cy := area.global_position.y
 	var hh := rect.size.y * 0.5
 	_ladder_top_y = cy - hh + 16.0

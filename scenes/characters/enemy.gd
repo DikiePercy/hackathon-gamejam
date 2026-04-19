@@ -36,6 +36,11 @@ enum RaidState {
 @export var board_speed_multiplier: float = 1.2
 @export var board_reach_threshold: float = 10.0
 @export var approach_reach_threshold: float = 24.0
+@export var assault_delay: float = 0.0
+@export var raid_target_refresh_interval: float = 0.35
+@export var dismount_jump_velocity: float = -300.0
+@export var roof_switch_cooldown: float = 3.0
+@export var roof_player_height_threshold: float = 42.0
 
 var _direction: int = 1
 var _damage_timer: float = 0.0
@@ -51,13 +56,22 @@ var _train_node: Node2D = null
 var _boarding_target: Vector2 = Vector2.ZERO
 var _patrol_anchor_x: float = 0.0
 var _shoot_anim_timer: float = 0.0
+var _shoot_hold_timer: float = 0.0
 var _jump_timer: float = 0.0
 var _is_dying: bool = false
+var _raid_lane_id: int = 0
+var _raid_target_refresh_timer: float = 0.0
+var _board_hold_timer: float = 0.0
+var _interior_target: Vector2 = Vector2.ZERO
+var _roof_target: Vector2 = Vector2.ZERO
+var _roof_mode: bool = false
+var _roof_switch_timer: float = 0.0
 
 var dst_shoot_sound: AudioStream = preload("res://assets/sounds/128300__xenonn__layered-gunshot-4.wav")
 
 @onready var _sprite: AnimatedSprite2D = $Visual
 @onready var _audio: AudioStreamPlayer = null
+@onready var _drezina: Node2D = get_node_or_null("Drezina") as Node2D
 
 var _sprite_base_scale_x: float = 1.0
 
@@ -83,10 +97,17 @@ func _ready() -> void:
 	_audio.volume_db = 0.0
 	_audio.stream = dst_shoot_sound
 
-func setup_for_train_raid(train_node: Node2D, boarding_target: Vector2) -> void:
+func setup_for_train_raid(train_node: Node2D, boarding_target: Vector2, lane_id: int = 0) -> void:
 	_train_node = train_node
 	_boarding_target = boarding_target
 	_patrol_anchor_x = boarding_target.x
+	_raid_lane_id = lane_id
+	_raid_target_refresh_timer = 0.0
+	_board_hold_timer = maxf(assault_delay, 0.0)
+	_interior_target = boarding_target
+	_roof_target = boarding_target + Vector2(0.0, -42.0)
+	_roof_mode = false
+	_roof_switch_timer = 0.0
 	_raid_state = RaidState.APPROACH_TRAIN
 
 func _physics_process(delta: float) -> void:
@@ -95,6 +116,8 @@ func _physics_process(delta: float) -> void:
 
 	if _player == null or not _player.is_inside_tree():
 		_player = _find_player()
+
+	_sync_raid_target_from_train(delta)
 
 	if not is_on_floor():
 		velocity.y += gravity * delta
@@ -116,12 +139,27 @@ func _physics_process(delta: float) -> void:
 		_shoot_timer = maxf(_shoot_timer - delta, 0.0)
 	if _shoot_anim_timer > 0.0:
 		_shoot_anim_timer = maxf(_shoot_anim_timer - delta, 0.0)
+	if _shoot_hold_timer > 0.0:
+		_shoot_hold_timer = maxf(_shoot_hold_timer - delta, 0.0)
 	if _jump_timer > 0.0:
 		_jump_timer = maxf(_jump_timer - delta, 0.0)
+	if _board_hold_timer > 0.0:
+		_board_hold_timer = maxf(_board_hold_timer - delta, 0.0)
+	if _roof_switch_timer > 0.0:
+		_roof_switch_timer = maxf(_roof_switch_timer - delta, 0.0)
 
 	_update_visual_animation()
+	_update_raid_mount_visual()
 
 	_apply_contact_damage()
+
+func _update_raid_mount_visual() -> void:
+	if _drezina == null:
+		return
+
+	var should_show: bool = _raid_state == RaidState.APPROACH_TRAIN
+	if _drezina.visible != should_show:
+		_drezina.visible = should_show
 
 func _process_approach_train() -> void:
 	_update_direction_toward(_boarding_target)
@@ -129,21 +167,32 @@ func _process_approach_train() -> void:
 	if is_on_floor() and velocity.y > 0.0:
 		velocity.y = 0.0
 	if absf(global_position.x - _boarding_target.x) <= approach_reach_threshold:
+		velocity.y = dismount_jump_velocity
 		_raid_state = RaidState.BOARD_TRAIN
 
 func _process_board_train() -> void:
 	# Let enemies fire during boarding if player is already in range.
+	var is_shooting_now := false
 	if _player != null and _player.is_inside_tree():
 		var player_dist_x := absf(_player.global_position.x - global_position.x)
 		if player_dist_x <= shoot_distance:
 			if _weapon_state == WeaponState.PATROL and _ammo_in_clip > 0:
 				_weapon_state = WeaponState.SHOOTING
 			if _weapon_state == WeaponState.SHOOTING:
+				is_shooting_now = true
 				_try_shoot_at(_player)
 
-	var to_target := _boarding_target - global_position
+	if is_shooting_now and _shoot_hold_timer > 0.0:
+		velocity.x = 0.0
+		return
+
+	var board_target := _interior_target if _interior_target != Vector2.ZERO else _boarding_target
+	var to_target := board_target - global_position
 	if to_target.length() <= board_reach_threshold:
 		velocity = Vector2.ZERO
+		if _board_hold_timer > 0.0:
+			return
+		_roof_mode = false
 		_raid_state = RaidState.ATTACK
 		return
 
@@ -152,7 +201,43 @@ func _process_board_train() -> void:
 	_direction = 1 if move_dir.x >= 0.0 else -1
 	_apply_visual_direction()
 
+func _sync_raid_target_from_train(delta: float) -> void:
+	if _train_node == null or not is_instance_valid(_train_node):
+		return
+	if not _train_node.has_method("get_enemy_boarding_target"):
+		return
+
+	_raid_target_refresh_timer -= delta
+	if _raid_target_refresh_timer > 0.0:
+		return
+
+	_raid_target_refresh_timer = raid_target_refresh_interval
+	var next_target = _train_node.call("get_enemy_boarding_target", _raid_lane_id)
+	if next_target is Vector2:
+		_boarding_target = next_target
+
+	if _train_node.has_method("get_enemy_interior_target"):
+		var inside_target = _train_node.call("get_enemy_interior_target", _raid_lane_id)
+		if inside_target is Vector2:
+			_interior_target = inside_target
+
+	if _train_node.has_method("get_enemy_roof_target"):
+		var roof_target = _train_node.call("get_enemy_roof_target", _raid_lane_id)
+		if roof_target is Vector2:
+			_roof_target = roof_target
+
+	var patrol_source := _roof_target if _roof_mode else _interior_target
+	if patrol_source == Vector2.ZERO:
+		patrol_source = _boarding_target
+	_patrol_anchor_x = patrol_source.x
+
 func _process_attack_state(delta: float) -> void:
+	_update_roof_mode()
+
+	if _roof_mode:
+		_process_roof_assault(delta)
+		return
+
 	var target := _pick_attack_target()
 	var target_visible := target != null
 	var target_dist_x := INF
@@ -182,7 +267,9 @@ func _process_attack_state(delta: float) -> void:
 
 	if target_visible:
 		_try_jump_toward(target)
-		if target_dist_x > stop_distance:
+		if _weapon_state == WeaponState.SHOOTING and target_dist_x <= shoot_distance:
+			velocity.x = 0.0
+		elif target_dist_x > stop_distance:
 			velocity.x = _direction * _move_speed
 		else:
 			velocity.x = 0.0
@@ -203,6 +290,49 @@ func _process_attack_state(delta: float) -> void:
 		_patrol_near_train()
 		if is_on_floor() and velocity.y > 0.0:
 			velocity.y = 0.0
+
+func _process_roof_assault(_delta: float) -> void:
+	if _roof_target != Vector2.ZERO:
+		var dx_to_roof := _roof_target.x - global_position.x
+		if absf(dx_to_roof) > 6.0:
+			_direction = 1 if dx_to_roof > 0.0 else -1
+			velocity.x = _direction * _move_speed
+			_apply_visual_direction()
+		else:
+			velocity.x = 0.0
+
+	if is_on_floor() and _roof_target != Vector2.ZERO and global_position.y > _roof_target.y + 12.0:
+		velocity.y = jump_velocity
+
+	var target := _player if _player != null and _player.is_inside_tree() else null
+	if target == null:
+		return
+
+	_update_direction_toward(target.global_position)
+	var target_dist_x := absf(target.global_position.x - global_position.x)
+	if _weapon_state == WeaponState.SHOOTING and target_dist_x <= shoot_distance:
+		_try_shoot_at(target)
+	elif _weapon_state == WeaponState.PATROL and target_dist_x <= shoot_distance and _ammo_in_clip > 0:
+		_weapon_state = WeaponState.SHOOTING
+
+func _update_roof_mode() -> void:
+	if _player == null or not _player.is_inside_tree():
+		return
+
+	if _roof_mode:
+		if _player.global_position.y > global_position.y + roof_player_height_threshold:
+			_roof_mode = false
+			_roof_switch_timer = roof_switch_cooldown
+		return
+
+	if _roof_switch_timer > 0.0:
+		return
+
+	var player_above := _player.global_position.y < global_position.y - roof_player_height_threshold
+	var player_close_x := absf(_player.global_position.x - global_position.x) <= jump_trigger_distance * 1.2
+	if player_above and player_close_x:
+		_roof_mode = true
+		_roof_switch_timer = roof_switch_cooldown
 
 func _try_jump_toward(target: Node2D) -> void:
 	if target == null:
@@ -250,9 +380,17 @@ func _find_player() -> MainPerson:
 	return null
 
 func _pick_attack_target() -> Person:
+	var passenger_target := _find_closest_passenger()
+	if _roof_mode:
+		if _player != null and _player.is_inside_tree():
+			return _player
+		return passenger_target
+
+	if passenger_target != null:
+		return passenger_target
 	if _player != null and _player.is_inside_tree():
 		return _player
-	return _find_closest_passenger()
+	return null
 
 func _find_closest_passenger() -> Passenger:
 	var passengers = get_tree().get_nodes_in_group("passenger")
@@ -285,7 +423,7 @@ func _update_visual_animation() -> void:
 	var shoot_anim := _resolve_anim_name("shoot", "attack")
 	var idle_anim := _resolve_anim_name("default", "idle")
 
-	if _shoot_anim_timer > 0.0:
+	if _shoot_anim_timer > 0.0 or (_weapon_state == WeaponState.SHOOTING and _shoot_hold_timer > 0.0):
 		if not shoot_anim.is_empty() and _sprite.animation != shoot_anim:
 			_sprite.play(shoot_anim)
 		return
@@ -337,6 +475,7 @@ func _shoot_at_target(target: Person) -> void:
 	var shoot_dir := (target.global_position - global_position).normalized()
 	bullet.direction = shoot_dir
 	bullet.global_position = global_position + shoot_dir * 24.0
+	_shoot_hold_timer = maxf(_shoot_hold_timer, 0.22)
 	_play_shot_feedback()
 	if _audio != null and dst_shoot_sound != null:
 		_audio.stop()
