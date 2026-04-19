@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://kggtcrnmw3fy" path="res://scenes/main/main.gd" id="2_maingd"]
 [ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://scenes/characters/Player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://scenes/paralaxes/parallax_background_3.tscn" id="4_l3cfh"]
+[ext_resource type="PackedScene" uid="uid://b03tildsg3ynj" path="res://scenes/UI/menupause.tscn" id="5_6q06x"]
 
 [node name="Main" type="Node2D" unique_id=1038197434]
 script = ExtResource("2_maingd")
@@ -18,3 +19,8 @@ max_health = null
 
 [node name="ParallaxBackground 3" parent="." unique_id=616799245 instance=ExtResource("4_l3cfh")]
 scroll_ignore_camera_zoom = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1979060732]
+
+[node name="menupause" parent="CanvasLayer" unique_id=1981241334 instance=ExtResource("5_6q06x")]
+process_mode = 2
