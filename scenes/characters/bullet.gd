@@ -5,6 +5,7 @@ class_name Bullet
 const SPEED := 650.0
 var direction: Vector2 = Vector2.RIGHT
 @export var damage: int = 25
+@export var owner_peer_id: int = 0
 
 @onready var _timer: Timer = $LifetimeTimer
 

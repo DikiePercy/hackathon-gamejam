@@ -44,6 +44,12 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 50
 text = "Depot"
 
+[node name="Multiplayer" type="Button" parent="Panel/VBoxContainer" unique_id=1492761484]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Multiplayer"
+
 [connection signal="pressed" from="Panel/VBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="Panel/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="Panel/VBoxContainer/Depot" to="." method="_on_depot_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/Multiplayer" to="." method="_on_multiplayer_pressed"]
