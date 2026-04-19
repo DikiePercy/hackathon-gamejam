@@ -4,10 +4,10 @@
 [ext_resource type="Script" uid="uid://kggtcrnmw3fy" path="res://scenes/main/main.gd" id="2_maingd"]
 [ext_resource type="Script" uid="uid://jc4w1dsn0371" path="res://scenes/main/pause.gd" id="2_ow5a4"]
 [ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://scenes/characters/Player.tscn" id="3_player"]
-[ext_resource type="PackedScene" uid="uid://w22l7k23ohsx" path="res://scenes/paralaxes/parallax_background_3.tscn" id="4_l3cfh"]
+[ext_resource type="PackedScene" path="res://scenes/paralaxes/parallax_background_3.tscn" id="4_l3cfh"]
 [ext_resource type="PackedScene" uid="uid://b03tildsg3ynj" path="res://scenes/UI/menupause.tscn" id="5_6q06x"]
 [ext_resource type="PackedScene" uid="uid://cxsft8op476qb" path="res://scenes/characters/kowboy_enemy.tscn" id="7_hujxm"]
-[ext_resource type="PackedScene" uid="uid://b7et08nmm166y" path="res://scenes/rels/parallax_background.tscn" id="8_yyfjg"]
+[ext_resource type="PackedScene" path="res://scenes/rels/parallax_background.tscn" id="8_yyfjg"]
 
 [node name="Main" type="Node2D" unique_id=1038197434]
 script = ExtResource("2_maingd")
@@ -17,7 +17,7 @@ process_mode = 3
 script = ExtResource("2_ow5a4")
 
 [node name="Train" parent="." unique_id=2065298570 instance=ExtResource("1_hyk8p")]
-position = Vector2(285, 168)
+position = Vector2(285, 154)
 
 [node name="Player" parent="." unique_id=1025993540 instance=ExtResource("3_player")]
 position = Vector2(260, -60)
@@ -29,6 +29,7 @@ max_health = null
 scroll_ignore_camera_zoom = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1979060732]
+visible = false
 
 [node name="menupause" parent="CanvasLayer" unique_id=1981241334 instance=ExtResource("5_6q06x")]
 process_mode = 2
