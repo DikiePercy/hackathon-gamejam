@@ -74,6 +74,20 @@ shape = SubResource("RectangleShape2D_mm4mv")
 z_index = 1
 position = Vector2(-218, 26)
 
+[node name="SeatMarkers" type="Node2D" parent="."]
+
+[node name="Seat1" type="Marker2D" parent="SeatMarkers"]
+position = Vector2(-118, 25)
+
+[node name="Seat2" type="Marker2D" parent="SeatMarkers"]
+position = Vector2(-38, 25)
+
+[node name="Seat3" type="Marker2D" parent="SeatMarkers"]
+position = Vector2(42, 25)
+
+[node name="Seat4" type="Marker2D" parent="SeatMarkers"]
+position = Vector2(122, 25)
+
 [node name="Interiorsprite" type="Sprite2D" parent="." unique_id=54981861]
 position = Vector2(1.04904175e-05, 0)
 scale = Vector2(1.8906251, 1.875)
