@@ -2,12 +2,17 @@
 
 [ext_resource type="PackedScene" uid="uid://bf52gpgg0aftq" path="res://scenes/train_timur/train.tscn" id="1_hyk8p"]
 [ext_resource type="Script" uid="uid://kggtcrnmw3fy" path="res://scenes/main/main.gd" id="2_maingd"]
+[ext_resource type="Script" uid="uid://jc4w1dsn0371" path="res://scenes/main/pause.gd" id="2_ow5a4"]
 [ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://scenes/characters/Player.tscn" id="3_player"]
-[ext_resource type="PackedScene" path="res://scenes/paralaxes/parallax_background_3.tscn" id="4_l3cfh"]
+[ext_resource type="PackedScene" uid="uid://w22l7k23ohsx" path="res://scenes/paralaxes/parallax_background_3.tscn" id="4_l3cfh"]
 [ext_resource type="PackedScene" uid="uid://b03tildsg3ynj" path="res://scenes/UI/menupause.tscn" id="5_6q06x"]
 
 [node name="Main" type="Node2D" unique_id=1038197434]
 script = ExtResource("2_maingd")
+
+[node name="pause" type="Node" parent="." unique_id=1423032809]
+process_mode = 3
+script = ExtResource("2_ow5a4")
 
 [node name="Train" parent="." unique_id=2065298570 instance=ExtResource("1_hyk8p")]
 position = Vector2(284, 213)
@@ -24,3 +29,8 @@ scroll_ignore_camera_zoom = true
 
 [node name="menupause" parent="CanvasLayer" unique_id=1981241334 instance=ExtResource("5_6q06x")]
 process_mode = 2
+
+[connection signal="pressed" from="CanvasLayer/menupause/Panel/VBoxContainer/Button" to="pause" method="_on_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/menupause/Panel/VBoxContainer/Button4" to="pause" method="_on_button_4_pressed"]
+
+[editable path="CanvasLayer/menupause"]
