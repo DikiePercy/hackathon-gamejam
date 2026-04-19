@@ -4,7 +4,12 @@ extends Control
 @export var locomotive_scene: PackedScene = preload("res://scenes/train_timur/train.tscn")
 
 @onready var train_preview = $TrainPreview
-@onready var gold_label = $Camera2D/GoldLabel
+@onready var weapon_label = $Camera2D.get_node_or_null("WeaponLabel")
+
+@export var shotgun_price: int = 600
+@onready var gold_label = $CanvasLayer/VBoxContainer/HBoxContainer2/GoldLabel
+@onready var p_label = $CanvasLayer/VBoxContainer/HBoxContainer2/VLabel
+@onready var v_label = $CanvasLayer/VBoxContainer/HBoxContainer2/PLabel
 
 @onready var camera = $Camera2D
 var camera_speed = 500.0
@@ -52,7 +57,7 @@ func draw_depot_train():
 		new_wagon.wagon_level = stats[0]
 		new_wagon.passengers = stats[1]
 		new_wagon.position.x = (-(i + 1) * wagon_width) + 200
-		new_wagon.position.y = loco.position.y + 16
+		new_wagon.position.y = loco.position.y + 8
 		
 		# ВАЖНО: В депо подключаем сигнал, чтобы ловить клики
 		if new_wagon.has_signal("clicked"):
@@ -120,11 +125,43 @@ func _on_buy_button_pressed() -> void:
 		
 		# 5. Обновляем текст с золотом
 		update_ui()
-		
-		print("Куплен новый вагон! Всего вагонов: ", GameManager.train_data.size())
 	else:
 		print("Недостаточно золота!")
+
+func _on_buy_weapon_button_pressed() -> void:
+	if GameManager.has_shotgun:
+		print("Уже куплено ружье")
+		return
+
+	if GameManager.total_gold >= shotgun_price:
+		GameManager.total_gold -= shotgun_price
+		GameManager.has_shotgun = true
+		update_ui()
+		print("Куплено ружье!")
+	else:
+		print("Недостаточно золота для ружья!")
 	
 	
 func update_ui():
 	gold_label.text = "Золото: " + str(GameManager.total_gold)
+	if weapon_label != null:
+		weapon_label.text = "Оружие: " + ("Ружье" if GameManager.has_shotgun else "Пистолет")
+	v_label.text = "Патроны: " + str(GameManager.total_p)
+	p_label.text = "Вагоны: " + str(GameManager.train_data.size())
+
+
+func _on_buy_p_pressed() -> void:
+	var p_price = 10
+	if GameManager.total_gold >= p_price:
+		# 1. Списываем золото
+		GameManager.total_gold -= p_price
+		
+		# 2. Создаем "пакет данных" для нового вагона: [уровень 1, 0 человек], 3)
+		
+		# 3. Добавляем эти данные в наш глобальный список в GameManager
+		GameManager.total_p += 1
+		
+		# 5. Обновляем текст с золотом
+		update_ui()
+	else:
+		print("Недостаточно золота!")
