@@ -4,10 +4,10 @@
 [ext_resource type="Script" uid="uid://kggtcrnmw3fy" path="res://scenes/main/main.gd" id="2_maingd"]
 [ext_resource type="Script" uid="uid://jc4w1dsn0371" path="res://scenes/main/pause.gd" id="2_ow5a4"]
 [ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://scenes/characters/Player.tscn" id="3_player"]
-[ext_resource type="PackedScene" uid="uid://w22l7k23ohsx" path="res://scenes/paralaxes/parallax_background_3.tscn" id="4_l3cfh"]
+[ext_resource type="PackedScene" path="res://scenes/paralaxes/parallax_background_3.tscn" id="4_l3cfh"]
 [ext_resource type="PackedScene" uid="uid://b03tildsg3ynj" path="res://scenes/UI/menupause.tscn" id="5_6q06x"]
 [ext_resource type="PackedScene" uid="uid://cxsft8op476qb" path="res://scenes/characters/kowboy_enemy.tscn" id="7_hujxm"]
-[ext_resource type="PackedScene" uid="uid://b7et08nmm166y" path="res://scenes/rels/parallax_background.tscn" id="8_yyfjg"]
+[ext_resource type="PackedScene" uid="uid://2qsupeeowy0u" path="res://scenes/rels/parallax_background.tscn" id="8_yyfjg"]
 
 [node name="Main" type="Node2D" unique_id=1038197434]
 script = ExtResource("2_maingd")
@@ -17,7 +17,7 @@ process_mode = 3
 script = ExtResource("2_ow5a4")
 
 [node name="Train" parent="." unique_id=2065298570 instance=ExtResource("1_hyk8p")]
-position = Vector2(285, 168)
+position = Vector2(285, 154)
 
 [node name="Player" parent="." unique_id=1025993540 instance=ExtResource("3_player")]
 position = Vector2(260, -60)
@@ -69,7 +69,6 @@ position = Vector2(-2145, 276)
 
 [node name="Rels8" parent="relses" unique_id=183978961 instance=ExtResource("8_yyfjg")]
 position = Vector2(-930, 276)
-
 [connection signal="pressed" from="CanvasLayer/menupause/Panel/VBoxContainer/Button" to="pause" method="_on_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/menupause/Panel/VBoxContainer/Button4" to="pause" method="_on_button_4_pressed"]
 [connection signal="pressed" from="CanvasLayer/menubutton" to="pause" method="_on_menubutton_pressed"]

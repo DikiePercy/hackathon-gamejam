@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://b7et08nmm166y"]
+[gd_scene format=3 uid="uid://2qsupeeowy0u"]
 
 [ext_resource type="Texture2D" uid="uid://bhqwegj5uoonb" path="res://assets/sprites/train/rails.png" id="1_3trsv"]
 [ext_resource type="Script" uid="uid://cskcokjs103n" path="res://scenes/rels/parallax_background.gd" id="1_ghhr8"]
@@ -10,6 +10,6 @@ script = ExtResource("1_ghhr8")
 motion_mirroring = Vector2(480, 0)
 
 [node name="Rails" type="Sprite2D" parent="ParallaxLayer" unique_id=295155093]
-position = Vector2(237.49998, 262)
-scale = Vector2(0.75, 1)
+position = Vector2(243.5, 262)
+scale = Vector2(0.768405, 1)
 texture = ExtResource("1_3trsv")
