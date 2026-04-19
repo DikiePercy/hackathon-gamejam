@@ -12,3 +12,24 @@ var train_data = [
 ]
 
 var train_level = 1 
+
+func to_save_dict() -> Dictionary:
+	return {
+		"total_gold": total_gold,
+		"has_shotgun": has_shotgun,
+		"total_p": total_p,
+		"train_speed": train_speed,
+		"train_level": train_level,
+		"train_data": train_data.duplicate(true)
+	}
+
+func apply_save_dict(data: Dictionary) -> void:
+	total_gold = int(data.get("total_gold", total_gold))
+	has_shotgun = bool(data.get("has_shotgun", has_shotgun))
+	total_p = int(data.get("total_p", total_p))
+	train_speed = int(data.get("train_speed", train_speed))
+	train_level = int(data.get("train_level", train_level))
+
+	var loaded_train_data = data.get("train_data", train_data)
+	if loaded_train_data is Array and loaded_train_data.size() > 0:
+		train_data = loaded_train_data.duplicate(true)
