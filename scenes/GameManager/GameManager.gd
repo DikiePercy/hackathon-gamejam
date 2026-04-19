@@ -21,7 +21,7 @@ const DEFAULT_TRAIN_DATA := [
 var total_gold = 5000
 var has_shotgun: bool = false
 var total_p = 100
-var train_speed = 0
+var train_speed = DEFAULT_TRAIN_SPEED
 var train_integrity_max: int = DEFAULT_TRAIN_INTEGRITY_MAX
 var train_integrity_current: int = DEFAULT_TRAIN_INTEGRITY_MAX
 var mission_target_distance: float = DEFAULT_MISSION_TARGET_DISTANCE
@@ -33,7 +33,7 @@ var pending_mission_reward: int = 0
 var last_mission_result: Dictionary = {}
 
 # Структура: [ [уровень, люди, hp], [уровень, люди, hp] ]
-var train_data = [
+var train_data: Array = [
 	[1, 5, 1], # Первый вагон
 	[1, 3, 2]  # Второй вагон
 ]
@@ -107,8 +107,7 @@ func apply_save_dict(data: Dictionary) -> void:
 	if loaded_train_data is Array and loaded_train_data.size() > 0:
 		train_data = loaded_train_data.duplicate(true)
 
-	train_integrity_max = maxi(train_integrity_max, 1)
-	train_integrity_current = clampi(train_integrity_current, 0, train_integrity_max)
+	_clamp_integrity_values()
 
 func begin_mission_run() -> void:
 	train_integrity_current = train_integrity_max
@@ -166,7 +165,7 @@ func _build_save_payload() -> Dictionary:
 	var now_unix := int(Time.get_unix_time_from_system())
 	var now_text := Time.get_datetime_string_from_system().replace("T", " ")
 
-	var slot_id := current_save_slot_id if not current_save_slot_id.is_empty() else AUTOSAVE_SLOT_ID
+	var slot_id := _resolved_target_slot_id()
 	return {
 		"meta": {
 			"slot_id": slot_id,
@@ -199,6 +198,8 @@ func _collect_player_state() -> Dictionary:
 	}
 
 func _write_slot(slot_id: String, payload: Dictionary) -> bool:
+	if slot_id.is_empty():
+		return false
 	DirAccess.make_dir_recursive_absolute(SAVE_DIR_PATH)
 	var file := FileAccess.open(_slot_path(slot_id), FileAccess.WRITE)
 	if file == null:
@@ -280,3 +281,10 @@ func _read_slot_payload(slot_id: String) -> Dictionary:
 		return {}
 
 	return parsed as Dictionary
+
+func _resolved_target_slot_id() -> String:
+	return current_save_slot_id if not current_save_slot_id.is_empty() else AUTOSAVE_SLOT_ID
+
+func _clamp_integrity_values() -> void:
+	train_integrity_max = maxi(train_integrity_max, 1)
+	train_integrity_current = clampi(train_integrity_current, 0, train_integrity_max)

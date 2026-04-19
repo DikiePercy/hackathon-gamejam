@@ -1,5 +1,12 @@
 extends Control
 
+const TRAIN_SCENE_PATH := "res://scenes/main/main.tscn"
+const MAX_WAGONS := 5
+const UPGRADE_PRICE := 100
+const NEW_WAGON_PRICE := 200
+const AMMO_PRICE := 10
+const MAX_WAGON_LEVEL := 3
+
 @export var wagon_scene: PackedScene = preload("res://scenes/wagon/wagon.tscn")
 @export var locomotive_scene: PackedScene = preload("res://scenes/train_timur/train.tscn")
 
@@ -16,13 +23,13 @@ extends Control
 @onready var v_label = $CanvasLayer/VBoxContainer/HBoxContainer2/PLabel
 
 @onready var camera = $Camera2D
-var camera_speed = 500.0
+var camera_speed: float = 500.0
 var _depot_music_restart_timer := 60.0
 
-var wagon_width = 240
-var selected_wagon = null # Храним, какой вагон сейчас нажат
+var wagon_width: float = 240.0
+var selected_wagon: Node2D = null
 
-func _ready():
+func _ready() -> void:
 	_apply_pending_mission_reward()
 	draw_depot_train()
 	update_ui()
@@ -36,14 +43,13 @@ func _on_depot_music_finished() -> void:
 	if dst_depot_music != null:
 		dst_depot_music.play()
 
-func _process(delta):
+func _process(delta: float) -> void:
 	if dst_depot_music != null:
 		_depot_music_restart_timer -= delta
 		if _depot_music_restart_timer <= 0.0:
 			_depot_music_restart_timer += 60.0
 			dst_depot_music.play()
-	# Создаем вектор направления движения
-	var direction = 0
+	var direction := 0
 	
 	# Проверяем нажатие клавиш A и D
 	if Input.is_key_pressed(KEY_D):
@@ -55,21 +61,21 @@ func _process(delta):
 	if direction != 0:
 		camera.position.x += direction * camera_speed * delta
 
-func draw_depot_train():
+func draw_depot_train() -> void:
 	# Очистка старых спрайтов
 	for child in train_preview.get_children():
 		child.queue_free()
 	
 	# 1. Сначала рисуем Локомотив
-	var loco = locomotive_scene.instantiate()
+	var loco := locomotive_scene.instantiate()
 	loco.is_in_depot = true
 	add_child(loco)
 	loco.position = Vector2(200, 100) # В депо локомотив в центре
 	
 	# 2. Рисуем вагоны из GameManager
 	for i in range(GameManager.train_data.size()):
-		var stats = GameManager.train_data[i]
-		var new_wagon = wagon_scene.instantiate()
+		var stats: Array = GameManager.train_data[i]
+		var new_wagon := wagon_scene.instantiate()
 		new_wagon.is_in_depot = true
 		new_wagon.vagon_type = stats[2]
 		train_preview.add_child(new_wagon)
@@ -88,7 +94,7 @@ func draw_depot_train():
 		new_wagon.update_wagon_stats()
 
 # Логика выбора вагона
-func _on_wagon_selected(wagon_node):
+func _on_wagon_selected(wagon_node: Node2D) -> void:
 	if selected_wagon:
 		selected_wagon.modulate = Color(1, 1, 1) # Снимаем цвет с прошлого
 	
@@ -97,66 +103,51 @@ func _on_wagon_selected(wagon_node):
 	print("Выбран вагон с уровнем: ", selected_wagon.wagon_level)
 
 # Кнопка улучшения в UI (подключи через сигнал pressed)
-func _on_upgrade_button_pressed():
-	if selected_wagon == null: return
-	
-	var price = 100
-	if GameManager.total_gold >= price:
-		# Находим индекс в массиве (индекс узла - 1, т.к. локо на 0 месте)
-		var idx = selected_wagon.get_index() - 1
-		
-		if GameManager.train_data[idx][0] < 3:
-			GameManager.total_gold -= price
-			GameManager.train_data[idx][0] += 1 # Повышаем уровень в данных
-			
-			# Сразу обновляем визуал вагона, на который смотрим
-			selected_wagon.wagon_level = GameManager.train_data[idx][0]
-			selected_wagon.update_wagon_stats()
-			
-			update_ui()
-			if dst_depot_buy_audio != null:
-				dst_depot_buy_audio.play()
-	else:
-		print("Недостаточно золота!")
-		if dst_depot_no_money_audio != null:
-			dst_depot_no_money_audio.play()
+func _on_upgrade_button_pressed() -> void:
+	if selected_wagon == null:
+		return
 
-func _on_wagon_hover(wagon_node):
+	var idx := selected_wagon.get_index() - 1
+	if idx < 0 or idx >= GameManager.train_data.size():
+		return
+
+	if GameManager.train_data[idx][0] >= MAX_WAGON_LEVEL:
+		return
+
+	if not _try_spend_gold(UPGRADE_PRICE):
+		return
+
+	GameManager.train_data[idx][0] += 1
+	selected_wagon.wagon_level = GameManager.train_data[idx][0]
+	selected_wagon.update_wagon_stats()
+	update_ui()
+	_play_buy_audio()
+
+func _on_wagon_hover(wagon_node: Node2D) -> void:
 	# Подсвечиваем, только если это НЕ уже выбранный вагон
 	if wagon_node != selected_wagon:
 		wagon_node.modulate = Color(1.2, 1.2, 1.2) # Слегка осветляем
 
-func _on_wagon_unhover(wagon_node):
+func _on_wagon_unhover(wagon_node: Node2D) -> void:
 	# Возвращаем обычный цвет, только если это НЕ выбранный вагон
 	if wagon_node != selected_wagon:
 		wagon_node.modulate = Color(1, 1, 1)
 
 func _on_buy_button_pressed() -> void:
-	var wagon_price = 200
-	if GameManager.train_data.size() >= 5:
+	if GameManager.train_data.size() >= MAX_WAGONS:
 		print("максимул вагонов")
-	elif GameManager.total_gold >= wagon_price:
-		# 1. Списываем золото
-		GameManager.total_gold -= wagon_price
-		
-		# 2. Создаем "пакет данных" для нового вагона: [уровень 1, 0 человек]
-		var randomv = randi_range(1, 3)
-		var new_wagon_data = [1, 0, randomv]
-		
-		# 3. Добавляем эти данные в наш глобальный список в GameManager
-		GameManager.train_data.append(new_wagon_data)
-		
-		# 4. ПОЛНОСТЬЮ перерисовываем поезд в Депо, чтобы увидеть новый вагон
-		draw_depot_train()
-		
-		# 5. Обновляем текст с золотом
-		update_ui()
-		if dst_depot_buy_audio != null:
-			dst_depot_buy_audio.play()
-	else:
-		print("Недостаточно золота!")
-		if dst_depot_no_money_audio != null:
-			dst_depot_no_money_audio.play()
+		return
+
+	if not _try_spend_gold(NEW_WAGON_PRICE):
+		return
+
+	var randomv := randi_range(1, 3)
+	var new_wagon_data := [1, 0, randomv]
+	GameManager.train_data.append(new_wagon_data)
+
+	draw_depot_train()
+	update_ui()
+	_play_buy_audio()
 
 func _on_buy_weapon_button_pressed() -> void:
 	if GameManager.has_shotgun:
@@ -169,11 +160,9 @@ func _on_buy_weapon_button_pressed() -> void:
 		update_ui()
 		print("Куплено ружье!")
 	else:
-		print("Недостаточно золота для ружья!")
-		if dst_depot_no_money_audio != null:
-			dst_depot_no_money_audio.play()
+		_play_not_enough_gold_feedback("Недостаточно золота для ружья!")
 	
-func update_ui():
+func update_ui() -> void:
 	gold_label.text = "Золото: " + str(GameManager.total_gold)
 	if weapon_label != null:
 		weapon_label.text = "Оружие: " + ("Ружье" if GameManager.has_shotgun else "Пистолет")
@@ -182,27 +171,15 @@ func update_ui():
 
 
 func _on_buy_p_pressed() -> void:
-	var p_price = 10
-	if GameManager.total_gold >= p_price:
-		# 1. Списываем золото
-		GameManager.total_gold -= p_price
-		
-		# 2. Создаем "пакет данных" для нового вагона: [уровень 1, 0 человек], 3)
-		
-		# 3. Добавляем эти данные в наш глобальный список в GameManager
-		GameManager.total_p += 1
-		
-		# 5. Обновляем текст с золотом
-		update_ui()
-		if dst_depot_buy_audio != null:
-			dst_depot_buy_audio.play()
-	else:
-		print("Недостаточно золота!")
-		if dst_depot_no_money_audio != null:
-			dst_depot_no_money_audio.play()
+	if not _try_spend_gold(AMMO_PRICE):
+		return
+
+	GameManager.total_p += 1
+	update_ui()
+	_play_buy_audio()
 
 func _on_back_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/main/main.tscn")
+	get_tree().change_scene_to_file(TRAIN_SCENE_PATH)
 
 func _apply_pending_mission_reward() -> void:
 	if GameManager.pending_mission_reward == 0:
@@ -213,3 +190,19 @@ func _apply_pending_mission_reward() -> void:
 		print("Награда за рейс: +", reward)
 	else:
 		print("Штраф за провал рейса: ", reward)
+
+func _try_spend_gold(amount: int) -> bool:
+	if GameManager.total_gold < amount:
+		_play_not_enough_gold_feedback("Недостаточно золота!")
+		return false
+	GameManager.total_gold -= amount
+	return true
+
+func _play_buy_audio() -> void:
+	if dst_depot_buy_audio != null:
+		dst_depot_buy_audio.play()
+
+func _play_not_enough_gold_feedback(message: String) -> void:
+	print(message)
+	if dst_depot_no_money_audio != null:
+		dst_depot_no_money_audio.play()

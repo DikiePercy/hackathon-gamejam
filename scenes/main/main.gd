@@ -1,6 +1,22 @@
 # res://scenes/main/main.gd
 extends Node2D
 
+const MIN_MISSION_TIME := 20.0
+const MIN_TARGET_DISTANCE := 200.0
+const DEATH_RELOAD_DELAY := 2.2
+const MISSION_END_DELAY := 2.6
+const DEPOT_SCENE_PATH := "res://scenes/depot/depot.tscn"
+const DEFAULT_OVERLAY_SCENE_PATH := ""
+
+const STATUS_RUN_IN_PROGRESS := "RUN: IN PROGRESS"
+const STATUS_RUN_SUCCESS := "RUN SUCCESS"
+const STATUS_RUN_FAILED := "RUN FAILED"
+const REASON_ALL_PASSENGERS_LOST := "All passengers lost"
+const REASON_TRAIN_DESTROYED := "Train destroyed"
+const REASON_DESTINATION_REACHED := "Destination reached"
+const REASON_TIME_UP := "Time is up"
+const REASON_TRAIN_OBJECTIVE_BROKEN := "Train objective broken"
+
 enum MissionState {
 	IN_PROGRESS,
 	SUCCESS,
@@ -29,16 +45,16 @@ var _mission_progress_label: Label = null
 func _ready() -> void:
 	_apply_pending_load()
 	GameManager.begin_mission_run()
-	_mission_timer = maxf(GameManager.mission_time_limit, 20.0)
-	_mission_target_distance = maxf(GameManager.mission_target_distance, 200.0)
+	_mission_timer = maxf(GameManager.mission_time_limit, MIN_MISSION_TIME)
+	_mission_target_distance = maxf(GameManager.mission_target_distance, MIN_TARGET_DISTANCE)
 	_setup_mission_ui()
 	_refresh_mission_ui()
 
 	if _train != null:
 		if _train.has_signal("go_trein") and not _train.go_trein.is_connected(_on_train_started):
 			_train.go_trein.connect(_on_train_started)
-		if _train.has_signal("stop_trein") and not _train.stop_trein.is_connected(_stop_train_started):
-			_train.stop_trein.connect(_stop_train_started)
+		if _train.has_signal("stop_trein") and not _train.stop_trein.is_connected(_on_train_stopped):
+			_train.stop_trein.connect(_on_train_stopped)
 		if _train.has_signal("train_objective_broken") and not _train.train_objective_broken.is_connected(_on_train_objective_broken):
 			_train.train_objective_broken.connect(_on_train_objective_broken)
 
@@ -48,9 +64,7 @@ func _ready() -> void:
 		_depot_button.hide()
 
 func _process(delta: float) -> void:
-	if _mission_state != MissionState.IN_PROGRESS:
-		return
-	if _death_flow_started:
+	if _mission_state != MissionState.IN_PROGRESS or _death_flow_started:
 		return
 
 	_mission_timer = maxf(_mission_timer - delta, 0.0)
@@ -84,18 +98,18 @@ func _evaluate_mission_state() -> void:
 	var reached_target := _mission_progress >= _mission_target_distance
 
 	if alive_passengers <= 0:
-		_finish_mission(false, "All passengers lost")
+		_finish_mission(false, REASON_ALL_PASSENGERS_LOST)
 		return
 	if train_integrity <= 0:
-		_finish_mission(false, "Train destroyed")
+		_finish_mission(false, REASON_TRAIN_DESTROYED)
 		return
 
 	if reached_target:
-		_finish_mission(true, "Destination reached")
+		_finish_mission(true, REASON_DESTINATION_REACHED)
 		return
 
 	if _mission_timer <= 0.0:
-		_finish_mission(false, "Time is up")
+		_finish_mission(false, REASON_TIME_UP)
 
 func _get_alive_passenger_count() -> int:
 	if _train != null and _train.has_method("get_total_alive_passengers"):
@@ -113,11 +127,14 @@ func _on_player_died() -> void:
 	_death_flow_started = true
 
 	_show_wasted_overlay()
-	await get_tree().create_timer(2.2).timeout
+	await get_tree().create_timer(DEATH_RELOAD_DELAY).timeout
 
 	if GameManager.load_latest_save_into_pending():
 		var payload := GameManager.pending_load_data
-		var scene_path := String(payload.get("scene_path", get_tree().current_scene.scene_file_path))
+		var fallback_scene_path := DEFAULT_OVERLAY_SCENE_PATH
+		if get_tree().current_scene != null:
+			fallback_scene_path = get_tree().current_scene.scene_file_path
+		var scene_path := String(payload.get("scene_path", fallback_scene_path))
 		get_tree().change_scene_to_file(scene_path)
 		return
 
@@ -153,12 +170,16 @@ func _on_train_started():
 	if _depot_button != null:
 		_depot_button.hide()
 	
-func _stop_train_started() -> void:
+func _on_train_stopped() -> void:
 	if _depot_button != null:
 		_depot_button.show()
 
+func _stop_train_started() -> void:
+	# Compatibility wrapper: keep support for scene/editor signal links.
+	_on_train_stopped()
+
 func _on_train_objective_broken() -> void:
-	_finish_mission(false, "Train objective broken")
+	_finish_mission(false, REASON_TRAIN_OBJECTIVE_BROKEN)
 
 func _finish_mission(success: bool, reason: String) -> void:
 	if _mission_end_started or _death_flow_started:
@@ -171,9 +192,9 @@ func _finish_mission(success: bool, reason: String) -> void:
 	var result := GameManager.apply_mission_result(success, alive_passengers, _mission_timer, ratio)
 	_show_mission_result_overlay(success, reason, result)
 
-	await get_tree().create_timer(2.6).timeout
+	await get_tree().create_timer(MISSION_END_DELAY).timeout
 	GameManager.autosave_current_state()
-	get_tree().change_scene_to_file("res://scenes/depot/depot.tscn")
+	get_tree().change_scene_to_file(DEPOT_SCENE_PATH)
 
 func _setup_mission_ui() -> void:
 	if _mission_ui_layer != null and is_instance_valid(_mission_ui_layer):
@@ -184,7 +205,7 @@ func _setup_mission_ui() -> void:
 	add_child(_mission_ui_layer)
 
 	_mission_status_label = Label.new()
-	_mission_status_label.text = "RUN: IN PROGRESS"
+	_mission_status_label.text = STATUS_RUN_IN_PROGRESS
 	_mission_status_label.position = Vector2(12.0, 10.0)
 	_mission_ui_layer.add_child(_mission_status_label)
 
@@ -234,7 +255,7 @@ func _show_mission_result_overlay(success: bool, reason: String, result: Diction
 	title.position = Vector2(-180.0, -45.0)
 	title.size = Vector2(360.0, 54.0)
 	title.add_theme_font_size_override("font_size", 36)
-	title.text = "RUN SUCCESS" if success else "RUN FAILED"
+	title.text = STATUS_RUN_SUCCESS if success else STATUS_RUN_FAILED
 	title.modulate = Color(0.3, 0.95, 0.35, 1.0) if success else Color(0.95, 0.25, 0.25, 1.0)
 	layer.add_child(title)
 
@@ -249,4 +270,4 @@ func _show_mission_result_overlay(success: bool, reason: String, result: Diction
 
 func _on_button_pressed() -> void:
 	GameManager.autosave_current_state()
-	get_tree().change_scene_to_file("res://scenes/depot/depot.tscn")
+	get_tree().change_scene_to_file(DEPOT_SCENE_PATH)
