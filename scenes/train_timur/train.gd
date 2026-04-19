@@ -6,8 +6,8 @@ extends Node2D
 @export var wagon_width: float = 240.0
 @export var wagon_scene: PackedScene = preload("res://scenes/wagon/wagon.tscn")
 @export var enemy_scene: PackedScene = preload("res://scenes/characters/enemy.tscn")
-@export var enemy_spawn_interval: float = 7.0
-@export var enemy_spawn_max_active: int = 3
+@export var enemy_spawn_interval: float = 12.0
+@export var enemy_spawn_max_active: int = 2
 
 var speed = 200.0
 var wagons = []

@@ -51,11 +51,17 @@ var dst_shoot_sound: AudioStream = preload("res://assets/sounds/128300__xenonn__
 @onready var _sprite: AnimatedSprite2D = $Visual
 @onready var _audio: AudioStreamPlayer = null
 
+var _sprite_base_scale_x: float = 1.0
+
 func _ready() -> void:
 	_player = _find_player()
 	_ammo_in_clip = clip_size
 	_reloads_left = reload_count
 	_weapon_state = WeaponState.PATROL
+	if _sprite != null:
+		_sprite_base_scale_x = absf(_sprite.scale.x)
+		if _sprite_base_scale_x <= 0.001:
+			_sprite_base_scale_x = 1.0
 	if _boarding_target == Vector2.ZERO:
 		_boarding_target = global_position + Vector2(100.0, 0.0)
 	_patrol_anchor_x = _boarding_target.x
@@ -117,10 +123,10 @@ func _process_board_train() -> void:
 func _process_attack_state(delta: float) -> void:
 	var target := _pick_attack_target()
 	var target_visible := target != null
-	var target_dist := INF
+	var target_dist_x := INF
 
 	if target_visible:
-		target_dist = global_position.distance_to(target.global_position)
+		target_dist_x = absf(target.global_position.x - global_position.x)
 		_update_direction_toward(target.global_position)
 
 	if _weapon_state == WeaponState.RELOADING:
@@ -140,15 +146,15 @@ func _process_attack_state(delta: float) -> void:
 		return
 
 	if target_visible:
-		if target_dist > stop_distance:
+		if target_dist_x > stop_distance:
 			velocity.x = _direction * _move_speed
 		else:
 			velocity.x = 0.0
 		velocity.y = 0.0
 
-		if _weapon_state == WeaponState.SHOOTING and target_dist <= shoot_distance:
+		if _weapon_state == WeaponState.SHOOTING and target_dist_x <= shoot_distance:
 			_try_shoot_at(target)
-		elif _weapon_state == WeaponState.PATROL and target_dist <= shoot_distance and _ammo_in_clip > 0:
+		elif _weapon_state == WeaponState.PATROL and target_dist_x <= shoot_distance and _ammo_in_clip > 0:
 			_weapon_state = WeaponState.SHOOTING
 
 		if _weapon_state == WeaponState.SHOOTING and _ammo_in_clip <= 0:
@@ -218,7 +224,7 @@ func _update_direction_toward(target_position: Vector2) -> void:
 
 func _apply_visual_direction() -> void:
 	if _sprite != null:
-		_sprite.scale.x = 1.0 if _direction > 0 else -1.0
+		_sprite.scale.x = _sprite_base_scale_x if _direction > 0 else -_sprite_base_scale_x
 
 func _try_shoot_at(target: Person) -> void:
 	if _weapon_state == WeaponState.KNIFE:

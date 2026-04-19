@@ -18,6 +18,7 @@ enum State { GROUND, CLIMBING, ROOF }
 var _state: State = State.GROUND
 
 var _facing_right := true
+var _aim_dir: Vector2 = Vector2.RIGHT
 var _shoot_timer := 0.0
 var _gun_local_x := 16.0
 
@@ -49,6 +50,8 @@ func _physics_process(delta: float) -> void:
 			_process_climbing()
 		State.ROOF:
 			_process_roof(delta)
+
+	_update_aim_from_mouse()
 
 	if Input.is_action_just_pressed("shoot") and _shoot_timer == 0.0:
 		_shoot()
@@ -120,6 +123,16 @@ func _move_x() -> void:
 func _sync_gun_point() -> void:
 	_gun_point.position.x = _gun_local_x if _facing_right else -_gun_local_x
 
+func _update_aim_from_mouse() -> void:
+	var to_mouse := get_global_mouse_position() - _gun_point.global_position
+	if to_mouse.length() <= 0.001:
+		return
+
+	_aim_dir = to_mouse.normalized()
+	_facing_right = _aim_dir.x >= 0.0
+	_sprite.flip_h = not _facing_right
+	_sync_gun_point()
+
 func _set_state(s: State) -> void:
 	_state = s
 	_apply_collision(s)
@@ -148,7 +161,7 @@ func _shoot() -> void:
 
 	var bullet: Node2D = bullet_scene.instantiate()
 	get_tree().current_scene.add_child(bullet)
-	var shoot_dir := Vector2.RIGHT if _facing_right else Vector2.LEFT
+	var shoot_dir := _aim_dir
 	bullet.direction = shoot_dir
 	bullet.global_position = _gun_point.global_position + shoot_dir * 10.0
 
