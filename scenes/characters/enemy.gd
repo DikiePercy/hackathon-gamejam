@@ -46,7 +46,10 @@ var _train_node: Node2D = null
 var _boarding_target: Vector2 = Vector2.ZERO
 var _patrol_anchor_x: float = 0.0
 
+var dst_shoot_sound: AudioStream = preload("res://assets/sounds/128300__xenonn__layered-gunshot-4.wav")
+
 @onready var _sprite: AnimatedSprite2D = $Visual
+@onready var _audio: AudioStreamPlayer = null
 
 func _ready() -> void:
 	_player = _find_player()
@@ -56,6 +59,15 @@ func _ready() -> void:
 	if _boarding_target == Vector2.ZERO:
 		_boarding_target = global_position + Vector2(100.0, 0.0)
 	_patrol_anchor_x = _boarding_target.x
+	if has_node("Audio"):
+		_audio = $Audio
+	else:
+		_audio = AudioStreamPlayer.new()
+		_audio.name = "Audio"
+		add_child(_audio)
+	_audio.bus = "Master"
+	_audio.volume_db = 0.0
+	_audio.stream = dst_shoot_sound
 
 func setup_for_train_raid(train_node: Node2D, boarding_target: Vector2) -> void:
 	_train_node = train_node
@@ -252,6 +264,10 @@ func _shoot_at_target(target: Person) -> void:
 	var shoot_dir := (target.global_position - global_position).normalized()
 	bullet.direction = shoot_dir
 	bullet.global_position = global_position + shoot_dir * 24.0
+	if _audio != null and dst_shoot_sound != null:
+		_audio.stop()
+		_audio.stream = dst_shoot_sound
+		_audio.play()
 
 func _apply_contact_damage() -> void:
 	if _target_in_contact == null:
