@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bf52gpgg0aftq" path="res://scenes/train_timur/train.tscn" id="1_hyk8p"]
 [ext_resource type="Script" uid="uid://kggtcrnmw3fy" path="res://scenes/main/main.gd" id="2_maingd"]
 [ext_resource type="Script" uid="uid://jc4w1dsn0371" path="res://scenes/main/pause.gd" id="2_ow5a4"]
+[ext_resource type="Script" uid="uid://bsxhpmy1p57xm" path="res://scenes/station/static_body_2d.gd" id="3_b1x3f"]
 [ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://scenes/characters/Player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://scenes/paralaxes/parallax_background_3.tscn" id="4_l3cfh"]
 [ext_resource type="PackedScene" uid="uid://b03tildsg3ynj" path="res://scenes/UI/menupause.tscn" id="5_6q06x"]
@@ -16,7 +17,8 @@ size = Vector2(974, 20)
 script = ExtResource("2_maingd")
 
 [node name="StaticBody2D" parent="." unique_id=946732154 instance=ExtResource("8_b1x3f")]
-position = Vector2(963, 35)
+position = Vector2(1114, 38)
+script = ExtResource("3_b1x3f")
 
 [node name="pause" type="Node" parent="." unique_id=1423032809]
 process_mode = 3

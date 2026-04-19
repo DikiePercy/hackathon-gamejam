@@ -9,8 +9,8 @@ extends Node2D
 @export var enemy_spawn_interval: float = 7.0
 @export var enemy_spawn_max_active: int = 3
 
-signal stop_trein()
-signal go_trein()
+signal stop_trein
+signal go_trein
 
 enum State {DRIVING, AT_STATION, SLOW, FAST}
 var current_state = State.DRIVING
