@@ -2,10 +2,12 @@
 
 [ext_resource type="Script" uid="uid://du4t2o4qn7xr0" path="res://scenes/depot/depot.gd" id="1_fxm1y"]
 [ext_resource type="Texture2D" uid="uid://otx3wpa248hm" path="res://assets/sprites/train/background-desert.jpg" id="2_j3mw0"]
+[ext_resource type="Script" uid="uid://b8g6pb8u3fmak" path="res://scenes/depot/background_desert.gd" id="3_a13ge"]
 [ext_resource type="AudioStream" uid="uid://6ib6ddgxyhkw" path="res://assets/music/Paradise_Found.mp3" id="3_depot_music"]
 [ext_resource type="AudioStream" uid="uid://dkqwr2dqvdih7" path="res://assets/music/freesound_community-train-horn-fades-25194.mp3" id="4_depot_horn"]
 [ext_resource type="AudioStream" uid="uid://dfukunoogk1at" path="res://assets/sounds/coin_pickup.wav" id="5_depot_buy"]
 [ext_resource type="AudioStream" uid="uid://dvv3ycuujo6bf" path="res://assets/sounds/242503__wrong-action.wav" id="6_depot_no_money"]
+[ext_resource type="PackedScene" uid="uid://beudi6gnie43b" path="res://scenes/rels/rels.tscn" id="7_pr7m7"]
 
 [node name="Depot" type="Control" unique_id=1590991496]
 layout_mode = 3
@@ -14,37 +16,6 @@ offset_right = 40.0
 offset_bottom = 40.0
 mouse_filter = 2
 script = ExtResource("1_fxm1y")
-
-[node name="TrainPreviewContent" type="Node2D" parent="." unique_id=491198593]
-
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1311003508]
-zoom = Vector2(0.6, 0.6)
-
-[node name="BackgroundDesert" type="Sprite2D" parent="Camera2D" unique_id=1989465728]
-position = Vector2(4.5739136, 4.7500305)
-scale = Vector2(0.4535714, 0.45357135)
-texture = ExtResource("2_j3mw0")
-
-[node name="DepotMusic" type="AudioStreamPlayer" parent="." unique_id=474715381]
-stream = ExtResource("3_depot_music")
-volume_db = -14.0
-autoplay = true
-
-[node name="DepotHorn" type="AudioStreamPlayer" parent="." unique_id=1522512817]
-stream = ExtResource("4_depot_horn")
-volume_db = -10.0
-
-[node name="DepotBuy" type="AudioStreamPlayer" parent="." unique_id=1455655635]
-stream = ExtResource("5_depot_buy")
-volume_db = -8.0
-
-[node name="DepotNoMoney" type="AudioStreamPlayer" parent="." unique_id=1506641942]
-stream = ExtResource("6_depot_no_money")
-autoplay = false
-volume_db = 2.0
-
-[node name="TrainPreview" type="Node2D" parent="." unique_id=478105875]
-scale = Vector2(1.8, 1.8)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1218118247]
 
@@ -83,6 +54,54 @@ text = "купить патроны"
 [node name="Back" type="Button" parent="CanvasLayer/VBoxContainer/HBoxContainer" unique_id=1574049834]
 layout_mode = 2
 text = "back"
+
+[node name="TrainPreviewContent" type="Node2D" parent="." unique_id=491198593]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1311003508]
+zoom = Vector2(0.6, 0.6)
+limit_left = -2400
+limit_right = 450
+
+[node name="BackgroundDesert" type="Sprite2D" parent="Camera2D" unique_id=1989465728]
+position = Vector2(4.5739136, 4.7500305)
+scale = Vector2(0.4535714, 0.45357135)
+texture = ExtResource("2_j3mw0")
+script = ExtResource("3_a13ge")
+
+[node name="DepotMusic" type="AudioStreamPlayer" parent="." unique_id=474715381]
+stream = ExtResource("3_depot_music")
+volume_db = -14.0
+autoplay = true
+
+[node name="DepotHorn" type="AudioStreamPlayer" parent="." unique_id=1522512817]
+stream = ExtResource("4_depot_horn")
+volume_db = -10.0
+
+[node name="DepotBuy" type="AudioStreamPlayer" parent="." unique_id=1455655635]
+stream = ExtResource("5_depot_buy")
+volume_db = -8.0
+
+[node name="DepotNoMoney" type="AudioStreamPlayer" parent="." unique_id=1506641942]
+stream = ExtResource("6_depot_no_money")
+volume_db = -10.0
+
+[node name="TrainPreview" type="Node2D" parent="." unique_id=478105875]
+scale = Vector2(1.8, 1.8)
+
+[node name="Rels" parent="." unique_id=1089401706 instance=ExtResource("7_pr7m7")]
+position = Vector2(-273, 210)
+
+[node name="Rels3" parent="." unique_id=2017767364 instance=ExtResource("7_pr7m7")]
+position = Vector2(-896, 210)
+
+[node name="Rels4" parent="." unique_id=1133648386 instance=ExtResource("7_pr7m7")]
+position = Vector2(-1520, 210)
+
+[node name="Rels5" parent="." unique_id=975952071 instance=ExtResource("7_pr7m7")]
+position = Vector2(-2147, 210)
+
+[node name="Rels2" parent="." unique_id=1672651135 instance=ExtResource("7_pr7m7")]
+position = Vector2(350, 210)
 
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/UpgradeButton" to="." method="_on_upgrade_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/BuyButton" to="." method="_on_buy_button_pressed"]
