@@ -126,8 +126,6 @@ func _on_buy_button_pressed() -> void:
 		
 		# 5. Обновляем текст с золотом
 		update_ui()
-		
-		print("Куплен новый вагон! Всего вагонов: ", GameManager.train_data.size())
 	else:
 		print("Недостаточно золота!")
 
@@ -159,19 +157,12 @@ func _on_buy_p_pressed() -> void:
 		# 1. Списываем золото
 		GameManager.total_gold -= p_price
 		
-		# 2. Создаем "пакет данных" для нового вагона: [уровень 1, 0 человек]
-		var randomv = randi_range(1, 3)
-		var new_wagon_data = [1, 0, randomv]
+		# 2. Создаем "пакет данных" для нового вагона: [уровень 1, 0 человек], 3)
 		
 		# 3. Добавляем эти данные в наш глобальный список в GameManager
-		GameManager.train_data.append(new_wagon_data)
-		
-		# 4. ПОЛНОСТЬЮ перерисовываем поезд в Депо, чтобы увидеть новый вагон
-		draw_depot_train()
+		GameManager.total_p += 1
 		
 		# 5. Обновляем текст с золотом
 		update_ui()
-		
-		print("Куплен новый вагон! Всего вагонов: ", GameManager.train_data.size())
 	else:
 		print("Недостаточно золота!")
