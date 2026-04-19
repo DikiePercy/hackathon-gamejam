@@ -40,7 +40,8 @@ volume_db = -8.0
 
 [node name="DepotNoMoney" type="AudioStreamPlayer" parent="." unique_id=1506641942]
 stream = ExtResource("6_depot_no_money")
-volume_db = -10.0
+autoplay = false
+volume_db = 2.0
 
 [node name="TrainPreview" type="Node2D" parent="." unique_id=478105875]
 scale = Vector2(1.8, 1.8)
