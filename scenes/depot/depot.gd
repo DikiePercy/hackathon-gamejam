@@ -43,7 +43,7 @@ func draw_depot_train():
 	# 1. Сначала рисуем Локомотив
 	var loco = locomotive_scene.instantiate()
 	loco.is_in_depot = true
-	train_preview.add_child(loco)
+	add_child(loco)
 	loco.position = Vector2(200, 150) # В депо локомотив в центре
 	
 	# 2. Рисуем вагоны из GameManager
@@ -56,8 +56,8 @@ func draw_depot_train():
 		
 		new_wagon.wagon_level = stats[0]
 		new_wagon.passengers = stats[1]
-		new_wagon.position.x = (-(i + 1) * wagon_width) + 200
-		new_wagon.position.y = loco.position.y + 8
+		new_wagon.position.x = (-(i + 1) * wagon_width) + 95
+		new_wagon.position.y = loco.position.y - 58
 		
 		# ВАЖНО: В депо подключаем сигнал, чтобы ловить клики
 		if new_wagon.has_signal("clicked"):
