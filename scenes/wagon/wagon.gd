@@ -10,6 +10,10 @@ const PLAYER_INSIDE_Z_INDEX := 5
 const EXTERIOR_Z_INDEX := 10
 const DEFAULT_PLAYER_Z_INDEX := 1
 
+signal mouse_hovered(wagon_instance)
+signal mouse_unhovered(wagon_instance)
+signal clicked(wagon_instance)
+
 var money_per_level = {
 	1: 10,
 	2: 50,
@@ -106,3 +110,11 @@ func _resolve_exterior_sprite() -> CanvasItem:
 	if exterior != null:
 		return exterior
 	return find_child("AnimatedSprite2D", true, false) as CanvasItem
+
+
+func _on_area_2d_mouse_entered() -> void:
+	emit_signal("mouse_hovered", self)
+
+
+func _on_area_2d_mouse_exited() -> void:
+	emit_signal("wagon_instance", self)
