@@ -9,10 +9,10 @@
 script = ExtResource("2_maingd")
 
 [node name="Train" parent="." unique_id=2065298570 instance=ExtResource("1_hyk8p")]
-position = Vector2(576, 204)
+position = Vector2(284, 213)
 
 [node name="Player" parent="." unique_id=1025993540 instance=ExtResource("3_player")]
-position = Vector2(557, 105)
+position = Vector2(257, 143)
 scale = Vector2(1, 1)
 max_health = null
 
