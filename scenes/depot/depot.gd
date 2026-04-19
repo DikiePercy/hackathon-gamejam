@@ -4,7 +4,9 @@ extends Control
 @export var locomotive_scene: PackedScene = preload("res://scenes/train_timur/train.tscn")
 
 @onready var train_preview = $TrainPreview
-@onready var gold_label = $Camera2D/GoldLabel
+@onready var gold_label = $CanvasLayer/VBoxContainer/HBoxContainer2/GoldLabel
+@onready var p_label = $CanvasLayer/VBoxContainer/HBoxContainer2/VLabel
+@onready var v_label = $CanvasLayer/VBoxContainer/HBoxContainer2/PLabel
 
 @onready var camera = $Camera2D
 var camera_speed = 500.0
@@ -52,7 +54,7 @@ func draw_depot_train():
 		new_wagon.wagon_level = stats[0]
 		new_wagon.passengers = stats[1]
 		new_wagon.position.x = (-(i + 1) * wagon_width) + 200
-		new_wagon.position.y = loco.position.y + 16
+		new_wagon.position.y = loco.position.y + 8
 		
 		# ВАЖНО: В депо подключаем сигнал, чтобы ловить клики
 		if new_wagon.has_signal("clicked"):
@@ -128,3 +130,29 @@ func _on_buy_button_pressed() -> void:
 	
 func update_ui():
 	gold_label.text = "Золото: " + str(GameManager.total_gold)
+	v_label.text = "Патроны: " + str(GameManager.total_p)
+	p_label.text = "Вагоны: " + str(GameManager.train_data.size())
+
+
+func _on_buy_p_pressed() -> void:
+	var p_price = 10
+	if GameManager.total_gold >= p_price:
+		# 1. Списываем золото
+		GameManager.total_gold -= p_price
+		
+		# 2. Создаем "пакет данных" для нового вагона: [уровень 1, 0 человек]
+		var randomv = randi_range(1, 3)
+		var new_wagon_data = [1, 0, randomv]
+		
+		# 3. Добавляем эти данные в наш глобальный список в GameManager
+		GameManager.train_data.append(new_wagon_data)
+		
+		# 4. ПОЛНОСТЬЮ перерисовываем поезд в Депо, чтобы увидеть новый вагон
+		draw_depot_train()
+		
+		# 5. Обновляем текст с золотом
+		update_ui()
+		
+		print("Куплен новый вагон! Всего вагонов: ", GameManager.train_data.size())
+	else:
+		print("Недостаточно золота!")

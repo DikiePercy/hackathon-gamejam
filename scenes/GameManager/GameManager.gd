@@ -1,6 +1,7 @@
 extends Node
 
 var total_gold = 5000
+var total_p = 100
 
 # Структура: [ [уровень, люди, hp], [уровень, люди, hp] ]
 var train_data = [
