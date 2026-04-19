@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://opcw5pecg12t" path="res://assets/Cowboy Assets/Cowboy_Idle/Cowboy_Idle.png" id="4_tnbbi"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ikgq3"]
+radius = 18.0
 height = 78.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gg7os"]

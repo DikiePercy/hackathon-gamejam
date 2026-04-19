@@ -4,10 +4,9 @@
 [ext_resource type="Script" uid="uid://kggtcrnmw3fy" path="res://scenes/main/main.gd" id="2_maingd"]
 [ext_resource type="Script" uid="uid://jc4w1dsn0371" path="res://scenes/main/pause.gd" id="2_ow5a4"]
 [ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://scenes/characters/Player.tscn" id="3_player"]
-[ext_resource type="PackedScene" path="res://scenes/paralaxes/parallax_background_3.tscn" id="4_l3cfh"]
+[ext_resource type="PackedScene" uid="uid://w22l7k23ohsx" path="res://scenes/paralaxes/parallax_background_3.tscn" id="4_l3cfh"]
 [ext_resource type="PackedScene" uid="uid://b03tildsg3ynj" path="res://scenes/UI/menupause.tscn" id="5_6q06x"]
-[ext_resource type="PackedScene" uid="uid://cxsft8op476qb" path="res://scenes/characters/kowboy_enemy.tscn" id="7_hujxm"]
-[ext_resource type="PackedScene" uid="uid://2qsupeeowy0u" path="res://scenes/rels/parallax_background.tscn" id="8_yyfjg"]
+[ext_resource type="PackedScene" uid="uid://b7et08nmm166y" path="res://scenes/rels/parallax_background.tscn" id="8_yyfjg"]
 
 [node name="Main" type="Node2D" unique_id=1038197434]
 script = ExtResource("2_maingd")
@@ -22,8 +21,6 @@ position = Vector2(285, 154)
 [node name="Player" parent="." unique_id=1025993540 instance=ExtResource("3_player")]
 position = Vector2(260, -60)
 scale = Vector2(1, 1)
-bullet_scene = null
-max_health = null
 
 [node name="ParallaxBackground 3" parent="." unique_id=616799245 instance=ExtResource("4_l3cfh")]
 scroll_ignore_camera_zoom = true
@@ -40,35 +37,26 @@ offset_right = 475.0
 offset_bottom = 72.0
 text = "Menu"
 
-[node name="Kowboy enemy" parent="." unique_id=1594219037 instance=ExtResource("7_hujxm")]
-position = Vector2(75, 192)
-
 [node name="ParallaxBackground" parent="." unique_id=1808317350 instance=ExtResource("8_yyfjg")]
+
 [node name="relses" type="Node2D" parent="." unique_id=1365972844]
 
 [node name="Rels" parent="relses" unique_id=1089401706 instance=ExtResource("8_yyfjg")]
-position = Vector2(2164, 276)
 
 [node name="Rels3" parent="relses" unique_id=1755232666 instance=ExtResource("8_yyfjg")]
-position = Vector2(949, 276)
 
 [node name="Rels4" parent="relses" unique_id=1919392374 instance=ExtResource("8_yyfjg")]
-position = Vector2(323, 276)
 
 [node name="Rels2" parent="relses" unique_id=1817454489 instance=ExtResource("8_yyfjg")]
-position = Vector2(1538, 276)
 
 [node name="Rels5" parent="relses" unique_id=193359381 instance=ExtResource("8_yyfjg")]
-position = Vector2(-304, 276)
 
 [node name="Rels6" parent="relses" unique_id=1136167340 instance=ExtResource("8_yyfjg")]
-position = Vector2(-1519, 276)
 
 [node name="Rels7" parent="relses" unique_id=73579383 instance=ExtResource("8_yyfjg")]
-position = Vector2(-2145, 276)
 
 [node name="Rels8" parent="relses" unique_id=183978961 instance=ExtResource("8_yyfjg")]
-position = Vector2(-930, 276)
+
 [connection signal="pressed" from="CanvasLayer/menupause/Panel/VBoxContainer/Button" to="pause" method="_on_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/menupause/Panel/VBoxContainer/Button4" to="pause" method="_on_button_4_pressed"]
 [connection signal="pressed" from="CanvasLayer/menubutton" to="pause" method="_on_menubutton_pressed"]
