@@ -1,0 +1,6 @@
+[gd_resource type="Theme" format=3 uid="uid://oior1fijibmt"]
+
+[ext_resource type="FontFile" uid="uid://dncnl87l008mf" path="res://fonts/SonicPressStartButton[NolivantNTEdit]-Regular.ttf" id="1_wpbi6"]
+
+[resource]
+default_font = ExtResource("1_wpbi6")

@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://dc0isej32hjlm"]
 
 [ext_resource type="Script" uid="uid://cufm2x8mw3448" path="res://scenes/menu/node_2d.gd" id="1_wtcfe"]
-[ext_resource type="PackedScene" path="res://scenes/menu/parallax_background.tscn" id="2_w52i0"]
+[ext_resource type="PackedScene" uid="uid://7fh1qvxbd856" path="res://scenes/menu/parallax_background.tscn" id="2_w52i0"]
 [ext_resource type="AudioStream" uid="uid://b42porumvfglq" path="res://assets/music/Adventures in Adventureland.mp3" id="3_music"]
+[ext_resource type="Theme" uid="uid://oior1fijibmt" path="res://fonts/ui_theme.tres" id="4_6l1xv"]
 
 [node name="Node2D" type="Node2D" unique_id=622073271]
 script = ExtResource("1_wtcfe")
@@ -16,11 +17,12 @@ autoplay = true
 scroll_ignore_camera_zoom = true
 
 [node name="Panel" type="Panel" parent="." unique_id=614577268]
-offset_left = 354.0
-offset_top = -121.0
-offset_right = 473.72272
-offset_bottom = -30.14093
+offset_left = 304.0
+offset_top = -128.0
+offset_right = 347.7696
+offset_bottom = -86.85628
 scale = Vector2(0.776795, 0.58332103)
+theme = ExtResource("4_6l1xv")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=1738653689]
 layout_mode = 0
@@ -62,6 +64,7 @@ offset_bottom = 323.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.6190076, 0.6195211)
+theme = ExtResource("4_6l1xv")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="SavePanel" unique_id=304157628]
 layout_mode = 1

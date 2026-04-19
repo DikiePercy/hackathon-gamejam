@@ -105,7 +105,7 @@ func drive_logic(delta):
 	if !$Timer.is_stopped():
 		pass
 	else:
-		$Timer.start(2)
+		$Timer.start(30)
 
 func station_logic(_delta):
 	_delta += 0.0
