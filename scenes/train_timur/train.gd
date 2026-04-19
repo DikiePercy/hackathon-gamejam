@@ -12,11 +12,16 @@ var is_in_depot = false
 
 func _ready():
 	# При старте уровня строим поезд по данным из GameManager
-	if !is_in_depot:
-		build_train_from_data()
-		_play_train_horn()
-		if speed > 0.0 and dst_train_engine_audio != null:
-			dst_train_engine_audio.play()
+	if is_in_depot:
+		if dst_train_engine_audio != null:
+			dst_train_engine_audio.stop()
+		if dst_train_horn_audio != null:
+			dst_train_horn_audio.stop()
+		return
+	build_train_from_data()
+	_play_train_horn()
+	if speed > 0.0 and dst_train_engine_audio != null:
+		dst_train_engine_audio.play()
 
 func build_train_from_data():
 	# Очищаем, если что-то было

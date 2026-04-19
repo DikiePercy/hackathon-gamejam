@@ -2,7 +2,10 @@
 
 [ext_resource type="Script" uid="uid://du4t2o4qn7xr0" path="res://scenes/depot/depot.gd" id="1_fxm1y"]
 [ext_resource type="Texture2D" uid="uid://otx3wpa248hm" path="res://assets/sprites/train/background-desert.jpg" id="2_j3mw0"]
-[ext_resource type="AudioStream" uid="uid://audiostream_depot_music" path="res://assets/music/kokoreli777-inside-old-train-169418.mp3" id="3_depot_music"]
+[ext_resource type="AudioStream" uid="uid://audiostream_depot_music" path="res://assets/music/Paradise_Found.mp3" id="3_depot_music"]
+[ext_resource type="AudioStream" uid="uid://audiostream_depot_horn" path="res://assets/music/freesound_community-train-horn-fades-25194.mp3" id="4_depot_horn"]
+[ext_resource type="AudioStream" uid="uid://audiostream_depot_buy" path="res://assets/sounds/coin_pickup.wav" id="5_depot_buy"]
+[ext_resource type="AudioStream" uid="uid://audiostream_depot_no_money" path="res://assets/sounds/242503__wrong-action.wav" id="6_depot_no_money"]
 
 [node name="Depot" type="Control" unique_id=1590991496]
 layout_mode = 3
@@ -22,6 +25,21 @@ stream = ExtResource("3_depot_music")
 autoplay = true
 volume_db = -14.0
 loop = true
+
+[node name="DepotHorn" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_depot_horn")
+autoplay = false
+volume_db = -10.0
+
+[node name="DepotBuy" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_depot_buy")
+autoplay = false
+volume_db = -8.0
+
+[node name="DepotNoMoney" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_depot_no_money")
+autoplay = false
+volume_db = -10.0
 
 [node name="BackgroundDesert" type="Sprite2D" parent="Camera2D" unique_id=1989465728]
 position = Vector2(4.5739136, 4.7500305)
