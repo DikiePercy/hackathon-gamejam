@@ -1,8 +1,6 @@
 extends Camera2D
 
 func _process(delta):
-	print(position.x)
-	
 	if position.x < -2000 :
 		position.x = -2000
 	elif position.x > 0:
