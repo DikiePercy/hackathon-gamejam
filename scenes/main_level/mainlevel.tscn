@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://dadd0xiiso4yf"]
+
+[ext_resource type="Script" uid="uid://dw1k6htnujfv6" path="res://scenes/main_level/mainlevel.gd" id="1_7t2k5"]
+[ext_resource type="PackedScene" uid="uid://qbej13o38ef5" path="res://scenes/train/train.tscn" id="1_pb4bg"]
+[ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://scenes/characters/Player.tscn" id="2_7t2k5"]
+
+[node name="mainlevel" type="Node2D" unique_id=1890819608]
+script = ExtResource("1_7t2k5")
+
+[node name="Train" parent="." unique_id=931045708 instance=ExtResource("1_pb4bg")]
+
+[node name="Player" parent="." unique_id=857582357 instance=ExtResource("2_7t2k5")]
+position = Vector2(1, -81)

@@ -15,6 +15,7 @@ func _ready():
 
 func build_train_from_data():
 	# Очищаем, если что-то было
+	
 	for child in wagons_container.get_children():
 		child.queue_free()
 	
