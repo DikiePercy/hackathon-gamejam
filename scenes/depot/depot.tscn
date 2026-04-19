@@ -58,6 +58,10 @@ text = "купить вагон"
 layout_mode = 2
 text = "купить патроны"
 
+[node name="Back" type="Button" parent="CanvasLayer/VBoxContainer/HBoxContainer" unique_id=1574049834]
+layout_mode = 2
+text = "back"
+
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/UpgradeButton" to="." method="_on_upgrade_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/BuyButton" to="." method="_on_buy_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/VBoxContainer/HBoxContainer/BuyP" to="." method="_on_buy_p_pressed"]
