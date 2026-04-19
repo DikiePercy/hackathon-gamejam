@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://opcw5pecg12t" path="res://assets/Cowboy Assets/Cowboy_Idle/Cowboy_Idle.png" id="4_tnbbi"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ikgq3"]
+radius = 18.0
 height = 78.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gg7os"]
@@ -135,8 +136,8 @@ position = Vector2(0, -7)
 shape = SubResource("CapsuleShape2D_ikgq3")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1423501748]
-position = Vector2(4, -11)
-scale = Vector2(2.1015627, 1.90625)
+position = Vector2(6, -12.000001)
+scale = Vector2(2.925781, 1.90625)
 sprite_frames = SubResource("SpriteFrames_gcqgy")
 animation = &"attack"
 frame = 5

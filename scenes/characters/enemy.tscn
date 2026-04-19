@@ -32,21 +32,21 @@ size = Vector2(26, 65)
 script = ExtResource("1_enemy")
 
 [node name="Visual" type="AnimatedSprite2D" parent="." unique_id=2059613931]
-position = Vector2(3.8146973e-06, -3.999998)
+position = Vector2(-0.4999962, 12.500001)
 scale = Vector2(4.96875, 4.15625)
 sprite_frames = SubResource("SpriteFrames_x5khh")
 autoplay = "default"
 frame_progress = 0.6156255
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1885989210]
-position = Vector2(1, -16.5)
+position = Vector2(0.5, 0)
 shape = SubResource("Shape_enemy_body")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=1618257981]
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1731789520]
-position = Vector2(1, -16.5)
+position = Vector2(0.5, 0)
 shape = SubResource("Shape_enemy_hitbox")
 
 [connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
