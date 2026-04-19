@@ -66,8 +66,8 @@ script = ExtResource("2_a13ge")
 [node name="Node2D" type="Node2D" parent="Camera2D" unique_id=1063610383]
 
 [node name="BackgroundDesert" type="Sprite2D" parent="Camera2D/Node2D" unique_id=1989465728]
-position = Vector2(4.5739136, 4.7500305)
-scale = Vector2(0.4535714, 0.45357135)
+position = Vector2(-1.8030405e-05, 0.9999833)
+scale = Vector2(0.45924228, 0.46122453)
 texture = ExtResource("2_j3mw0")
 
 [node name="DepotMusic" type="AudioStreamPlayer" parent="." unique_id=474715381]

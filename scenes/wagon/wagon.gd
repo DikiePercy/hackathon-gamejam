@@ -23,8 +23,8 @@ var money_per_level = {
 }
 
 # Ссылки на узлы по твоей структуре в wagon.tscn
-@onready var interior_sprite: CanvasItem = _resolve_interior_sprite()
-@onready var exterior_sprite: CanvasItem = _resolve_exterior_sprite()
+@onready var interior_sprite = $Interiorsprite
+@onready var exterior_sprite = $StaticBody2D/AnimatedSprite2D
 @onready var _seat_markers_root: Node2D = $SeatMarkers
 
 var _spawned_passengers: Array[Node2D] = []
@@ -123,7 +123,7 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 		body.z_index = DEFAULT_PLAYER_Z_INDEX
 
 # Сигналы кликов
-func _on_area_2d_input_event(_viewport, event, _shape_idx):
+func _on_area_2d_input_event(_viewport, event, _shape_idx) -> void:
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		emit_signal("clicked", self)
 

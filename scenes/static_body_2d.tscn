@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://c3sf4krcan4oo"]
+
+[ext_resource type="Texture2D" path="res://assets/station/platform.png" id="1_d0w87"]
+[ext_resource type="Texture2D" path="res://assets/station/fence.png" id="2_krnit"]
+[ext_resource type="Texture2D" path="res://assets/station/Shelter.png" id="3_ma48p"]
+[ext_resource type="Texture2D" path="res://assets/station/birb.png" id="4_24lh1"]
+
+[node name="StaticBody2D" type="StaticBody2D" unique_id=946732154]
+
+[node name="Node2D" type="Node2D" parent="." unique_id=273154797]
+scale = Vector2(0.7, 0.7)
+
+[node name="Platform" type="Sprite2D" parent="Node2D" unique_id=2091204430]
+position = Vector2(462, 235)
+texture = ExtResource("1_d0w87")
+
+[node name="Fence" type="Sprite2D" parent="Node2D" unique_id=2083224719]
+position = Vector2(304, 170)
+texture = ExtResource("2_krnit")
+
+[node name="Shelter" type="Sprite2D" parent="Node2D" unique_id=59176066]
+position = Vector2(464.99997, 117.000015)
+scale = Vector2(0.24837399, 0.24837397)
+texture = ExtResource("3_ma48p")
+
+[node name="Birb" type="Sprite2D" parent="Node2D" unique_id=1619557997]
+position = Vector2(375, 38)
+texture = ExtResource("4_24lh1")

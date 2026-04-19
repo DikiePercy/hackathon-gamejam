@@ -15,12 +15,22 @@ extends Node2D
 @export var enemy_assault_delay_min: float = 0.25
 @export var enemy_assault_delay_max: float = 0.8
 
+signal stop_trein
+signal go_trein
+
+enum State {DRIVING, AT_STATION, SLOW, FAST}
+var current_state = State.DRIVING
+
+@export var max_speed: float = 300.0
+@export var braking_distance: float = 500.0 # Дистанция начала торможения
+
 var speed = 200.0
 var wagons = []
 var is_in_depot = false
 var _active_enemies: Array[Node2D] = []
 var _enemy_spawn_timer: Timer = null
 var _last_lane_id: int = -1
+
 
 const ENEMY_BULLET_SCENE := preload("res://scenes/characters/Bullet.tscn")
 const ENEMY_SPAWN_OFFSET_X_MIN := 360.0
@@ -55,9 +65,40 @@ func _process(_delta: float) -> void:
 	if is_in_depot:
 		$Locomotive/AnimatedSprite2D.stop()
 
+func slow_logic(delta):
+	emit_signal("stop_trein")
+	if GameManager.train_speed > 0:
+		GameManager.train_speed -= 1
+	else:
+		current_state = State.AT_STATION
+
+func fast_logic(delta):
+	emit_signal("go_trein")
+	if GameManager.train_speed < max_speed:
+		GameManager.train_speed += 1
+	else:
+		current_state = State.DRIVING
+
+func drive_logic(delta):
+	if !$Timer.is_stopped():
+		print($Timer.time_left)
+	else:
+		$Timer.start(5)
+
+func station_logic(_delta):
+	pass
+	
+func _on_timer_timeout() -> void:
+	current_state = State.SLOW
+	print("Поезд stop!")
+
+func _input(event):
+	# "ui_accept" — это стандартное действие для Пробела (и Enter)
+	if event.is_action_pressed("ui_accept") and current_state == State.AT_STATION:
+		current_state = State.FAST 
+
 func build_train_from_data():
 	# Очищаем, если что-то было
-	
 	for child in wagons_container.get_children():
 		child.queue_free()
 	
