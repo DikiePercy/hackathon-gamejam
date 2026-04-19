@@ -45,7 +45,6 @@ position = Vector2(75, 192)
 
 [node name="ParallaxBackground" parent="." unique_id=1808317350 instance=ExtResource("8_yyfjg")]
 [node name="relses" type="Node2D" parent="." unique_id=1365972844]
-script = ExtResource("8_b1x3f")
 
 [node name="Rels" parent="relses" unique_id=1089401706 instance=ExtResource("8_yyfjg")]
 position = Vector2(2164, 276)
