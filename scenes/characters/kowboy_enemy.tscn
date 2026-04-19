@@ -130,6 +130,7 @@ script = ExtResource("1_tuio4")
 shape = SubResource("CapsuleShape2D_ikgq3")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1423501748]
+position = Vector2(2, -4)
 sprite_frames = SubResource("SpriteFrames_gcqgy")
 animation = &"attack"
-frame_progress = 0.36518478
+frame_progress = 0.8687708
