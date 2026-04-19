@@ -1,8 +1,14 @@
 extends Node2D
 
+signal clicked(wagon_node)
+signal mouse_hovered(wagon_node)
+signal mouse_unhovered(wagon_node)
+
 var wagon_level = 1
 var vagon_type = 1
 var passengers = 0
+
+@export var passenger_scene: PackedScene = preload("res://scenes/characters/passenger.tscn")
 
 var money_per_level = {
 	1: 10,
@@ -13,6 +19,9 @@ var money_per_level = {
 # Ссылки на узлы по твоей структуре в wagon.tscn
 @onready var interior_sprite = $Interiorsprite
 @onready var exterior_sprite = $StaticBody2D/AnimatedSprite2D
+@onready var _seat_markers_root: Node2D = $SeatMarkers
+
+var _spawned_passengers: Array[Node2D] = []
 
 func _ready():
 	update_wagon_stats()
@@ -24,6 +33,7 @@ func _ready():
 		interior_sprite.play("v" + str(vagon_type))
 	if exterior_sprite and exterior_sprite.has_method("play"):
 		exterior_sprite.play("v" + str(vagon_type))
+	call_deferred("sync_passengers")
 
 func update_wagon_stats():
 	if not is_inside_tree(): return
@@ -35,6 +45,31 @@ func update_wagon_stats():
 
 	if interior_sprite: interior_sprite.modulate = target_color
 	if exterior_sprite: exterior_sprite.modulate = target_color
+
+func sync_passengers() -> void:
+	for passenger_node in _spawned_passengers:
+		if is_instance_valid(passenger_node):
+			passenger_node.queue_free()
+	_spawned_passengers.clear()
+
+	if passenger_scene == null or _seat_markers_root == null:
+		return
+
+	var seats := _seat_markers_root.get_children()
+	var spawn_count := min(passengers, seats.size())
+
+	for i in range(spawn_count):
+		var seat := seats[i] as Marker2D
+		if seat == null:
+			continue
+		var passenger_node := passenger_scene.instantiate()
+		add_child(passenger_node)
+		if passenger_node is Passenger:
+			(passenger_node as Passenger).sit_at_global(seat.global_position)
+		else:
+			push_warning("wagon.gd: passenger_scene должен создавать Passenger")
+			passenger_node.global_position = seat.global_position
+		_spawned_passengers.append(passenger_node)
 
 # ЭФФЕКТ НАРЕЗКИ
 func _on_area_2d_body_entered(body: Node2D) -> void:
@@ -59,3 +94,9 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 func _on_area_2d_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
 		emit_signal("clicked", self)
+
+func _on_area_2d_mouse_entered() -> void:
+	emit_signal("mouse_hovered", self)
+
+func _on_area_2d_mouse_exited() -> void:
+	emit_signal("mouse_unhovered", self)
