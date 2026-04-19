@@ -9,7 +9,7 @@ extends Control
 @onready var camera = $Camera2D
 var camera_speed = 500.0
 
-var wagon_width = 480
+var wagon_width = 240
 var selected_wagon = null # Храним, какой вагон сейчас нажат
 
 func _ready():

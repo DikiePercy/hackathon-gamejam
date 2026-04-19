@@ -14,7 +14,7 @@ script = ExtResource("1_fxm1y")
 [node name="TrainPreviewContent" type="Node2D" parent="." unique_id=491198593]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1311003508]
-zoom = Vector2(0.4, 0.4)
+zoom = Vector2(0.6, 0.6)
 
 [node name="BackgroundDesert" type="Sprite2D" parent="Camera2D" unique_id=1989465728]
 position = Vector2(85, -154)
@@ -42,6 +42,8 @@ offset_bottom = 56.0
 text = "выбор вагона"
 
 [node name="TrainPreview" type="Node2D" parent="." unique_id=478105875]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1218118247]
 
 [connection signal="pressed" from="Camera2D/UpgradeButton" to="." method="_on_upgrade_button_pressed"]
 [connection signal="pressed" from="Camera2D/BuyButton" to="." method="_on_buy_button_pressed"]
