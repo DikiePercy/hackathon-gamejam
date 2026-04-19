@@ -12,7 +12,10 @@ func _on_player_died() -> void:
 
 func _on_train_started():
 	$CanvasLayer/Button.hide()
-
 	
 func _stop_train_started(): 
 	$CanvasLayer/Button.show()
+
+
+func _on_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/depot/depot.tscn")

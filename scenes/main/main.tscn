@@ -65,5 +65,6 @@ shape = SubResource("RectangleShape2D_yyfjg")
 [connection signal="pressed" from="CanvasLayer/menupause/Panel/VBoxContainer/Button" to="pause" method="_on_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/menupause/Panel/VBoxContainer/Button4" to="pause" method="_on_button_4_pressed"]
 [connection signal="pressed" from="CanvasLayer/menubutton" to="pause" method="_on_menubutton_pressed"]
+[connection signal="pressed" from="CanvasLayer/Button" to="." method="_on_button_pressed"]
 
 [editable path="CanvasLayer/menupause"]
