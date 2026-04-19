@@ -18,4 +18,4 @@ func _stop_train_started():
 
 
 func _on_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/depot/depot.tscn")
+	get_tree().change_scene_to_file("res://scenes/depot/depot.tscn" )
