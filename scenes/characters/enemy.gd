@@ -27,6 +27,11 @@ enum RaidState {
 @export var detection_distance: float = 450.0
 @export var shoot_distance: float = 320.0
 @export var stop_distance: float = 120.0
+@export var gravity: float = 1000.0
+@export var jump_velocity: float = -340.0
+@export var jump_cooldown: float = 0.9
+@export var jump_trigger_height: float = 30.0
+@export var jump_trigger_distance: float = 150.0
 @export var knife_speed_multiplier: float = 1.4
 @export var board_speed_multiplier: float = 1.2
 @export var board_reach_threshold: float = 10.0
@@ -45,6 +50,8 @@ var _player: MainPerson = null
 var _train_node: Node2D = null
 var _boarding_target: Vector2 = Vector2.ZERO
 var _patrol_anchor_x: float = 0.0
+var _shoot_anim_timer: float = 0.0
+var _jump_timer: float = 0.0
 
 var dst_shoot_sound: AudioStream = preload("res://assets/sounds/128300__xenonn__layered-gunshot-4.wav")
 
@@ -85,6 +92,11 @@ func _physics_process(delta: float) -> void:
 	if _player == null or not _player.is_inside_tree():
 		_player = _find_player()
 
+	if not is_on_floor():
+		velocity.y += gravity * delta
+	elif velocity.y > 0.0:
+		velocity.y = 0.0
+
 	if _raid_state == RaidState.APPROACH_TRAIN:
 		_process_approach_train()
 	elif _raid_state == RaidState.BOARD_TRAIN:
@@ -98,17 +110,33 @@ func _physics_process(delta: float) -> void:
 		_damage_timer = maxf(_damage_timer - delta, 0.0)
 	if _shoot_timer > 0.0:
 		_shoot_timer = maxf(_shoot_timer - delta, 0.0)
+	if _shoot_anim_timer > 0.0:
+		_shoot_anim_timer = maxf(_shoot_anim_timer - delta, 0.0)
+	if _jump_timer > 0.0:
+		_jump_timer = maxf(_jump_timer - delta, 0.0)
+
+	_update_visual_animation()
 
 	_apply_contact_damage()
 
 func _process_approach_train() -> void:
 	_update_direction_toward(_boarding_target)
 	velocity.x = _direction * _move_speed
-	velocity.y = 0.0
+	if is_on_floor() and velocity.y > 0.0:
+		velocity.y = 0.0
 	if absf(global_position.x - _boarding_target.x) <= approach_reach_threshold:
 		_raid_state = RaidState.BOARD_TRAIN
 
 func _process_board_train() -> void:
+	# Let enemies fire during boarding if player is already in range.
+	if _player != null and _player.is_inside_tree():
+		var player_dist_x := absf(_player.global_position.x - global_position.x)
+		if player_dist_x <= shoot_distance:
+			if _weapon_state == WeaponState.PATROL and _ammo_in_clip > 0:
+				_weapon_state = WeaponState.SHOOTING
+			if _weapon_state == WeaponState.SHOOTING:
+				_try_shoot_at(_player)
+
 	var to_target := _boarding_target - global_position
 	if to_target.length() <= board_reach_threshold:
 		velocity = Vector2.ZERO
@@ -132,25 +160,30 @@ func _process_attack_state(delta: float) -> void:
 	if _weapon_state == WeaponState.RELOADING:
 		_reload_timer = maxf(_reload_timer - delta, 0.0)
 		velocity.x = 0.0
-		velocity.y = 0.0
+		if is_on_floor() and velocity.y > 0.0:
+			velocity.y = 0.0
 		if _reload_timer <= 0.0:
 			_finish_reload()
 		return
 
 	if _weapon_state == WeaponState.KNIFE:
 		if target_visible:
+			_try_jump_toward(target)
 			velocity.x = _direction * _move_speed * knife_speed_multiplier
 		else:
 			_patrol_near_train()
-		velocity.y = 0.0
+		if is_on_floor() and velocity.y > 0.0:
+			velocity.y = 0.0
 		return
 
 	if target_visible:
+		_try_jump_toward(target)
 		if target_dist_x > stop_distance:
 			velocity.x = _direction * _move_speed
 		else:
 			velocity.x = 0.0
-		velocity.y = 0.0
+		if is_on_floor() and velocity.y > 0.0:
+			velocity.y = 0.0
 
 		if _weapon_state == WeaponState.SHOOTING and target_dist_x <= shoot_distance:
 			_try_shoot_at(target)
@@ -164,7 +197,22 @@ func _process_attack_state(delta: float) -> void:
 				_weapon_state = WeaponState.KNIFE
 	else:
 		_patrol_near_train()
-		velocity.y = 0.0
+		if is_on_floor() and velocity.y > 0.0:
+			velocity.y = 0.0
+
+func _try_jump_toward(target: Node2D) -> void:
+	if target == null:
+		return
+	if not is_on_floor():
+		return
+	if _jump_timer > 0.0:
+		return
+
+	var dy := target.global_position.y - global_position.y
+	var dx := absf(target.global_position.x - global_position.x)
+	if dy < -jump_trigger_height and dx <= jump_trigger_distance:
+		velocity.y = jump_velocity
+		_jump_timer = jump_cooldown
 
 func _patrol_near_train() -> void:
 	if global_position.x <= _left_limit_global():
@@ -226,6 +274,18 @@ func _apply_visual_direction() -> void:
 	if _sprite != null:
 		_sprite.scale.x = _sprite_base_scale_x if _direction > 0 else -_sprite_base_scale_x
 
+func _update_visual_animation() -> void:
+	if _sprite == null or _sprite.sprite_frames == null:
+		return
+
+	if _shoot_anim_timer > 0.0:
+		if _sprite.sprite_frames.has_animation("shoot") and _sprite.animation != "shoot":
+			_sprite.play("shoot")
+		return
+
+	if _sprite.sprite_frames.has_animation("default") and _sprite.animation != "default":
+		_sprite.play("default")
+
 func _try_shoot_at(target: Person) -> void:
 	if _weapon_state == WeaponState.KNIFE:
 		return
@@ -270,10 +330,26 @@ func _shoot_at_target(target: Person) -> void:
 	var shoot_dir := (target.global_position - global_position).normalized()
 	bullet.direction = shoot_dir
 	bullet.global_position = global_position + shoot_dir * 24.0
+	_play_shot_feedback()
 	if _audio != null and dst_shoot_sound != null:
 		_audio.stop()
 		_audio.stream = dst_shoot_sound
 		_audio.play()
+
+func _play_shot_feedback() -> void:
+	if _sprite == null:
+		return
+
+	_shoot_anim_timer = 0.12
+	if _sprite.sprite_frames != null and _sprite.sprite_frames.has_animation("shoot"):
+		_sprite.play("shoot")
+		_sprite.frame = 0
+		return
+
+	# Fallback if there is no dedicated shoot animation in sprite frames.
+	_sprite.modulate = Color(1.25, 1.15, 1.0, 1.0)
+	var tween := create_tween()
+	tween.tween_property(_sprite, "modulate", Color(1, 1, 1, 1), 0.10)
 
 func _apply_contact_damage() -> void:
 	if _target_in_contact == null:
