@@ -17,3 +17,4 @@ scale = Vector2(1, 1)
 max_health = null
 
 [node name="ParallaxBackground 3" parent="." unique_id=616799245 instance=ExtResource("4_l3cfh")]
+scroll_ignore_camera_zoom = true
