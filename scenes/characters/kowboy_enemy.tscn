@@ -6,14 +6,15 @@
 [ext_resource type="Texture2D" uid="uid://opcw5pecg12t" path="res://assets/Cowboy Assets/Cowboy_Idle/Cowboy_Idle.png" id="4_tnbbi"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ikgq3"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_rqpls"]
-atlas = ExtResource("2_a2ttn")
-region = Rect2(64, 0, 64, 64)
+height = 78.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_gg7os"]
 atlas = ExtResource("2_a2ttn")
 region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rqpls"]
+atlas = ExtResource("2_a2ttn")
+region = Rect2(64, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3u0l4"]
 atlas = ExtResource("2_a2ttn")
@@ -67,10 +68,10 @@ region = Rect2(64, 0, 64, 64)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_rqpls")
+"texture": SubResource("AtlasTexture_gg7os")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_gg7os")
+"texture": SubResource("AtlasTexture_rqpls")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_3u0l4")
@@ -80,10 +81,13 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ktxr1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gg7os")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack",
-"speed": 5.0
+"speed": 6.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -127,6 +131,7 @@ animations = [{
 script = ExtResource("1_tuio4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1438301091]
+position = Vector2(0, -7)
 shape = SubResource("CapsuleShape2D_ikgq3")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1423501748]
