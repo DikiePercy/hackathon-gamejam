@@ -3,14 +3,17 @@
 [ext_resource type="PackedScene" uid="uid://bf52gpgg0aftq" path="res://scenes/train_timur/train.tscn" id="1_hyk8p"]
 [ext_resource type="Script" uid="uid://kggtcrnmw3fy" path="res://scenes/main/main.gd" id="2_maingd"]
 [ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://scenes/characters/Player.tscn" id="3_player"]
+[ext_resource type="PackedScene" path="res://scenes/paralaxes/parallax_background_3.tscn" id="4_l3cfh"]
 
 [node name="Main" type="Node2D" unique_id=1038197434]
 script = ExtResource("2_maingd")
 
 [node name="Train" parent="." unique_id=2065298570 instance=ExtResource("1_hyk8p")]
-position = Vector2(742, 187)
+position = Vector2(576, 204)
 
 [node name="Player" parent="." unique_id=1025993540 instance=ExtResource("3_player")]
-position = Vector2(59, -83)
+position = Vector2(557, 105)
 scale = Vector2(1, 1)
 max_health = null
+
+[node name="ParallaxBackground 3" parent="." unique_id=616799245 instance=ExtResource("4_l3cfh")]
