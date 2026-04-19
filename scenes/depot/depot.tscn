@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://be00ylwiwetr2"]
 
 [ext_resource type="Script" uid="uid://du4t2o4qn7xr0" path="res://scenes/depot/depot.gd" id="1_fxm1y"]
+[ext_resource type="Script" uid="uid://bgov5fpymeesk" path="res://scenes/depot/camera_2d.gd" id="2_a13ge"]
 [ext_resource type="Texture2D" uid="uid://otx3wpa248hm" path="res://assets/sprites/train/background-desert.jpg" id="2_j3mw0"]
-[ext_resource type="Script" uid="uid://b8g6pb8u3fmak" path="res://scenes/depot/background_desert.gd" id="3_a13ge"]
 [ext_resource type="AudioStream" uid="uid://6ib6ddgxyhkw" path="res://assets/music/Paradise_Found.mp3" id="3_depot_music"]
 [ext_resource type="AudioStream" uid="uid://dkqwr2dqvdih7" path="res://assets/music/freesound_community-train-horn-fades-25194.mp3" id="4_depot_horn"]
 [ext_resource type="AudioStream" uid="uid://dfukunoogk1at" path="res://assets/sounds/coin_pickup.wav" id="5_depot_buy"]
@@ -61,18 +61,19 @@ text = "back"
 zoom = Vector2(0.6, 0.6)
 limit_left = -2400
 limit_right = 450
+script = ExtResource("2_a13ge")
 
-[node name="BackgroundDesert" type="Sprite2D" parent="Camera2D" unique_id=1989465728]
+[node name="Node2D" type="Node2D" parent="Camera2D" unique_id=1063610383]
+
+[node name="BackgroundDesert" type="Sprite2D" parent="Camera2D/Node2D" unique_id=1989465728]
 position = Vector2(4.5739136, 4.7500305)
 scale = Vector2(0.4535714, 0.45357135)
 texture = ExtResource("2_j3mw0")
-script = ExtResource("3_a13ge")
 
 [node name="DepotMusic" type="AudioStreamPlayer" parent="." unique_id=474715381]
 stream = ExtResource("3_depot_music")
 volume_db = -14.0
 autoplay = true
-loop = true
 
 [node name="DepotHorn" type="AudioStreamPlayer" parent="." unique_id=1522512817]
 stream = ExtResource("4_depot_horn")
