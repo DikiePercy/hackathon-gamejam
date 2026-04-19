@@ -23,6 +23,10 @@ func _ready():
 	if speed > 0.0 and dst_train_engine_audio != null:
 		dst_train_engine_audio.play()
 
+func _process(delta: float) -> void:
+	if is_in_depot:
+		$Locomotive/AnimatedSprite2D.stop()
+
 func build_train_from_data():
 	# Очищаем, если что-то было
 	

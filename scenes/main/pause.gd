@@ -19,3 +19,7 @@ func _on_button_pressed() -> void:
 func _on_button_4_pressed() -> void:
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://scenes/menu/node_2d.tscn")
+
+
+func _on_menubutton_pressed() -> void:
+	game_paused = !game_paused
