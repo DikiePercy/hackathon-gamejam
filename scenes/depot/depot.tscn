@@ -47,6 +47,7 @@ scale = Vector2(0.4535714, 0.45357135)
 texture = ExtResource("2_j3mw0")
 
 [node name="TrainPreview" type="Node2D" parent="." unique_id=478105875]
+scale = Vector2(1.8, 1.8)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1218118247]
 
