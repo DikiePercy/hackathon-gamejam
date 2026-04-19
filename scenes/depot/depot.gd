@@ -4,7 +4,6 @@ extends Control
 @export var locomotive_scene: PackedScene = preload("res://scenes/train_timur/train.tscn")
 
 @onready var train_preview = $TrainPreview
-@onready var gold_label = $Camera2D/GoldLabel
 @onready var weapon_label = $Camera2D.get_node_or_null("WeaponLabel")
 
 @export var shotgun_price: int = 600
