@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://d1kayi5fa6r" path="res://assets/Cowboy (Animated Pixel Art)/Animation Sprite Sheets (PNG)/CowBoyHolsterWeapon.png" id="4_miirx"]
 [ext_resource type="Texture2D" uid="uid://du3ujuq8meyq0" path="res://assets/Cowboy (Animated Pixel Art)/Animation Sprite Sheets (PNG)/CowBoyDrawWeapon.png" id="4_rpfb3"]
 [ext_resource type="Texture2D" uid="uid://dluqu3hhipbq3" path="res://assets/Cowboy (Animated Pixel Art)/Animation Sprite Sheets (PNG)/CowBoyWalking.png" id="6_miirx"]
+[ext_resource type="AudioStream" uid="uid://shoot_sound" path="res://assets/sounds/player_shoot.wav" id="7_shoot_sound"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7wym0"]
 atlas = ExtResource("3_7n8ao")
@@ -326,6 +327,11 @@ shape = SubResource("CapsuleShape2D_mqro2")
 
 [node name="GunPoint" type="Marker2D" parent="." unique_id=713230383]
 position = Vector2(15, 3)
+
+[node name="Audio" type="AudioStreamPlayer" parent="." unique_id=183746501]
+stream = ExtResource("7_shoot_sound")
+autoplay = false
+volume_db = 4.0
 
 [node name="LadderDetector" type="Area2D" parent="." unique_id=755396173]
 collision_layer = 0
