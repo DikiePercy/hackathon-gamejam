@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://b3frusq7jxvxp"]
 
 [ext_resource type="Script" uid="uid://ckpn4iwkpqpl6" path="res://scenes/multiplayer/game.gd" id="1"]
-[ext_resource type="PackedScene" uid="uid://a2b3c4d5e6f78901" path="res://scenes/train_timur/train.tscn" id="2"]
-[ext_resource type="PackedScene" uid="uid://b2c3d4e5f6a78901" path="res://scenes/paralaxes/parallax_background_3.tscn" id="3"]
-[ext_resource type="PackedScene" uid="uid://c2d3e4f5a6b78901" path="res://scenes/rels/parallax_background.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://bf52gpgg0aftq" path="res://scenes/train_timur/train.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/paralaxes/parallax_background_3.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://2qsupeeowy0u" path="res://scenes/rels/parallax_background.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://scenes/characters/Player.tscn" id="5_1jm78"]
 
 [node name="MultiplayerGame" type="Node2D" unique_id=481395063]
 script = ExtResource("1")
@@ -26,21 +27,30 @@ position = Vector2(240, 80)
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=872392930]
 
 [node name="StatusLabel" type="Label" parent="CanvasLayer" unique_id=321109485]
-margin_left = 16.0
-margin_top = 20.0
 text = "Сетевой режим"
 
 [node name="HitLabel" type="Label" parent="CanvasLayer" unique_id=911741220]
-margin_left = 16.0
-margin_top = 54.0
+offset_left = 2.0
+offset_top = 17.0
+offset_right = 159.0
+offset_bottom = 40.0
 text = "Ваши попадания: 0"
 
-[node name="InstructionsLabel" type="Label" parent="CanvasLayer" unique_id=712836505]
-margin_left = 16.0
-margin_top = 88.0
-text = "WASD/JD — движение, мышь — прицел, ЛКМ — выстрел"
-
 [node name="BackButton" type="Button" parent="CanvasLayer" unique_id=289073191]
-margin_left = 16.0
-margin_top = 126.0
+offset_left = 3.0
+offset_top = 39.0
+offset_right = 127.0
+offset_bottom = 70.0
 text = "Выход в меню"
+
+[node name="Player" parent="." unique_id=857582357 instance=ExtResource("5_1jm78")]
+position = Vector2(257, -29)
+scale = Vector2(1, 1)
+
+[node name="Player2" parent="." unique_id=443414768 instance=ExtResource("5_1jm78")]
+position = Vector2(152, -33)
+scale = Vector2(1, 1)
+
+[node name="Player" parent="Player2" unique_id=1244610165 instance=ExtResource("5_1jm78")]
+position = Vector2(-68, 0)
+scale = Vector2(1, 1)
