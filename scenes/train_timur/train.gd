@@ -23,7 +23,9 @@ var _enemy_spawn_timer: Timer = null
 var _last_lane_id: int = -1
 
 const ENEMY_BULLET_SCENE := preload("res://scenes/characters/Bullet.tscn")
-const ENEMY_SPAWN_OFFSET := Vector2(-220.0, 0.0)
+const ENEMY_SPAWN_OFFSET_X_MIN := 360.0
+const ENEMY_SPAWN_OFFSET_X_MAX := 460.0
+const ENEMY_SPAWN_HEIGHT_ABOVE_RAIL := 30.0
 const DEFAULT_BOARDING_OFFSET := Vector2(-200.0, -206.0)
 const DEFAULT_INTERIOR_OFFSET := Vector2(-90.0, -206.0)
 const DEFAULT_ROOF_OFFSET := Vector2(-10.0, -244.0)
@@ -33,6 +35,7 @@ const LANE_FRONT := 2
 const LADDER_LAYER_BIT := 4
 const LADDER_WIDTH := 24.0
 const LADDER_EXTRA_HEIGHT := 22.0
+const REAR_GUARD_EXTRA_DISTANCE := 130.0
 
 func _ready():
 	# При старте уровня строим поезд по данным из GameManager
@@ -128,7 +131,8 @@ func _spawn_enemy_member(lane_id: int, delay_seconds: float) -> void:
 		return
 
 	var board_target: Vector2 = get_enemy_boarding_target(lane_id)
-	var spawn_position: Vector2 = board_target + ENEMY_SPAWN_OFFSET
+	var spawn_offset_x: float = randf_range(ENEMY_SPAWN_OFFSET_X_MIN, ENEMY_SPAWN_OFFSET_X_MAX)
+	var spawn_position := Vector2(board_target.x - spawn_offset_x, get_rail_level_y() - ENEMY_SPAWN_HEIGHT_ABOVE_RAIL)
 	var enemy_instance := enemy_scene.instantiate()
 	if enemy_instance == null:
 		return
@@ -227,6 +231,18 @@ func _resolve_lane_marker_or_fallback(wagon_node: Node2D, marker_name: String, f
 
 	return wagon_node.global_position + fallback_offset
 
+func get_rear_guard_x() -> float:
+	var rear_wagon := _get_lane_wagon(LANE_REAR)
+	if rear_wagon == null:
+		return global_position.x - REAR_GUARD_EXTRA_DISTANCE
+	return rear_wagon.global_position.x - REAR_GUARD_EXTRA_DISTANCE
+
+func get_rail_level_y() -> float:
+	var rail_shape := get_node_or_null("EnemyRaidRail/CollisionShape2D") as CollisionShape2D
+	if rail_shape != null:
+		return rail_shape.global_position.y
+	return global_position.y + 60.0
+
 func _has_property(node: Object, property_name: String) -> bool:
 	for property in node.get_property_list():
 		if property is Dictionary and property.get("name", "") == property_name:
@@ -259,7 +275,12 @@ func _rebuild_ladders() -> void:
 		var ladder_top_y: float = minf(left_roof.global_position.y, right_roof.global_position.y)
 		var ladder_bottom_y: float = left_inside.global_position.y
 		var ladder_center_x: float = (left_roof.global_position.x + right_roof.global_position.x) * 0.5
-		_create_ladder_area(Vector2(ladder_center_x, (ladder_top_y + ladder_bottom_y) * 0.5), absf(ladder_bottom_y - ladder_top_y) + LADDER_EXTRA_HEIGHT)
+		_create_ladder_area(
+			Vector2(ladder_center_x, (ladder_top_y + ladder_bottom_y) * 0.5),
+			absf(ladder_bottom_y - ladder_top_y) + LADDER_EXTRA_HEIGHT,
+			ladder_top_y,
+			ladder_bottom_y
+		)
 
 	if wagon_count == 1:
 		var single_wagon := wagons_container.get_child(0) as Node2D
@@ -269,9 +290,14 @@ func _rebuild_ladders() -> void:
 		var inside_marker := single_wagon.get_node_or_null("InteriorEntry") as Marker2D
 		if roof_marker == null or inside_marker == null:
 			return
-		_create_ladder_area(Vector2(inside_marker.global_position.x, (roof_marker.global_position.y + inside_marker.global_position.y) * 0.5), absf(inside_marker.global_position.y - roof_marker.global_position.y) + LADDER_EXTRA_HEIGHT)
+		_create_ladder_area(
+			Vector2(inside_marker.global_position.x, (roof_marker.global_position.y + inside_marker.global_position.y) * 0.5),
+			absf(inside_marker.global_position.y - roof_marker.global_position.y) + LADDER_EXTRA_HEIGHT,
+			roof_marker.global_position.y,
+			inside_marker.global_position.y
+		)
 
-func _create_ladder_area(global_center: Vector2, height: float) -> void:
+func _create_ladder_area(global_center: Vector2, height: float, ladder_top_y: float, ladder_bottom_y: float) -> void:
 	if ladders_container == null:
 		return
 
@@ -280,6 +306,8 @@ func _create_ladder_area(global_center: Vector2, height: float) -> void:
 	ladder_area.collision_layer = LADDER_LAYER_BIT
 	ladder_area.collision_mask = 0
 	ladder_area.add_to_group("ladder")
+	ladder_area.set_meta("ladder_top_y", ladder_top_y)
+	ladder_area.set_meta("ladder_bottom_y", ladder_bottom_y)
 
 	var ladder_shape := CollisionShape2D.new()
 	var rect_shape := RectangleShape2D.new()

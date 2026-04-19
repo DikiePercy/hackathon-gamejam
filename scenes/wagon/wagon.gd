@@ -65,13 +65,16 @@ func sync_passengers() -> void:
 	if passenger_scene == null or _seat_markers_root == null:
 		return
 
-	var seats: Array[Node] = _seat_markers_root.get_children()
-	var spawn_count: int = mini(passengers, seats.size())
+	var seat_markers: Array[Marker2D] = []
+	for child in _seat_markers_root.get_children():
+		if child is Marker2D:
+			seat_markers.append(child as Marker2D)
+
+	seat_markers.shuffle()
+	var spawn_count: int = mini(passengers, seat_markers.size())
 
 	for i in range(spawn_count):
-		var seat: Marker2D = seats[i] as Marker2D
-		if seat == null:
-			continue
+		var seat: Marker2D = seat_markers[i]
 		var passenger_node := passenger_scene.instantiate()
 		add_child(passenger_node)
 		if passenger_node is Passenger:

@@ -130,3 +130,74 @@ func _write_slot(slot_id: String, payload: Dictionary) -> bool:
 
 func _slot_path(slot_id: String) -> String:
 	return SAVE_DIR_PATH.path_join("%s.json" % slot_id)
+
+func get_latest_save_payload() -> Dictionary:
+	# 1) Prefer currently active slot if it exists.
+	if not current_save_slot_id.is_empty():
+		var active_payload := _read_slot_payload(current_save_slot_id)
+		if not active_payload.is_empty():
+			return active_payload
+
+	# 2) Fallback to rolling autosave.
+	var autosave_payload := _read_slot_payload(AUTOSAVE_SLOT_ID)
+	if not autosave_payload.is_empty():
+		return autosave_payload
+
+	# 3) Else pick the newest by saved_at_unix.
+	var newest_payload: Dictionary = {}
+	var newest_time: int = -1
+	var dir := DirAccess.open(SAVE_DIR_PATH)
+	if dir == null:
+		return {}
+
+	dir.list_dir_begin()
+	while true:
+		var file_name := dir.get_next()
+		if file_name == "":
+			break
+		if dir.current_is_dir() or not file_name.ends_with(".json"):
+			continue
+
+		var slot_id := file_name.trim_suffix(".json")
+		var payload := _read_slot_payload(slot_id)
+		if payload.is_empty():
+			continue
+
+		var meta: Dictionary = payload.get("meta", {}) as Dictionary
+		var save_time: int = int(meta.get("saved_at_unix", 0))
+		if save_time > newest_time:
+			newest_time = save_time
+			newest_payload = payload
+
+	return newest_payload
+
+func load_latest_save_into_pending() -> bool:
+	var payload := get_latest_save_payload()
+	if payload.is_empty():
+		return false
+
+	var meta: Dictionary = payload.get("meta", {}) as Dictionary
+	if not meta.is_empty():
+		current_save_slot_id = String(meta.get("slot_id", current_save_slot_id))
+
+	pending_load_data = payload
+	return true
+
+func _read_slot_payload(slot_id: String) -> Dictionary:
+	if slot_id.is_empty():
+		return {}
+
+	var path := _slot_path(slot_id)
+	if not FileAccess.file_exists(path):
+		return {}
+
+	var file := FileAccess.open(path, FileAccess.READ)
+	if file == null:
+		return {}
+
+	var parsed = JSON.parse_string(file.get_as_text())
+	file.close()
+	if parsed == null or not (parsed is Dictionary):
+		return {}
+
+	return parsed as Dictionary

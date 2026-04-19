@@ -167,7 +167,7 @@ func _process_approach_train() -> void:
 	if is_on_floor() and velocity.y > 0.0:
 		velocity.y = 0.0
 	if absf(global_position.x - _boarding_target.x) <= approach_reach_threshold:
-		velocity.y = dismount_jump_velocity
+		_apply_boarding_jump(_boarding_target)
 		_raid_state = RaidState.BOARD_TRAIN
 
 func _process_board_train() -> void:
@@ -196,10 +196,21 @@ func _process_board_train() -> void:
 		_raid_state = RaidState.ATTACK
 		return
 
+	if is_on_floor() and global_position.y > board_target.y + jump_trigger_height and _jump_timer <= 0.0:
+		_apply_boarding_jump(board_target)
+
 	var move_dir := to_target.normalized()
 	velocity = move_dir * _move_speed * board_speed_multiplier
 	_direction = 1 if move_dir.x >= 0.0 else -1
 	_apply_visual_direction()
+
+func _apply_boarding_jump(target_position: Vector2) -> void:
+	var min_jump_speed: float = absf(dismount_jump_velocity)
+	var vertical_gap: float = maxf(global_position.y - target_position.y, 0.0)
+	var required_jump_speed: float = sqrt(maxf(2.0 * gravity * (vertical_gap + 12.0), 0.0))
+	var jump_speed: float = maxf(min_jump_speed, required_jump_speed)
+	velocity.y = -jump_speed
+	_jump_timer = maxf(_jump_timer, jump_cooldown * 0.5)
 
 func _sync_raid_target_from_train(delta: float) -> void:
 	if _train_node == null or not is_instance_valid(_train_node):
