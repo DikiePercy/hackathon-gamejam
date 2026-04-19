@@ -118,7 +118,9 @@ func _on_wagon_unhover(wagon_node):
 
 func _on_buy_button_pressed() -> void:
 	var wagon_price = 200
-	if GameManager.total_gold >= wagon_price:
+	if GameManager.train_data.size() >= 5:
+		print("максимул вагонов")
+	elif GameManager.total_gold >= wagon_price:
 		# 1. Списываем золото
 		GameManager.total_gold -= wagon_price
 		
@@ -184,6 +186,5 @@ func _on_buy_p_pressed() -> void:
 		if dst_depot_no_money_audio != null:
 			dst_depot_no_money_audio.play()
 
-
 func _on_back_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/main/main.tscn")
+	get_tree().change_scene_to_file("res://scenes/menu/node_2d.tscn")
