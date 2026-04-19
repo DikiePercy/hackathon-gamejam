@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://d1kayi5fa6r" path="res://assets/Cowboy (Animated Pixel Art)/Animation Sprite Sheets (PNG)/CowBoyHolsterWeapon.png" id="4_miirx"]
 [ext_resource type="Texture2D" uid="uid://du3ujuq8meyq0" path="res://assets/Cowboy (Animated Pixel Art)/Animation Sprite Sheets (PNG)/CowBoyDrawWeapon.png" id="4_rpfb3"]
 [ext_resource type="Texture2D" uid="uid://dluqu3hhipbq3" path="res://assets/Cowboy (Animated Pixel Art)/Animation Sprite Sheets (PNG)/CowBoyWalking.png" id="6_miirx"]
-[ext_resource type="AudioStream" uid="uid://chjdly8f6tk0r" path="res://assets/sounds/player_shoot.wav" id="7_shoot_sound"]
+[ext_resource type="AudioStream" uid="uid://chjdly8f6tk0r" path="res://assets/sounds/128300__xenonn__layered-gunshot-4.wav" id="7_shoot_sound"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7wym0"]
 atlas = ExtResource("3_7n8ao")
