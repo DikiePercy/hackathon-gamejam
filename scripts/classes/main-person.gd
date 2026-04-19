@@ -1,11 +1,15 @@
 extends Person
 class_name MainPerson
 
-const WALK_SPEED     := 150.0
-const JUMP_VELOCITY  := -450.0
+const WALK_SPEED     := 220.0
+const JUMP_VELOCITY  := -460.0
 const GRAVITY        := 1000.0
 const CLIMB_SPEED    := 160.0
 const SHOOT_COOLDOWN := 0.25
+
+const SHOOT_ANIM_TIME := 0.3
+var _shoot_anim_timer := 0.0
+var _is_drawing_back := false
 
 const LAYER_INSIDE := 1
 const LAYER_ROOF   := 2
@@ -31,10 +35,13 @@ func _ready() -> void:
 	_gun_local_x = absf(_gun_point.position.x)
 	_sync_gun_point()
 	_apply_collision(_state)
+	if _sprite:
+		_sprite.animation_finished.connect(_on_sprite_animation_finished)
 
 func _physics_process(delta: float) -> void:
 	_shoot_timer = maxf(_shoot_timer - delta, 0.0)
-
+	_shoot_anim_timer = maxf(_shoot_anim_timer - delta, 0.0)
+	
 	match _state:
 		State.GROUND:
 			_process_ground(delta)
@@ -45,6 +52,8 @@ func _physics_process(delta: float) -> void:
 
 	if Input.is_action_just_pressed("shoot") and _shoot_timer == 0.0:
 		_shoot()
+
+	_update_anim()
 
 func _process_ground(delta: float) -> void:
 	if not is_on_floor():
@@ -101,11 +110,11 @@ func _move_x() -> void:
 	velocity.x = dir * WALK_SPEED
 	if dir > 0.0:
 		_facing_right = true
-		_sprite.scale.x = 1.0
+		_sprite.flip_h = false
 		_sync_gun_point()
 	elif dir < 0.0:
 		_facing_right = false
-		_sprite.scale.x = -1.0
+		_sprite.flip_h = true
 		_sync_gun_point()
 
 func _sync_gun_point() -> void:
@@ -128,16 +137,24 @@ func _apply_collision(s: State) -> void:
 			set_collision_mask_value(LAYER_ROOF, true)
 
 func _shoot() -> void:
+	if _is_drawing_back:
+		return
 	if not bullet_scene:
 		push_warning("MainPerson: назначь bullet_scene в инспекторе!")
 		return
 
 	_shoot_timer = SHOOT_COOLDOWN
+	_shoot_anim_timer = SHOOT_ANIM_TIME  # <-- добавь
+
 	var bullet: Node2D = bullet_scene.instantiate()
 	get_tree().current_scene.add_child(bullet)
 	var shoot_dir := Vector2.RIGHT if _facing_right else Vector2.LEFT
 	bullet.direction = shoot_dir
 	bullet.global_position = _gun_point.global_position + shoot_dir * 10.0
+
+	if _sprite.sprite_frames and _sprite.sprite_frames.has_animation("shoot"):
+		_sprite.play("shoot")             # <-- добавь
+		_sprite.frame = 0                 # <-- чтобы стартовал с 1 кадра
 
 func _on_ladder_detector_area_entered(area: Area2D) -> void:
 	if not area.is_in_group("ladder"):
@@ -156,3 +173,50 @@ func _on_ladder_detector_area_exited(area: Area2D) -> void:
 	_current_ladder = null
 	if _state == State.CLIMBING:
 		_set_state(State.GROUND)
+		
+func _update_anim() -> void:
+	# Пока идёт draw — не перебиваем walking/idle/jump
+	if _is_drawing_back:
+		return
+	
+	if not _sprite or not _sprite.sprite_frames:
+		return
+
+	# 1) Приоритет выстрела
+	if _shoot_anim_timer > 0.0 and _sprite.sprite_frames.has_animation("shoot"):
+		if _sprite.animation != "shoot":
+			_sprite.play("shoot")
+		return
+
+	# 2) Лазание
+	if _state == State.CLIMBING and _sprite.sprite_frames.has_animation("climb"):
+		if absf(velocity.y) > 1.0:
+			_sprite.play("climb")
+		else:
+			_sprite.stop()
+		return
+
+	# 3) Прыжок/падение
+	if not is_on_floor() and _sprite.sprite_frames.has_animation("jump"):
+		_sprite.play("jump")
+		return
+
+	# 4) Бег/idle
+	if absf(velocity.x) > 1.0 and _sprite.sprite_frames.has_animation("walking"):
+		_sprite.play("walking")
+	elif _sprite.sprite_frames.has_animation("idle"):
+		_sprite.play("idle")
+
+func _on_sprite_animation_finished() -> void:
+	if not _sprite:
+		return
+
+	if _sprite.animation == "shoot":
+		if _sprite.sprite_frames and _sprite.sprite_frames.has_animation("draw"):
+			_is_drawing_back = true
+			_sprite.play("draw")
+		else:
+			_is_drawing_back = false
+
+	elif _sprite.animation == "draw":
+		_is_drawing_back = false

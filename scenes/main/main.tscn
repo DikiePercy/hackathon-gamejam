@@ -12,3 +12,5 @@ position = Vector2(70, 91)
 
 [node name="Player" parent="." unique_id=1025993540 instance=ExtResource("3_player")]
 position = Vector2(59, -83)
+scale = Vector2(1, 1)
+max_health = null

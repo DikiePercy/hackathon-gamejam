@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://do6rpggofwsp3"]
+
+[sub_resource type="RectangleShape2D" id="Shape_floor"]
+size = Vector2(216, 10)
+
+[sub_resource type="RectangleShape2D" id="Shape_roof"]
+size = Vector2(216, 10)
+
+[sub_resource type="RectangleShape2D" id="Shape_ladder"]
+size = Vector2(28, 88)
+
+[node name="Wagon" type="Node2D" unique_id=1006291350]
+position = Vector2(115, 107)
+
+[node name="Visual" type="ColorRect" parent="." unique_id=352505188]
+offset_left = -110.0
+offset_top = -100.0
+offset_right = 110.0
+color = Color(0.28, 0.32, 0.42, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="WheelLeft" type="ColorRect" parent="." unique_id=827608917]
+offset_left = -90.0
+offset_top = 2.0
+offset_right = -70.0
+offset_bottom = 22.0
+color = Color(0.15, 0.15, 0.15, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="WheelRight" type="ColorRect" parent="." unique_id=1136196186]
+offset_left = 70.0
+offset_top = 2.0
+offset_right = 90.0
+offset_bottom = 22.0
+color = Color(0.15, 0.15, 0.15, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="InsideFloor" type="StaticBody2D" parent="." unique_id=557214271]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InsideFloor" unique_id=1964911931]
+shape = SubResource("Shape_floor")
+
+[node name="RoofSurface" type="StaticBody2D" parent="." unique_id=1982752535]
+position = Vector2(0, -100)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RoofSurface" unique_id=1007373064]
+shape = SubResource("Shape_roof")
+
+[node name="LadderZone" type="Area2D" parent="." unique_id=1315070827]
+position = Vector2(0, -50)
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LadderZone" unique_id=2009923142]
+shape = SubResource("Shape_ladder")
+
+[node name="EnemySpawnPoint" type="Marker2D" parent="." unique_id=61403353]
+
+[node name="Seats" type="Node2D" parent="." unique_id=189114006]
+
+[node name="Seat01" type="Marker2D" parent="Seats" unique_id=1082722102]
+position = Vector2(-70, -8)
+
+[node name="Seat02" type="Marker2D" parent="Seats" unique_id=621982264]
+position = Vector2(-25, -8)
+
+[node name="Seat03" type="Marker2D" parent="Seats" unique_id=976993822]
+position = Vector2(20, -8)
+
+[node name="Seat04" type="Marker2D" parent="Seats" unique_id=336231480]
+position = Vector2(65, -8)
