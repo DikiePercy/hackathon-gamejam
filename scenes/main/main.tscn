@@ -12,6 +12,6 @@ script = ExtResource("2_maingd")
 position = Vector2(742, 187)
 
 [node name="Player" parent="." unique_id=1025993540 instance=ExtResource("3_player")]
-position = Vector2(728, 52)
-
-[node name="ParallaxBackground" parent="." unique_id=173723067 instance=ExtResource("4_l3cfh")]
+position = Vector2(59, -83)
+scale = Vector2(1, 1)
+max_health = null
