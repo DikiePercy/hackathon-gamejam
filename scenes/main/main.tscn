@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://bf52gpgg0aftq" path="res://scenes/train_timur/train.tscn" id="1_hyk8p"]
 [ext_resource type="Script" uid="uid://kggtcrnmw3fy" path="res://scenes/main/main.gd" id="2_maingd"]
 [ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://scenes/characters/Player.tscn" id="3_player"]
-[ext_resource type="PackedScene" uid="uid://cxsft8op476qb" path="res://scenes/characters/kowboy_enemy.tscn" id="4_l3cfh"]
 
 [node name="Main" type="Node2D" unique_id=1038197434]
 script = ExtResource("2_maingd")
@@ -15,6 +14,3 @@ position = Vector2(742, 187)
 position = Vector2(59, -83)
 scale = Vector2(1, 1)
 max_health = null
-
-[node name="Kowboy enemy" parent="." unique_id=1594219037 instance=ExtResource("4_l3cfh")]
-position = Vector2(710, 138)
