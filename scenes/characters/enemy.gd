@@ -81,9 +81,7 @@ func _physics_process(delta: float) -> void:
 	if _shoot_timer > 0.0:
 		_shoot_timer = maxf(_shoot_timer - delta, 0.0)
 
-	if _target_in_contact != null and is_instance_valid(_target_in_contact) and _damage_timer <= 0.0:
-		_target_in_contact.take_damage(_knife_damage if _weapon_state == WeaponState.KNIFE else _contact_damage)
-		_damage_timer = _contact_damage_cooldown
+	_apply_contact_damage()
 
 func _process_approach_train() -> void:
 	_update_direction_toward(_boarding_target)
@@ -191,7 +189,7 @@ func _find_closest_passenger() -> Passenger:
 	var closest: Passenger = null
 	var best_dist := INF
 	for node in passengers:
-		if not (node is Passenger):
+		if node is not Passenger:
 			continue
 		var passenger := node as Passenger
 		if not passenger.is_inside_tree():
@@ -254,3 +252,15 @@ func _shoot_at_target(target: Person) -> void:
 	var shoot_dir := (target.global_position - global_position).normalized()
 	bullet.direction = shoot_dir
 	bullet.global_position = global_position + shoot_dir * 24.0
+
+func _apply_contact_damage() -> void:
+	if _target_in_contact == null:
+		return
+	if not is_instance_valid(_target_in_contact):
+		_target_in_contact = null
+		return
+	if _damage_timer > 0.0:
+		return
+
+	_target_in_contact.take_damage(_knife_damage if _weapon_state == WeaponState.KNIFE else _contact_damage)
+	_damage_timer = _contact_damage_cooldown

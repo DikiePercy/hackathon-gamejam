@@ -67,6 +67,7 @@ func sync_passengers() -> void:
 		if passenger_node is Passenger:
 			(passenger_node as Passenger).sit_at_global(seat.global_position)
 		else:
+			push_warning("wagon.gd: passenger_scene должен создавать Passenger")
 			passenger_node.global_position = seat.global_position
 		_spawned_passengers.append(passenger_node)
 
