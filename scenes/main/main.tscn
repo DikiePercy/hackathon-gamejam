@@ -3,18 +3,17 @@
 [ext_resource type="PackedScene" uid="uid://bf52gpgg0aftq" path="res://scenes/train_timur/train.tscn" id="1_hyk8p"]
 [ext_resource type="Script" uid="uid://kggtcrnmw3fy" path="res://scenes/main/main.gd" id="2_maingd"]
 [ext_resource type="Script" uid="uid://jc4w1dsn0371" path="res://scenes/main/pause.gd" id="2_ow5a4"]
-[ext_resource type="Script" uid="uid://bsxhpmy1p57xm" path="res://scenes/station/static_body_2d.gd" id="3_b1x3f"]
 [ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://scenes/characters/Player.tscn" id="3_player"]
-[ext_resource type="PackedScene" path="res://scenes/paralaxes/parallax_background_3.tscn" id="4_l3cfh"]
+[ext_resource type="PackedScene" uid="uid://w22l7k23ohsx" path="res://scenes/paralaxes/parallax_background_3.tscn" id="4_l3cfh"]
 [ext_resource type="PackedScene" uid="uid://b03tildsg3ynj" path="res://scenes/UI/menupause.tscn" id="5_6q06x"]
-[ext_resource type="PackedScene" path="res://scenes/rels/parallax_background.tscn" id="8_yyfjg"]
+[ext_resource type="PackedScene" uid="uid://c10q74xue0g2k" path="res://scenes/station/static_body_2d.tscn" id="8_b1x3f"]
+[ext_resource type="PackedScene" uid="uid://2qsupeeowy0u" path="res://scenes/rels/parallax_background.tscn" id="8_yyfjg"]
 
 [node name="Main" type="Node2D" unique_id=1038197434]
 script = ExtResource("2_maingd")
 
 [node name="StaticBody2D" parent="." unique_id=946732154 instance=ExtResource("8_b1x3f")]
 position = Vector2(1114, 38)
-script = ExtResource("3_b1x3f")
 
 [node name="pause" type="Node" parent="." unique_id=1423032809]
 process_mode = 3
@@ -31,7 +30,6 @@ scale = Vector2(1, 1)
 scroll_ignore_camera_zoom = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1979060732]
-visible = false
 
 [node name="menupause" parent="CanvasLayer" unique_id=1981241334 instance=ExtResource("5_6q06x")]
 process_mode = 2
@@ -62,10 +60,6 @@ visible = false
 [node name="Rels6" parent="relses" unique_id=1136167340 instance=ExtResource("8_yyfjg")]
 
 [node name="Rels7" parent="relses" unique_id=73579383 instance=ExtResource("8_yyfjg")]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ParallaxBackground/Area2D" unique_id=2062610940]
-position = Vector2(488, 237)
-shape = SubResource("RectangleShape2D_yyfjg")
 
 [connection signal="pressed" from="CanvasLayer/menupause/Panel/VBoxContainer/Button" to="pause" method="_on_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/menupause/Panel/VBoxContainer/Button4" to="pause" method="_on_button_4_pressed"]

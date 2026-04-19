@@ -65,21 +65,21 @@ func _process(_delta: float) -> void:
 	if is_in_depot:
 		$Locomotive/AnimatedSprite2D.stop()
 
-func slow_logic(delta):
+func slow_logic(_delta):
 	emit_signal("stop_trein")
 	if GameManager.train_speed > 0:
 		GameManager.train_speed -= 1
 	else:
 		current_state = State.AT_STATION
 
-func fast_logic(delta):
+func fast_logic(_delta):
 	emit_signal("go_trein")
 	if GameManager.train_speed < max_speed:
 		GameManager.train_speed += 1
 	else:
 		current_state = State.DRIVING
 
-func drive_logic(delta):
+func drive_logic(_delta):
 	if !$Timer.is_stopped():
 		print($Timer.time_left)
 	else:
