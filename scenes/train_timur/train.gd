@@ -43,7 +43,7 @@ func build_train_from_data():
 		
 		# Позиция (смещение за локомотив)
 		new_wagon.position.x = -(i + 1) * wagon_width
-		new_wagon.position.y = position.y - 83
+		new_wagon.position.y = position.y - 196
 		
 		# Обновляем статы
 		if new_wagon.has_method("update_wagon_stats"):
