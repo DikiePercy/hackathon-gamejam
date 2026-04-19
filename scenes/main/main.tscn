@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" path="res://scenes/paralaxes/parallax_background_3.tscn" id="4_l3cfh"]
 [ext_resource type="PackedScene" uid="uid://b03tildsg3ynj" path="res://scenes/UI/menupause.tscn" id="5_6q06x"]
 [ext_resource type="PackedScene" uid="uid://cxsft8op476qb" path="res://scenes/characters/kowboy_enemy.tscn" id="7_hujxm"]
-[ext_resource type="PackedScene" path="res://scenes/rels/parallax_background.tscn" id="8_yyfjg"]
+[ext_resource type="PackedScene" uid="uid://2qsupeeowy0u" path="res://scenes/rels/parallax_background.tscn" id="8_yyfjg"]
 
 [node name="Main" type="Node2D" unique_id=1038197434]
 script = ExtResource("2_maingd")
@@ -29,7 +29,6 @@ max_health = null
 scroll_ignore_camera_zoom = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1979060732]
-visible = false
 
 [node name="menupause" parent="CanvasLayer" unique_id=1981241334 instance=ExtResource("5_6q06x")]
 process_mode = 2
