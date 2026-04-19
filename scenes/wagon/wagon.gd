@@ -110,3 +110,11 @@ func _resolve_exterior_sprite() -> CanvasItem:
 	if exterior != null:
 		return exterior
 	return find_child("AnimatedSprite2D", true, false) as CanvasItem
+
+
+func _on_area_2d_mouse_entered() -> void:
+	emit_signal("mouse_hovered", self)
+
+
+func _on_area_2d_mouse_exited() -> void:
+	emit_signal("wagon_instance", self)
