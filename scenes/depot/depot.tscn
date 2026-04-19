@@ -72,6 +72,7 @@ script = ExtResource("3_a13ge")
 stream = ExtResource("3_depot_music")
 volume_db = -14.0
 autoplay = true
+loop = true
 
 [node name="DepotHorn" type="AudioStreamPlayer" parent="." unique_id=1522512817]
 stream = ExtResource("4_depot_horn")

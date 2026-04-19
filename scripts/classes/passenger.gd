@@ -6,6 +6,7 @@ extends Person
 
 func _ready() -> void:
 	super._ready()
+	add_to_group("passenger")
 	velocity = Vector2.ZERO
 
 
