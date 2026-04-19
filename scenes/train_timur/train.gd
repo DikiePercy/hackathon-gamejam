@@ -61,10 +61,15 @@ func drive_logic(delta):
 func station_logic(_delta):
 	GameManager.train_speed = 0
 	
-	
 func _on_timer_timeout() -> void:
 	current_state = State.AT_STATION
 	print("Поезд stop!")
+
+func _input(event):
+	# "ui_accept" — это стандартное действие для Пробела (и Enter)
+	if event.is_action_pressed("ui_accept") and current_state == State.AT_STATION:
+		current_state = State.DRIVING
+		GameManager.train_speed = 250
 
 func build_train_from_data():
 	# Очищаем, если что-то было
