@@ -6,6 +6,8 @@ const JUMP_VELOCITY  := -340.0
 const GRAVITY        := 1000.0
 const CLIMB_SPEED    := 160.0
 const SHOOT_COOLDOWN := 0.25
+const AIM_FLIP_DEADZONE := 0.2
+const SHOOT_TURN_STOP_TIME := 0.3
 
 const SHOOT_ANIM_TIME := 0.3
 var _shoot_anim_timer := 0.0
@@ -20,6 +22,7 @@ var _state: State = State.GROUND
 var _facing_right := true
 var _aim_dir: Vector2 = Vector2.RIGHT
 var _shoot_timer := 0.0
+var _shoot_turn_stop_timer := 0.0
 var _gun_local_x := 16.0
 
 var _current_ladder: Area2D = null
@@ -42,6 +45,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	_shoot_timer = maxf(_shoot_timer - delta, 0.0)
 	_shoot_anim_timer = maxf(_shoot_anim_timer - delta, 0.0)
+	_shoot_turn_stop_timer = maxf(_shoot_turn_stop_timer - delta, 0.0)
 	
 	match _state:
 		State.GROUND:
@@ -109,27 +113,41 @@ func _process_roof(delta: float) -> void:
 	move_and_slide()
 
 func _move_x() -> void:
+	if _shoot_turn_stop_timer > 0.0:
+		velocity.x = 0.0
+		return
+
 	var dir := Input.get_axis("move_left", "move_right")
 	velocity.x = dir * WALK_SPEED
 	if dir > 0.0:
-		_facing_right = true
-		_sprite.flip_h = false
-		_sync_gun_point()
+		_set_facing(true)
 	elif dir < 0.0:
-		_facing_right = false
-		_sprite.flip_h = true
-		_sync_gun_point()
+		_set_facing(false)
 
 func _sync_gun_point() -> void:
 	_gun_point.position.x = _gun_local_x if _facing_right else -_gun_local_x
 
 func _update_aim_from_mouse() -> void:
-	var to_mouse := get_global_mouse_position() - _gun_point.global_position
+	var to_mouse := get_global_mouse_position() - global_position
 	if to_mouse.length() <= 0.001:
 		return
 
 	_aim_dir = to_mouse.normalized()
-	_facing_right = _aim_dir.x >= 0.0
+
+	# Rotate to cursor only while idle to avoid twitching while running.
+	if absf(velocity.x) <= 1.0:
+		_apply_facing_from_aim()
+
+func _apply_facing_from_aim() -> void:
+	if _aim_dir.x > AIM_FLIP_DEADZONE:
+		_set_facing(true)
+	elif _aim_dir.x < -AIM_FLIP_DEADZONE:
+		_set_facing(false)
+
+func _set_facing(facing_right: bool) -> void:
+	if _facing_right == facing_right:
+		return
+	_facing_right = facing_right
 	_sprite.flip_h = not _facing_right
 	_sync_gun_point()
 
@@ -155,6 +173,11 @@ func _shoot() -> void:
 	if not bullet_scene:
 		push_warning("MainPerson: назначь bullet_scene в инспекторе!")
 		return
+
+	# On shoot: turn to cursor and briefly stop movement.
+	_apply_facing_from_aim()
+	_shoot_turn_stop_timer = SHOOT_TURN_STOP_TIME
+	velocity.x = 0.0
 
 	_shoot_timer = SHOOT_COOLDOWN
 	_shoot_anim_timer = SHOOT_ANIM_TIME  # <-- добавь

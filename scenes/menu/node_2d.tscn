@@ -16,10 +16,11 @@ autoplay = true
 scroll_ignore_camera_zoom = true
 
 [node name="Panel" type="Panel" parent="." unique_id=614577268]
-offset_left = 391.0
-offset_top = -258.0
-offset_right = 443.0
-offset_bottom = -219.0
+offset_left = 354.0
+offset_top = -121.0
+offset_right = 473.72272
+offset_bottom = -30.14093
+scale = Vector2(0.776795, 0.58332103)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=1738653689]
 layout_mode = 0
@@ -33,6 +34,11 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 50
 text = "Play"
 
+[node name="Load" type="Button" parent="Panel/VBoxContainer" unique_id=1410110304]
+layout_mode = 2
+theme_override_font_sizes/font_size = 50
+text = "Load"
+
 [node name="Quit" type="Button" parent="Panel/VBoxContainer" unique_id=2022056419]
 layout_mode = 2
 theme_override_font_sizes/font_size = 50
@@ -43,6 +49,65 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 50
 text = "Depot"
 
+[node name="SavePanel" type="Panel" parent="." unique_id=713450205]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -140.0
+offset_right = 220.0
+offset_bottom = 140.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SavePanel" unique_id=304157628]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 14.0
+offset_top = 14.0
+offset_right = -14.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="SavePanel/VBoxContainer" unique_id=143741281]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Choose Save"
+horizontal_alignment = 1
+
+[node name="SaveList" type="ItemList" parent="SavePanel/VBoxContainer" unique_id=890952857]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+
+[node name="Buttons" type="HBoxContainer" parent="SavePanel/VBoxContainer" unique_id=612108022]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="NewSave" type="Button" parent="SavePanel/VBoxContainer/Buttons" unique_id=785485738]
+layout_mode = 2
+text = "New Save"
+
+[node name="LoadSelected" type="Button" parent="SavePanel/VBoxContainer/Buttons" unique_id=662747330]
+layout_mode = 2
+text = "Load Selected"
+
+[node name="Back" type="Button" parent="SavePanel/VBoxContainer/Buttons" unique_id=323680262]
+layout_mode = 2
+text = "Back"
+
 [connection signal="pressed" from="Panel/VBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/Load" to="." method="_on_load_pressed"]
 [connection signal="pressed" from="Panel/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="Panel/VBoxContainer/Depot" to="." method="_on_depot_pressed"]
+[connection signal="item_activated" from="SavePanel/VBoxContainer/SaveList" to="." method="_on_save_list_item_activated"]
+[connection signal="pressed" from="SavePanel/VBoxContainer/Buttons/NewSave" to="." method="_on_new_save_pressed"]
+[connection signal="pressed" from="SavePanel/VBoxContainer/Buttons/LoadSelected" to="." method="_on_load_selected_pressed"]
+[connection signal="pressed" from="SavePanel/VBoxContainer/Buttons/Back" to="." method="_on_save_menu_back_pressed"]

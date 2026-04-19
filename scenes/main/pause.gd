@@ -4,7 +4,7 @@ extends Node
 @onready var _load_button: Button = $"../CanvasLayer/menupause/Panel/VBoxContainer/Button3"
 @onready var _player: MainPerson = $"../Player"
 
-const SAVE_FILE_PATH := "user://savegame.json"
+const SAVE_DIR_PATH := "user://saves"
 
 var game_paused: bool=false
 
@@ -39,13 +39,26 @@ func _on_menubutton_pressed() -> void:
 
 
 func _on_save_button_pressed() -> void:
+	_ensure_save_dir()
+
+	if GameManager.current_save_slot_id.is_empty():
+		GameManager.current_save_slot_id = _new_slot_id()
+
+	var save_time_text := Time.get_datetime_string_from_system().replace("T", " ")
+	var save_time_unix := int(Time.get_unix_time_from_system())
 	var save_payload := {
+		"meta": {
+			"slot_id": GameManager.current_save_slot_id,
+			"saved_at_text": save_time_text,
+			"saved_at_unix": save_time_unix
+		},
 		"game_manager": GameManager.to_save_dict(),
 		"player": _collect_player_state(),
 		"scene_path": get_tree().current_scene.scene_file_path
 	}
 
-	var file := FileAccess.open(SAVE_FILE_PATH, FileAccess.WRITE)
+	var save_path := _slot_path(GameManager.current_save_slot_id)
+	var file := FileAccess.open(save_path, FileAccess.WRITE)
 	if file == null:
 		push_warning("Save failed: cannot open save file")
 		return
@@ -56,11 +69,16 @@ func _on_save_button_pressed() -> void:
 
 
 func _on_load_button_pressed() -> void:
-	if not FileAccess.file_exists(SAVE_FILE_PATH):
+	if GameManager.current_save_slot_id.is_empty():
+		push_warning("Load failed: no active save slot")
+		return
+
+	var save_path := _slot_path(GameManager.current_save_slot_id)
+	if not FileAccess.file_exists(save_path):
 		push_warning("Load failed: save file not found")
 		return
 
-	var file := FileAccess.open(SAVE_FILE_PATH, FileAccess.READ)
+	var file := FileAccess.open(save_path, FileAccess.READ)
 	if file == null:
 		push_warning("Load failed: cannot open save file")
 		return
@@ -106,3 +124,15 @@ func _apply_player_state(player_data: Dictionary) -> void:
 	_player.max_health = int(player_data.get("max_health", _player.max_health))
 	_player.health = clampi(int(player_data.get("health", _player.health)), 0, _player.max_health)
 	_player.health_changed.emit(_player.health)
+
+
+func _ensure_save_dir() -> void:
+	DirAccess.make_dir_recursive_absolute(SAVE_DIR_PATH)
+
+
+func _new_slot_id() -> String:
+	return "save_%d" % int(Time.get_unix_time_from_system())
+
+
+func _slot_path(slot_id: String) -> String:
+	return SAVE_DIR_PATH.path_join("%s.json" % slot_id)

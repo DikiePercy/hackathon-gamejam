@@ -52,6 +52,7 @@ var _boarding_target: Vector2 = Vector2.ZERO
 var _patrol_anchor_x: float = 0.0
 var _shoot_anim_timer: float = 0.0
 var _jump_timer: float = 0.0
+var _is_dying: bool = false
 
 var dst_shoot_sound: AudioStream = preload("res://assets/sounds/128300__xenonn__layered-gunshot-4.wav")
 
@@ -89,6 +90,9 @@ func setup_for_train_raid(train_node: Node2D, boarding_target: Vector2) -> void:
 	_raid_state = RaidState.APPROACH_TRAIN
 
 func _physics_process(delta: float) -> void:
+	if _is_dying:
+		return
+
 	if _player == null or not _player.is_inside_tree():
 		_player = _find_player()
 
@@ -278,13 +282,16 @@ func _update_visual_animation() -> void:
 	if _sprite == null or _sprite.sprite_frames == null:
 		return
 
+	var shoot_anim := _resolve_anim_name("shoot", "attack")
+	var idle_anim := _resolve_anim_name("default", "idle")
+
 	if _shoot_anim_timer > 0.0:
-		if _sprite.sprite_frames.has_animation("shoot") and _sprite.animation != "shoot":
-			_sprite.play("shoot")
+		if not shoot_anim.is_empty() and _sprite.animation != shoot_anim:
+			_sprite.play(shoot_anim)
 		return
 
-	if _sprite.sprite_frames.has_animation("default") and _sprite.animation != "default":
-		_sprite.play("default")
+	if not idle_anim.is_empty() and _sprite.animation != idle_anim:
+		_sprite.play(idle_anim)
 
 func _try_shoot_at(target: Person) -> void:
 	if _weapon_state == WeaponState.KNIFE:
@@ -341,8 +348,9 @@ func _play_shot_feedback() -> void:
 		return
 
 	_shoot_anim_timer = 0.12
-	if _sprite.sprite_frames != null and _sprite.sprite_frames.has_animation("shoot"):
-		_sprite.play("shoot")
+	var shoot_anim := _resolve_anim_name("shoot", "attack")
+	if not shoot_anim.is_empty():
+		_sprite.play(shoot_anim)
 		_sprite.frame = 0
 		return
 
@@ -350,6 +358,39 @@ func _play_shot_feedback() -> void:
 	_sprite.modulate = Color(1.25, 1.15, 1.0, 1.0)
 	var tween := create_tween()
 	tween.tween_property(_sprite, "modulate", Color(1, 1, 1, 1), 0.10)
+
+func _resolve_anim_name(primary: String, fallback: String) -> String:
+	if _sprite == null or _sprite.sprite_frames == null:
+		return ""
+	if _sprite.sprite_frames.has_animation(primary):
+		return primary
+	if _sprite.sprite_frames.has_animation(fallback):
+		return fallback
+	return ""
+
+func die() -> void:
+	if _is_dying:
+		return
+	_is_dying = true
+	died.emit()
+
+	var death_anim := _resolve_anim_name("death", "")
+	if not death_anim.is_empty() and _sprite != null:
+		set_physics_process(false)
+		velocity = Vector2.ZERO
+
+		var body_shape := get_node_or_null("CollisionShape2D") as CollisionShape2D
+		if body_shape != null:
+			body_shape.disabled = true
+
+		var hitbox_shape := get_node_or_null("Hitbox/CollisionShape2D") as CollisionShape2D
+		if hitbox_shape != null:
+			hitbox_shape.disabled = true
+
+		_sprite.play(death_anim)
+		await get_tree().create_timer(0.7).timeout
+
+	queue_free()
 
 func _apply_contact_damage() -> void:
 	if _target_in_contact == null:

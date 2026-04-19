@@ -8,8 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://b03tildsg3ynj" path="res://scenes/UI/menupause.tscn" id="5_6q06x"]
 [ext_resource type="PackedScene" uid="uid://b7et08nmm166y" path="res://scenes/rels/parallax_background.tscn" id="8_yyfjg"]
 
-[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hujxm"]
-
 [node name="Main" type="Node2D" unique_id=1038197434]
 script = ExtResource("2_maingd")
 
@@ -21,7 +19,7 @@ script = ExtResource("2_ow5a4")
 position = Vector2(285, 154)
 
 [node name="Player" parent="." unique_id=1025993540 instance=ExtResource("3_player")]
-position = Vector2(257, -29)
+position = Vector2(161, 125)
 scale = Vector2(1, 1)
 
 [node name="ParallaxBackground 3" parent="." unique_id=616799245 instance=ExtResource("4_l3cfh")]
@@ -40,10 +38,6 @@ offset_bottom = 72.0
 text = "Menu"
 
 [node name="ParallaxBackground" parent="." unique_id=1808317350 instance=ExtResource("8_yyfjg")]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ParallaxBackground" unique_id=723688219]
-position = Vector2(31, 226)
-shape = SubResource("WorldBoundaryShape2D_hujxm")
 
 [node name="relses" type="Node2D" parent="." unique_id=1365972844]
 visible = false

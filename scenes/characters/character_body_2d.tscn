@@ -1,33 +1,15 @@
 [gd_scene format=3 uid="uid://hawdyl8jh1in"]
 
-[ext_resource type="Script" uid="uid://brjd3ioessev5" path="res://scenes/characters/character_body_2d.gd" id="1_3ebvk"]
+[ext_resource type="Script" path="res://scenes/characters/enemy.gd" id="1_3ebvk"]
 [ext_resource type="Texture2D" uid="uid://di7jbdddgpwre" path="res://assets/Cowboy Assets/Cowboy_Attack/Cowboy Attack Animation.png" id="1_j7wjm"]
 [ext_resource type="Texture2D" uid="uid://oix2niyg277d" path="res://assets/Cowboy Assets/Cowboy_Death/Cowboy Death Animation.png" id="2_neyf4"]
 [ext_resource type="Texture2D" uid="uid://opcw5pecg12t" path="res://assets/Cowboy Assets/Cowboy_Idle/Cowboy_Idle.png" id="3_3ebvk"]
-[ext_resource type="Script" path="res://scenes/characters/animated_sprite_2d.gd" id="5_rqpls"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ikgq3"]
 height = 60.0
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_rqpls"]
-atlas = ExtResource("1_j7wjm")
-region = Rect2(64, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gg7os"]
-atlas = ExtResource("1_j7wjm")
-region = Rect2(0, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_3u0l4"]
-atlas = ExtResource("1_j7wjm")
-region = Rect2(128, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7a0a2"]
-atlas = ExtResource("1_j7wjm")
-region = Rect2(192, 0, 64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ktxr1"]
-atlas = ExtResource("1_j7wjm")
-region = Rect2(256, 0, 64, 64)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hitbox"]
+size = Vector2(30, 60)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_it5q7"]
 atlas = ExtResource("2_neyf4")
@@ -65,28 +47,28 @@ region = Rect2(0, 0, 64, 64)
 atlas = ExtResource("3_3ebvk")
 region = Rect2(64, 0, 64, 64)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_rqpls"]
+atlas = ExtResource("1_j7wjm")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gg7os"]
+atlas = ExtResource("1_j7wjm")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3u0l4"]
+atlas = ExtResource("1_j7wjm")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7a0a2"]
+atlas = ExtResource("1_j7wjm")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ktxr1"]
+atlas = ExtResource("1_j7wjm")
+region = Rect2(256, 0, 64, 64)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_gcqgy"]
 animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_rqpls")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gg7os")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3u0l4")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_7a0a2")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ktxr1")
-}],
-"loop": true,
-"name": &"attack",
-"speed": 5.0
-}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_it5q7")
@@ -123,6 +105,26 @@ animations = [{
 "loop": true,
 "name": &"idle",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rqpls")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gg7os")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3u0l4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7a0a2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ktxr1")
+}],
+"loop": true,
+"name": &"shoot",
+"speed": 5.0
 }]
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=1594219037]
@@ -131,10 +133,18 @@ script = ExtResource("1_3ebvk")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1438301091]
 shape = SubResource("CapsuleShape2D_ikgq3")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1423501748]
+[node name="Visual" type="AnimatedSprite2D" parent="." unique_id=1423501748]
 position = Vector2(2, -4)
 scale = Vector2(1.4375, 1.421875)
 sprite_frames = SubResource("SpriteFrames_gcqgy")
-animation = &"attack"
-frame_progress = 0.31666395
-script = ExtResource("5_rqpls")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=1697824541]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=206078486]
+shape = SubResource("RectangleShape2D_hitbox")
+
+[connection signal="body_entered" from="Hitbox" to="." method="_on_hitbox_body_entered"]
+[connection signal="body_exited" from="Hitbox" to="." method="_on_hitbox_body_exited"]

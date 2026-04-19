@@ -5,7 +5,7 @@ extends Node2D
 @onready var dst_train_horn_audio: AudioStreamPlayer = $TrainHorn
 @export var wagon_width: float = 240.0
 @export var wagon_scene: PackedScene = preload("res://scenes/wagon/wagon.tscn")
-@export var enemy_scene: PackedScene = preload("res://scenes/characters/enemy.tscn")
+@export var enemy_scene: PackedScene = preload("res://scenes/characters/character_body_2d.tscn")
 @export var enemy_spawn_interval: float = 12.0
 @export var enemy_spawn_max_active: int = 2
 
@@ -33,7 +33,7 @@ func _ready():
 		dst_train_engine_audio.play()
 	_setup_enemy_spawner()
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if is_in_depot:
 		$Locomotive/AnimatedSprite2D.stop()
 
