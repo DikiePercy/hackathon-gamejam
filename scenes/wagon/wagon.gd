@@ -50,7 +50,7 @@ func update_wagon_stats():
 	var target_color = Color(1, 1, 1)
 	match wagon_level:
 		1: target_color = Color(1, 1, 1)
-		2: target_color = Color(0.7, 0.7, 1)
+		2: target_color = Color(0.545, 0.647, 0.631, 1.0)
 		3: target_color = Color(1, 0.9, 0.4)
 
 	if interior_sprite: interior_sprite.modulate = target_color
