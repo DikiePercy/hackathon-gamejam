@@ -183,3 +183,7 @@ func _on_buy_p_pressed() -> void:
 		print("Недостаточно золота!")
 		if dst_depot_no_money_audio != null:
 			dst_depot_no_money_audio.play()
+
+
+func _on_back_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/main/main.tscn")

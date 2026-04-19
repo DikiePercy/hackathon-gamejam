@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://b03tildsg3ynj"]
+
+[node name="menupause" type="Control" unique_id=1981241334]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="." unique_id=1760847379]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -58.0
+offset_top = -69.0
+offset_right = 58.0
+offset_bottom = 69.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=1100424168]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -43.0
+offset_top = -55.0
+offset_right = 43.0
+offset_bottom = 55.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="Panel/VBoxContainer" unique_id=1306507272]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "RESUME"
+
+[node name="Button2" type="Button" parent="Panel/VBoxContainer" unique_id=320130197]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "SAVE"
+
+[node name="Button3" type="Button" parent="Panel/VBoxContainer" unique_id=223421981]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "LOAD"
+
+[node name="Button4" type="Button" parent="Panel/VBoxContainer" unique_id=23860299]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "QUIT
+"
