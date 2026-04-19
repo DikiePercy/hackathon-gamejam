@@ -131,8 +131,9 @@ func _spawn_enemy_member(lane_id: int, delay_seconds: float) -> void:
 		return
 
 	var board_target: Vector2 = get_enemy_boarding_target(lane_id)
+	var rear_anchor: Vector2 = get_enemy_boarding_target(LANE_REAR)
 	var spawn_offset_x: float = randf_range(ENEMY_SPAWN_OFFSET_X_MIN, ENEMY_SPAWN_OFFSET_X_MAX)
-	var spawn_position := Vector2(board_target.x - spawn_offset_x, get_rail_level_y() - ENEMY_SPAWN_HEIGHT_ABOVE_RAIL)
+	var spawn_position := Vector2(rear_anchor.x - spawn_offset_x, get_rail_level_y() - ENEMY_SPAWN_HEIGHT_ABOVE_RAIL)
 	var enemy_instance := enemy_scene.instantiate()
 	if enemy_instance == null:
 		return
@@ -239,6 +240,10 @@ func get_rear_guard_x() -> float:
 
 func get_rail_level_y() -> float:
 	var rail_shape := get_node_or_null("EnemyRaidRail/CollisionShape2D") as CollisionShape2D
+	if rail_shape != null and rail_shape.shape is RectangleShape2D:
+		var rect := rail_shape.shape as RectangleShape2D
+		var half_height: float = rect.size.y * 0.5 * absf(rail_shape.global_scale.y)
+		return rail_shape.global_position.y - half_height
 	if rail_shape != null:
 		return rail_shape.global_position.y
 	return global_position.y + 60.0

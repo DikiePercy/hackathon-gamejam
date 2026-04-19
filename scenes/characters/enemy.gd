@@ -166,7 +166,9 @@ func _process_approach_train() -> void:
 	velocity.x = _direction * _move_speed
 	if is_on_floor() and velocity.y > 0.0:
 		velocity.y = 0.0
-	if absf(global_position.x - _boarding_target.x) <= approach_reach_threshold:
+	var reached_by_distance := absf(global_position.x - _boarding_target.x) <= approach_reach_threshold
+	var passed_target := (_direction > 0 and global_position.x >= _boarding_target.x - approach_reach_threshold) or (_direction < 0 and global_position.x <= _boarding_target.x + approach_reach_threshold)
+	if reached_by_distance or passed_target:
 		_apply_boarding_jump(_boarding_target)
 		_raid_state = RaidState.BOARD_TRAIN
 

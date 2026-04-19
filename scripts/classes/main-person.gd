@@ -15,6 +15,8 @@ var _is_drawing_back := false
 
 const LAYER_INSIDE := 1
 const LAYER_ROOF   := 2
+const LAYER_RAILINGS := 3
+const LAYER_RAILINGS_MASK := 1 << (LAYER_RAILINGS - 1)
 
 enum State { GROUND, CLIMBING, ROOF }
 var _state: State = State.GROUND
@@ -30,9 +32,12 @@ var _ladder_top_y: float = 0.0
 var _ladder_bottom_y: float = 0.0
 var _train_node: Node2D = null
 var _is_dead: bool = false
+var _drop_through_timer: float = 0.0
 
 const ROOF_FALL_SWITCH_Y := 24.0
-const RAIL_DEATH_BUFFER_Y := 10.0
+const RAIL_DEATH_BUFFER_Y := 2.0
+const DROP_THROUGH_TIME := 0.16
+const DROP_THROUGH_NUDGE_Y := 2.0
 
 @export var bullet_scene: PackedScene
 
@@ -55,6 +60,10 @@ func _physics_process(delta: float) -> void:
 	_shoot_timer = maxf(_shoot_timer - delta, 0.0)
 	_shoot_anim_timer = maxf(_shoot_anim_timer - delta, 0.0)
 	_shoot_turn_stop_timer = maxf(_shoot_turn_stop_timer - delta, 0.0)
+	if _drop_through_timer > 0.0:
+		_drop_through_timer = maxf(_drop_through_timer - delta, 0.0)
+		if _drop_through_timer <= 0.0:
+			_apply_collision(_state)
 	
 	match _state:
 		State.GROUND:
@@ -80,7 +89,14 @@ func _process_ground(delta: float) -> void:
 		velocity.y = 0.0
 
 	if Input.is_action_just_pressed("jump") and is_on_floor():
+		if _should_start_drop_through():
+			_start_drop_through()
+			return
 		velocity.y = JUMP_VELOCITY
+
+	if _should_start_drop_through():
+		_start_drop_through()
+		return
 
 	_move_x()
 
@@ -118,7 +134,14 @@ func _process_roof(delta: float) -> void:
 		velocity.y = 0.0
 
 	if Input.is_action_just_pressed("jump") and is_on_floor():
+		if _should_start_drop_through():
+			_start_drop_through()
+			return
 		velocity.y = JUMP_VELOCITY
+
+	if _should_start_drop_through():
+		_start_drop_through()
+		return
 
 	_move_x()
 
@@ -176,19 +199,23 @@ func _set_state(s: State) -> void:
 	if _is_dead:
 		return
 	_state = s
-	_apply_collision(s)
+	if _drop_through_timer <= 0.0:
+		_apply_collision(s)
 
 func _apply_collision(s: State) -> void:
 	match s:
 		State.GROUND:
 			set_collision_mask_value(LAYER_INSIDE, true)
 			set_collision_mask_value(LAYER_ROOF, false)
+			set_collision_mask_value(LAYER_RAILINGS, true)
 		State.CLIMBING:
 			set_collision_mask_value(LAYER_INSIDE, false)
 			set_collision_mask_value(LAYER_ROOF, false)
+			set_collision_mask_value(LAYER_RAILINGS, false)
 		State.ROOF:
 			set_collision_mask_value(LAYER_INSIDE, true)
 			set_collision_mask_value(LAYER_ROOF, true)
+			set_collision_mask_value(LAYER_RAILINGS, true)
 
 func _shoot() -> void:
 	if _is_dead:
@@ -357,12 +384,57 @@ func _check_train_rail_fall_death() -> void:
 		_train_node = get_parent().get_node_or_null("Train") as Node2D
 	if _train_node == null:
 		return
-	if not _train_node.has_method("get_rear_guard_x"):
-		return
 	if not _train_node.has_method("get_rail_level_y"):
 		return
 
-	var guard_x := float(_train_node.call("get_rear_guard_x"))
 	var rail_y := float(_train_node.call("get_rail_level_y"))
-	if global_position.x < guard_x and global_position.y >= rail_y - RAIL_DEATH_BUFFER_Y:
+	if _get_feet_y() >= rail_y - RAIL_DEATH_BUFFER_Y:
 		die()
+
+func _get_feet_y() -> float:
+	var body_collision := get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if body_collision == null or body_collision.shape == null:
+		return global_position.y
+
+	var half_height := 0.0
+	if body_collision.shape is CapsuleShape2D:
+		half_height = (body_collision.shape as CapsuleShape2D).height * 0.5
+	elif body_collision.shape is RectangleShape2D:
+		half_height = (body_collision.shape as RectangleShape2D).size.y * 0.5
+	elif body_collision.shape is CircleShape2D:
+		half_height = (body_collision.shape as CircleShape2D).radius
+
+	half_height *= absf(body_collision.global_scale.y)
+	return body_collision.global_position.y + half_height
+
+func _should_start_drop_through() -> bool:
+	if _drop_through_timer > 0.0:
+		return false
+	if not is_on_floor():
+		return false
+	if not Input.is_action_pressed("move_down"):
+		return false
+	if not _is_on_railing_surface():
+		return false
+
+	var pressed_down_now: bool = Input.is_action_just_pressed("move_down")
+	var pressed_jump_now: bool = Input.is_action_just_pressed("jump")
+	return pressed_down_now or pressed_jump_now
+
+func _start_drop_through() -> void:
+	_drop_through_timer = DROP_THROUGH_TIME
+	set_collision_mask_value(LAYER_RAILINGS, false)
+	global_position.y += DROP_THROUGH_NUDGE_Y
+	velocity.y = maxf(velocity.y, CLIMB_SPEED)
+	if _state == State.ROOF:
+		_state = State.GROUND
+
+func _is_on_railing_surface() -> bool:
+	var space_state := get_world_2d().direct_space_state
+	var from := Vector2(global_position.x, _get_feet_y() - 2.0)
+	var to := from + Vector2(0.0, 10.0)
+	var query := PhysicsRayQueryParameters2D.create(from, to)
+	query.collision_mask = LAYER_RAILINGS_MASK
+	query.exclude = [self]
+	var hit := space_state.intersect_ray(query)
+	return not hit.is_empty()
