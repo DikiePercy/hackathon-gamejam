@@ -3,12 +3,13 @@
 [ext_resource type="PackedScene" uid="uid://bf52gpgg0aftq" path="res://scenes/train_timur/train.tscn" id="1_hyk8p"]
 [ext_resource type="Script" uid="uid://kggtcrnmw3fy" path="res://scenes/main/main.gd" id="2_maingd"]
 [ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://scenes/characters/Player.tscn" id="3_player"]
+[ext_resource type="PackedScene" uid="uid://7fh1qvxbd856" path="res://scenes/menu/parallax_background.tscn" id="4_l3cfh"]
 
 [node name="Main" type="Node2D" unique_id=1038197434]
 script = ExtResource("2_maingd")
 
 [node name="Train" parent="." unique_id=2065298570 instance=ExtResource("1_hyk8p")]
-position = Vector2(70, 91)
+position = Vector2(742, 187)
 
 [node name="Player" parent="." unique_id=1025993540 instance=ExtResource("3_player")]
 position = Vector2(59, -83)
