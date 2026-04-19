@@ -11,7 +11,7 @@ extends Node2D
 
 
 
-enum State {DRIVING, AT_STATION}
+enum State {DRIVING, AT_STATION, SLOW, FAST}
 var current_state = State.DRIVING
 
 @export var max_speed: float = 300.0
@@ -49,8 +49,24 @@ func _process(delta: float) -> void:
 			drive_logic(delta)
 		State.AT_STATION:
 			station_logic(delta)
+		State.SLOW:
+			slow_logic(delta)
+		State.FAST:
+			fast_logic(delta)
 	if is_in_depot:
 		$Locomotive/AnimatedSprite2D.stop()
+
+func slow_logic(delta):
+	if GameManager.train_speed > 0:
+		GameManager.train_speed -= 1
+	else:
+		current_state = State.AT_STATION
+
+func fast_logic(delta):
+	if GameManager.train_speed < max_speed:
+		GameManager.train_speed += 1
+	else:
+		current_state = State.DRIVING
 
 func drive_logic(delta):
 	if !$Timer.is_stopped():
@@ -59,17 +75,16 @@ func drive_logic(delta):
 		$Timer.start(5)
 
 func station_logic(_delta):
-	GameManager.train_speed = 0
+	pass
 	
 func _on_timer_timeout() -> void:
-	current_state = State.AT_STATION
+	current_state = State.SLOW
 	print("Поезд stop!")
 
 func _input(event):
 	# "ui_accept" — это стандартное действие для Пробела (и Enter)
 	if event.is_action_pressed("ui_accept") and current_state == State.AT_STATION:
-		current_state = State.DRIVING
-		GameManager.train_speed = 250
+		current_state = State.FAST
 
 func build_train_from_data():
 	# Очищаем, если что-то было

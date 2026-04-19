@@ -16,7 +16,7 @@ size = Vector2(974, 20)
 script = ExtResource("2_maingd")
 
 [node name="StaticBody2D" parent="." unique_id=946732154 instance=ExtResource("8_b1x3f")]
-position = Vector2(506, 37)
+position = Vector2(963, 35)
 
 [node name="pause" type="Node" parent="." unique_id=1423032809]
 process_mode = 3
