@@ -5,6 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://c2visn0hhmcmj" path="res://assets/Kooky - Pixel Train assets - v0.0.1/carriage_v18_car1.png" id="3_68lq8"]
 [ext_resource type="Texture2D" uid="uid://b8udkpqwl6635" path="res://assets/Kooky - Pixel Train assets - v0.0.1/train_xray.png" id="4_1svnm"]
 [ext_resource type="Texture2D" uid="uid://dohr32p0sf0nf" path="res://assets/Kooky - Pixel Train assets - v0.0.1/carriage_v18_car5.png" id="4_qwgqn"]
+[ext_resource type="PackedScene" path="res://scenes/characters/passenger.tscn" id="5_passenger"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6wpp6"]
 size = Vector2(428, 88)
@@ -73,6 +74,20 @@ shape = SubResource("RectangleShape2D_mm4mv")
 [node name="Marker2D" type="Marker2D" parent="." unique_id=1777439383]
 z_index = 1
 position = Vector2(-218, 26)
+
+[node name="SeatMarkers" type="Node2D" parent="."]
+
+[node name="Seat1" type="Marker2D" parent="SeatMarkers"]
+position = Vector2(-118, 25)
+
+[node name="Seat2" type="Marker2D" parent="SeatMarkers"]
+position = Vector2(-38, 25)
+
+[node name="Seat3" type="Marker2D" parent="SeatMarkers"]
+position = Vector2(42, 25)
+
+[node name="Seat4" type="Marker2D" parent="SeatMarkers"]
+position = Vector2(122, 25)
 
 [node name="Interiorsprite" type="Sprite2D" parent="." unique_id=54981861]
 position = Vector2(1.04904175e-05, 0)
