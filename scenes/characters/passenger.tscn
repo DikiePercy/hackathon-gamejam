@@ -1,20 +1,21 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://iy3710akk3sm"]
 
-[ext_resource type="Script" path="res://scripts/classes/passenger.gd" id="1_passenger"]
+[ext_resource type="Script" uid="uid://dncgofrkkea1j" path="res://scripts/classes/passenger.gd" id="1_passenger"]
 
 [sub_resource type="RectangleShape2D" id="Shape_passenger_body"]
-size = Vector2(16, 24)
+size = Vector2(8.5, 15)
 
-[node name="Passenger" type="CharacterBody2D"]
+[node name="Passenger" type="CharacterBody2D" unique_id=685475136]
 script = ExtResource("1_passenger")
 max_health = 30
 
-[node name="Visual" type="ColorRect" parent="."]
-offset_left = -8.0
-offset_top = -24.0
-offset_right = 8.0
+[node name="Visual" type="ColorRect" parent="." unique_id=2116489393]
+offset_left = -4.0
+offset_top = -19.0
+offset_right = 4.0
+offset_bottom = -4.0
 color = Color(0.94, 0.86, 0.65, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -12)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=308941578]
+position = Vector2(0, -11.5)
 shape = SubResource("Shape_passenger_body")
