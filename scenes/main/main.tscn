@@ -6,8 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://scenes/characters/Player.tscn" id="3_player"]
 [ext_resource type="PackedScene" uid="uid://w22l7k23ohsx" path="res://scenes/paralaxes/parallax_background_3.tscn" id="4_l3cfh"]
 [ext_resource type="PackedScene" uid="uid://b03tildsg3ynj" path="res://scenes/UI/menupause.tscn" id="5_6q06x"]
-[ext_resource type="Script" path="res://scenes/main/relses.gd" id="8_b1x3f"]
-[ext_resource type="PackedScene" uid="uid://beudi6gnie43b" path="res://scenes/rels/rels.tscn" id="8_yyfjg"]
+[ext_resource type="PackedScene" uid="uid://cxsft8op476qb" path="res://scenes/characters/kowboy_enemy.tscn" id="7_hujxm"]
+[ext_resource type="PackedScene" uid="uid://b7et08nmm166y" path="res://scenes/rels/parallax_background.tscn" id="8_yyfjg"]
 
 [node name="Main" type="Node2D" unique_id=1038197434]
 script = ExtResource("2_maingd")
@@ -40,6 +40,10 @@ offset_right = 475.0
 offset_bottom = 72.0
 text = "Menu"
 
+[node name="Kowboy enemy" parent="." unique_id=1594219037 instance=ExtResource("7_hujxm")]
+position = Vector2(75, 192)
+
+[node name="ParallaxBackground" parent="." unique_id=1808317350 instance=ExtResource("8_yyfjg")]
 [node name="relses" type="Node2D" parent="." unique_id=1365972844]
 script = ExtResource("8_b1x3f")
 

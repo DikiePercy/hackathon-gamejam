@@ -135,9 +135,7 @@ position = Vector2(0, -7)
 shape = SubResource("CapsuleShape2D_ikgq3")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1423501748]
-position = Vector2(4, -11)
-scale = Vector2(2.1015627, 1.90625)
+position = Vector2(2, -4)
 sprite_frames = SubResource("SpriteFrames_gcqgy")
 animation = &"attack"
-frame = 5
-frame_progress = 1.0
+frame_progress = 0.8687708
