@@ -4,7 +4,6 @@
 [ext_resource type="Texture2D" uid="uid://di7jbdddgpwre" path="res://assets/Cowboy Assets/Cowboy_Attack/Cowboy Attack Animation.png" id="2_a2ttn"]
 [ext_resource type="Texture2D" uid="uid://oix2niyg277d" path="res://assets/Cowboy Assets/Cowboy_Death/Cowboy Death Animation.png" id="3_u5hxg"]
 [ext_resource type="Texture2D" uid="uid://opcw5pecg12t" path="res://assets/Cowboy Assets/Cowboy_Idle/Cowboy_Idle.png" id="4_tnbbi"]
-[ext_resource type="Script" uid="uid://bbae46g7d8gg6" path="res://scenes/characters/animated_sprite_2d.gd" id="5_2vaa1"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ikgq3"]
 
@@ -134,4 +133,3 @@ shape = SubResource("CapsuleShape2D_ikgq3")
 sprite_frames = SubResource("SpriteFrames_gcqgy")
 animation = &"attack"
 frame_progress = 0.36518478
-script = ExtResource("5_2vaa1")
