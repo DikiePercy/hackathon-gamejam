@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://ckj5li5e8puw3"]
 
 [ext_resource type="Script" uid="uid://d0ppuq5eq8pf6" path="res://scripts/classes/main-person.gd" id="1_mainperson"]
-[ext_resource type="PackedScene" uid="uid://8wrtibmowea" path="res://scenes/characters/Bullet.tscn" id="2_gin2a"]
 [ext_resource type="Texture2D" uid="uid://m6ulqg4l508m" path="res://assets/Cowboy (Animated Pixel Art)/Animation Sprite Sheets (PNG)/CowBoyIdle.png" id="3_7n8ao"]
 [ext_resource type="Texture2D" uid="uid://djx5ctw0f5l5q" path="res://assets/Cowboy (Animated Pixel Art)/Animation Sprite Sheets (PNG)/CowBoyShoot.png" id="4_7wym0"]
 [ext_resource type="Texture2D" uid="uid://d1kayi5fa6r" path="res://assets/Cowboy (Animated Pixel Art)/Animation Sprite Sheets (PNG)/CowBoyHolsterWeapon.png" id="4_miirx"]
@@ -310,11 +309,12 @@ height = 32.0
 height = 40.0
 
 [node name="Player" type="CharacterBody2D" unique_id=857582357]
+z_index = 1
 scale = Vector2(0.3, 0.3)
 script = ExtResource("1_mainperson")
-bullet_scene = ExtResource("2_gin2a")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1428740918]
+z_index = 1
 sprite_frames = SubResource("SpriteFrames_ufbvs")
 animation = &"shoot"
 autoplay = "idle"

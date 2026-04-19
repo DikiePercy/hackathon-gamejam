@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dc0isej32hjlm"]
 
 [ext_resource type="Script" uid="uid://cufm2x8mw3448" path="res://scenes/menu/node_2d.gd" id="1_wtcfe"]
-[ext_resource type="PackedScene" uid="uid://7fh1qvxbd856" path="res://scenes/menu/parallax_background.tscn" id="2_w52i0"]
+[ext_resource type="PackedScene" path="res://scenes/menu/parallax_background.tscn" id="2_w52i0"]
 [ext_resource type="AudioStream" uid="uid://b42porumvfglq" path="res://assets/music/Adventures in Adventureland.mp3" id="3_music"]
 
 [node name="Node2D" type="Node2D" unique_id=622073271]

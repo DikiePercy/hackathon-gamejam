@@ -1,8 +1,8 @@
 extends Person
 class_name MainPerson
 
-const WALK_SPEED     := 220.0
-const JUMP_VELOCITY  := -460.0
+const WALK_SPEED     := 180.0
+const JUMP_VELOCITY  := -340.0
 const GRAVITY        := 1000.0
 const CLIMB_SPEED    := 160.0
 const SHOOT_COOLDOWN := 0.25
