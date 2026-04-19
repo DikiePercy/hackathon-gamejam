@@ -14,10 +14,6 @@ const PLAYER_INSIDE_Z_INDEX := 5
 const EXTERIOR_Z_INDEX := 10
 const DEFAULT_PLAYER_Z_INDEX := 1
 
-signal mouse_hovered(wagon_instance)
-signal mouse_unhovered(wagon_instance)
-signal clicked(wagon_instance)
-
 @export var passenger_scene: PackedScene = preload("res://scenes/characters/passenger.tscn")
 
 var money_per_level = {
@@ -27,8 +23,8 @@ var money_per_level = {
 }
 
 # Ссылки на узлы по твоей структуре в wagon.tscn
-@onready var interior_sprite = $Interiorsprite
-@onready var exterior_sprite = $StaticBody2D/AnimatedSprite2D
+@onready var interior_sprite: CanvasItem = _resolve_interior_sprite()
+@onready var exterior_sprite: CanvasItem = _resolve_exterior_sprite()
 @onready var _seat_markers_root: Node2D = $SeatMarkers
 
 var _spawned_passengers: Array[Node2D] = []
@@ -69,11 +65,11 @@ func sync_passengers() -> void:
 	if passenger_scene == null or _seat_markers_root == null:
 		return
 
-	var seats := _seat_markers_root.get_children()
-	var spawn_count := min(passengers, seats.size())
+	var seats: Array[Node] = _seat_markers_root.get_children()
+	var spawn_count: int = mini(passengers, seats.size())
 
 	for i in range(spawn_count):
-		var seat := seats[i] as Marker2D
+		var seat: Marker2D = seats[i] as Marker2D
 		if seat == null:
 			continue
 		var passenger_node := passenger_scene.instantiate()
@@ -152,4 +148,4 @@ func _on_area_2d_mouse_entered() -> void:
 
 
 func _on_area_2d_mouse_exited() -> void:
-	emit_signal("wagon_instance", self)
+	emit_signal("mouse_unhovered", self)
