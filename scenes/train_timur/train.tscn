@@ -102,3 +102,8 @@ volume_db = -16.0
 [node name="TrainHorn" type="AudioStreamPlayer" parent="." unique_id=1655035755]
 stream = ExtResource("19_train_horn")
 volume_db = -8.0
+
+[node name="Timer" type="Timer" parent="." unique_id=634806176]
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
