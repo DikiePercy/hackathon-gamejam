@@ -42,6 +42,8 @@ var _mission_passengers_label: Label = null
 var _mission_integrity_label: Label = null
 var _mission_progress_label: Label = null
 
+var station_ch = false
+
 func _ready() -> void:
 	_apply_pending_load()
 	GameManager.begin_mission_run()

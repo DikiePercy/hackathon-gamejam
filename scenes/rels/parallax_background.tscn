@@ -7,10 +7,12 @@
 script = ExtResource("1_ghhr8")
 
 [node name="ParallaxLayer" type="ParallaxLayer" parent="." unique_id=1130842375]
-position = Vector2(-234, 0)
-motion_mirroring = Vector2(480, 0)
+motion_mirroring = Vector2(481.845, 0)
 
 [node name="Rails" type="Sprite2D" parent="ParallaxLayer" unique_id=295155093]
-position = Vector2(243.5, 262)
+texture_repeat = 2
+position = Vector2(-7.999999, 66)
 scale = Vector2(0.768405, 1)
 texture = ExtResource("1_3trsv")
+centered = false
+region_rect = Rect2(21.470537, 156.911, 627.045, 100.136)
