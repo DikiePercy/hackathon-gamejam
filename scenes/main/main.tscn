@@ -4,10 +4,9 @@
 [ext_resource type="Script" uid="uid://kggtcrnmw3fy" path="res://scenes/main/main.gd" id="2_maingd"]
 [ext_resource type="Script" uid="uid://jc4w1dsn0371" path="res://scenes/main/pause.gd" id="2_ow5a4"]
 [ext_resource type="PackedScene" uid="uid://ckj5li5e8puw3" path="res://scenes/characters/Player.tscn" id="3_player"]
-[ext_resource type="PackedScene" path="res://scenes/paralaxes/parallax_background_3.tscn" id="4_l3cfh"]
+[ext_resource type="PackedScene" uid="uid://w22l7k23ohsx" path="res://scenes/paralaxes/parallax_background_3.tscn" id="4_l3cfh"]
 [ext_resource type="PackedScene" uid="uid://b03tildsg3ynj" path="res://scenes/UI/menupause.tscn" id="5_6q06x"]
-[ext_resource type="PackedScene" path="res://scenes/characters/kowboy_enemy.tscn" id="7_hujxm"]
-[ext_resource type="Script" uid="uid://dtx8quw37o8mk" path="res://scenes/main/relses.gd" id="8_b1x3f"]
+[ext_resource type="Script" path="res://scenes/main/relses.gd" id="8_b1x3f"]
 [ext_resource type="PackedScene" uid="uid://beudi6gnie43b" path="res://scenes/rels/rels.tscn" id="8_yyfjg"]
 
 [node name="Main" type="Node2D" unique_id=1038197434]
@@ -40,9 +39,6 @@ offset_top = 41.0
 offset_right = 475.0
 offset_bottom = 72.0
 text = "Menu"
-
-[node name="Kowboy enemy" parent="." unique_id=1594219037 instance=ExtResource("7_hujxm")]
-position = Vector2(75, 192)
 
 [node name="relses" type="Node2D" parent="." unique_id=1365972844]
 script = ExtResource("8_b1x3f")
