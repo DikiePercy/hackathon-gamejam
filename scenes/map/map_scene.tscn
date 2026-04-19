@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://dtmrg88aeps15"]
+
+[ext_resource type="Texture2D" uid="uid://cepinopf23qc5" path="res://scenes/map/map.png" id="1_2flw7"]
+[ext_resource type="Texture2D" uid="uid://bchohomjtayw5" path="res://scenes/map/pin.png" id="2_nsgnk"]
+[ext_resource type="Texture2D" uid="uid://w3mfg7gtefg3" path="res://assets/textures/plywood_diff_1k.jpg" id="3_etenc"]
+
+[node name="MapScene" type="Node2D" unique_id=1903539605]
+
+[node name="Map" type="Sprite2D" parent="." unique_id=1346203111]
+position = Vector2(99.24999, 126.125)
+scale = Vector2(0.17801341, 0.19834886)
+texture = ExtResource("1_2flw7")
+
+[node name="Pin" type="Sprite2D" parent="." unique_id=2030637098]
+position = Vector2(157, 31)
+scale = Vector2(0.03203125, 0.03239202)
+texture = ExtResource("2_nsgnk")
+
+[node name="Pin3" type="Sprite2D" parent="." unique_id=959954838]
+position = Vector2(167, 232)
+rotation = 1.3089969
+scale = Vector2(0.03203125, 0.03239202)
+texture = ExtResource("2_nsgnk")
+
+[node name="Pin2" type="Sprite2D" parent="." unique_id=1203873238]
+position = Vector2(27, 22.999998)
+rotation = -1.5707964
+scale = Vector2(0.03203125, 0.03239202)
+texture = ExtResource("2_nsgnk")
+
+[node name="PlywoodDiff1k" type="Sprite2D" parent="." unique_id=486663560]
+z_index = -2
+position = Vector2(260.25, 132.74997)
+scale = Vector2(0.51123047, 0.2993164)
+texture = ExtResource("3_etenc")
