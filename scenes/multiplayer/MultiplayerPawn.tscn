@@ -1,20 +1,20 @@
-[gd_scene format=3 uid="uid://e1f2a3b4c5d67890"]
+[gd_scene format=3 uid="uid://eht8fmpywavx"]
 
-[ext_resource type="Script" uid="uid://f1a2b3c4d5e67890" path="res://scenes/multiplayer/MultiplayerPawn.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://a1b2c3d4e5f67891" path="res://assets/Cowboy (Animated Pixel Art)/Animation Sprite Sheets (PNG)/CowBoyIdle.png" id="2"]
+[ext_resource type="Script" uid="uid://evlhmw0agerc" path="res://scenes/multiplayer/MultiplayerPawn.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://m6ulqg4l508m" path="res://assets/Cowboy (Animated Pixel Art)/Animation Sprite Sheets (PNG)/CowBoyIdle.png" id="2"]
+
+[sub_resource type="RectangleShape2D" id="Shape2D"]
+size = Vector2(18, 24)
 
 [node name="MultiplayerPawn" type="CharacterBody2D" unique_id=231105782]
 script = ExtResource("1")
 
-[node name="Sprite2D" type="Sprite2D" parent="MultiplayerPawn" unique_id=769237824]
-texture = ExtResource("2")
+[node name="MultiplayerPawn#Sprite2D" type="Sprite2D" parent="." unique_id=769237824]
 scale = Vector2(0.5, 0.5)
+texture = ExtResource("2")
 
-[node name="GunPoint" type="Marker2D" parent="MultiplayerPawn" unique_id=1372490021]
+[node name="MultiplayerPawn#GunPoint" type="Marker2D" parent="." unique_id=1372490021]
 position = Vector2(18, 0)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="MultiplayerPawn" unique_id=1839584380]
+[node name="MultiplayerPawn#CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1839584380]
 shape = SubResource("Shape2D")
-
-[sub_resource type="RectangleShape2D" id="Shape2D"]
-size = Vector2(18, 24)

@@ -51,7 +51,7 @@ func _ready() -> void:
 
 func _on_host_pressed() -> void:
 	print("Lobby: _on_host_pressed called")
-	if get_tree().multiplayer.network_peer != null:
+	if get_tree().get_multiplayer().multiplayer_peer != null:
 		_set_status("Сервер уже запущен или подключен")
 		return
 
@@ -61,12 +61,14 @@ func _on_host_pressed() -> void:
 	if err != OK:
 		_set_status("Не удалось запустить сервер: %d" % err)
 		return
-	get_tree().multiplayer.network_peer = peer
 
-	_setup_multiplayer(peer)
+	get_tree().get_multiplayer().multiplayer_peer = peer
+	_setup_multiplayer()
+
 	_is_host = true
-	_local_peer_id = get_tree().multiplayer.peer_id
+	_local_peer_id = get_tree().get_multiplayer().get_unique_id()
 	_players[_local_peer_id] = {"name": _local_name + " (хост)", "ready": false}
+
 	if _host_button:
 		_host_button.disabled = true
 	if _join_button:
@@ -77,11 +79,12 @@ func _on_host_pressed() -> void:
 		_start_button.disabled = true
 	if _ip_input:
 		_ip_input.editable = false
+
 	_set_status("Сервер запущен на порту %d. Ожидание игроков..." % LOBBY_PORT)
 	_refresh_player_list()
 
 func _on_join_pressed() -> void:
-	if get_tree().multiplayer.network_peer != null:
+	if get_tree().get_multiplayer().multiplayer_peer != null:
 		return
 
 	var address = ""
@@ -95,25 +98,26 @@ func _on_join_pressed() -> void:
 	if err != OK:
 		_set_status("Не удалось подключиться: %d" % err)
 		return
-	get_tree().multiplayer.network_peer = peer
 
-	_setup_multiplayer(peer)
+	get_tree().get_multiplayer().multiplayer_peer = peer
+	_setup_multiplayer()
+
 	if _host_button:
 		_host_button.disabled = true
 	if _ip_input:
 		_ip_input.editable = false
 	_set_status("Подключение к %s:%d..." % [address, LOBBY_PORT])
 
-func _setup_multiplayer(peer: ENetMultiplayerPeer) -> void:
-	var api = get_tree().multiplayer
+func _setup_multiplayer() -> void:
+	var api = get_tree().get_multiplayer()
 	api.connect("peer_connected", Callable(self, "_on_peer_connected"))
 	api.connect("peer_disconnected", Callable(self, "_on_peer_disconnected"))
-	peer.connect("connection_succeeded", Callable(self, "_on_connection_succeeded"))
-	peer.connect("connection_failed", Callable(self, "_on_connection_failed"))
-	peer.connect("server_disconnected", Callable(self, "_on_server_disconnected"))
+	api.connect("connected_to_server", Callable(self, "_on_connection_succeeded"))
+	api.connect("connection_failed", Callable(self, "_on_connection_failed"))
+	api.connect("server_disconnected", Callable(self, "_on_server_disconnected"))
 
 func _on_connection_succeeded() -> void:
-	_local_peer_id = get_tree().multiplayer.peer_id
+	_local_peer_id = get_tree().get_multiplayer().get_unique_id()
 	_players[_local_peer_id] = {"name": _local_name, "ready": false}
 	if _ready_button:
 		_ready_button.disabled = false
@@ -134,8 +138,15 @@ func _on_peer_connected(id: int) -> void:
 		return
 
 	_players[id] = {"name": "Игрок %d" % id, "ready": false}
+
+	# Отправить новому игроку текущее состояние лобби
 	rpc_id(id, "rpc_sync_full_lobby", _players)
-	rpc_id(id, "rpc_register_player", _local_peer_id, _local_name, _is_ready)
+
+	# Уведомить остальных игроков о новом игроке
+	for pid in _players.keys():
+		if pid != id and pid != _local_peer_id:
+			rpc_id(pid, "rpc_register_player", id, "Игрок %d" % id, false)
+
 	_set_status("Игрок %d подключился" % id)
 	_refresh_player_list()
 	_refresh_start_button()
@@ -190,9 +201,6 @@ func _refresh_player_list() -> void:
 		label.text = "%s %s" % [ready_text, data.name]
 		_players_list.add_child(label)
 
-func _update_status(text: String) -> void:
-	_set_status(text)
-
 func _set_status(text: String) -> void:
 	print("Lobby status:", text)
 	if _status_label:
@@ -201,17 +209,22 @@ func _set_status(text: String) -> void:
 		push_warning("Lobby: status label is null")
 
 func _reset_network() -> void:
-	if get_tree().multiplayer.network_peer != null:
-		get_tree().multiplayer.network_peer.close_connection()
-	get_tree().multiplayer.network_peer = null
+	if get_tree().get_multiplayer().multiplayer_peer != null:
+		get_tree().get_multiplayer().multiplayer_peer = null
 	_is_host = false
 	_local_peer_id = 0
 	_is_ready = false
 	_players.clear()
+	if _host_button:
+		_host_button.disabled = false
+	if _join_button:
+		_join_button.disabled = false
 	if _ready_button:
 		_ready_button.disabled = true
 	if _start_button:
 		_start_button.disabled = true
+	if _ip_input:
+		_ip_input.editable = true
 	_refresh_player_list()
 
 func _find_ui_node(path: String) -> Node:
