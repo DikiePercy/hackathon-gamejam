@@ -9,11 +9,20 @@ extends Node2D
 @export var enemy_spawn_interval: float = 7.0
 @export var enemy_spawn_max_active: int = 3
 
+
+
+enum State {DRIVING, AT_STATION}
+var current_state = State.DRIVING
+
+@export var max_speed: float = 300.0
+@export var braking_distance: float = 500.0 # Дистанция начала торможения
+
 var speed = 200.0
 var wagons = []
 var is_in_depot = false
 var _active_enemies: Array[Node2D] = []
 var _enemy_spawn_timer: Timer = null
+
 
 const ENEMY_BULLET_SCENE := preload("res://scenes/characters/Bullet.tscn")
 const ENEMY_SPAWN_OFFSET := Vector2(-220.0, 0.0)
@@ -34,8 +43,28 @@ func _ready():
 	_setup_enemy_spawner()
 
 func _process(delta: float) -> void:
+	print(GameManager.train_speed)
+	match current_state:
+		State.DRIVING:
+			drive_logic(delta)
+		State.AT_STATION:
+			station_logic(delta)
 	if is_in_depot:
 		$Locomotive/AnimatedSprite2D.stop()
+
+func drive_logic(delta):
+	if !$Timer.is_stopped():
+		print($Timer.time_left)
+	else:
+		$Timer.start(5)
+
+func station_logic(_delta):
+	GameManager.train_speed = 0
+	
+	
+func _on_timer_timeout() -> void:
+	current_state = State.AT_STATION
+	print("Поезд stop!")
 
 func build_train_from_data():
 	# Очищаем, если что-то было

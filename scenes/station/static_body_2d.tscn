@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://c10q74xue0g2k"]
+
+[ext_resource type="Texture2D" uid="uid://d3805oq7jup35" path="res://assets/station/platform.png" id="1_h0rvb"]
+[ext_resource type="Texture2D" uid="uid://4sphl6n0ebih" path="res://assets/station/fence.png" id="2_tree8"]
+[ext_resource type="Texture2D" uid="uid://b5rck2b4bdq45" path="res://assets/station/Shelter.png" id="3_kdp45"]
+[ext_resource type="Texture2D" uid="uid://ccrtf0uo8dyth" path="res://assets/station/birb.png" id="4_k6u0s"]
+
+[node name="StaticBody2D" type="StaticBody2D" unique_id=946732154]
+
+[node name="Node2D" type="Node2D" parent="." unique_id=273154797]
+scale = Vector2(0.7, 0.7)
+
+[node name="Platform" type="Sprite2D" parent="Node2D" unique_id=2091204430]
+position = Vector2(462, 235)
+texture = ExtResource("1_h0rvb")
+
+[node name="Fence" type="Sprite2D" parent="Node2D" unique_id=2083224719]
+position = Vector2(304, 170)
+texture = ExtResource("2_tree8")
+
+[node name="Shelter" type="Sprite2D" parent="Node2D" unique_id=59176066]
+position = Vector2(464.99997, 117.000015)
+scale = Vector2(0.24837399, 0.24837397)
+texture = ExtResource("3_kdp45")
+
+[node name="Birb" type="Sprite2D" parent="Node2D" unique_id=1619557997]
+position = Vector2(375, 38)
+texture = ExtResource("4_k6u0s")
