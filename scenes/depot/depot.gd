@@ -5,6 +5,7 @@ extends Control
 
 @onready var train_preview = $TrainPreview
 @onready var weapon_label = $Camera2D.get_node_or_null("WeaponLabel")
+@onready var dst_depot_music: AudioStreamPlayer = $DepotMusic
 @onready var dst_depot_horn_audio: AudioStreamPlayer = $DepotHorn
 @onready var dst_depot_buy_audio: AudioStreamPlayer = $DepotBuy
 @onready var dst_depot_no_money_audio: AudioStreamPlayer = $DepotNoMoney
@@ -16,6 +17,7 @@ extends Control
 
 @onready var camera = $Camera2D
 var camera_speed = 500.0
+var _depot_music_restart_timer := 60.0
 
 var wagon_width = 240
 var selected_wagon = null # Храним, какой вагон сейчас нажат
@@ -23,10 +25,22 @@ var selected_wagon = null # Храним, какой вагон сейчас н�
 func _ready():
 	draw_depot_train()
 	update_ui()
+	if dst_depot_music != null:
+		dst_depot_music.play()
+		dst_depot_music.finished.connect(_on_depot_music_finished)
 	if dst_depot_horn_audio != null:
 		dst_depot_horn_audio.play()
 
+func _on_depot_music_finished() -> void:
+	if dst_depot_music != null:
+		dst_depot_music.play()
+
 func _process(delta):
+	if dst_depot_music != null:
+		_depot_music_restart_timer -= delta
+		if _depot_music_restart_timer <= 0.0:
+			_depot_music_restart_timer += 60.0
+			dst_depot_music.play()
 	# Создаем вектор направления движения
 	var direction = 0
 	
