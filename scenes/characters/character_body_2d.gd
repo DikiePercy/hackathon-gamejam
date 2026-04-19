@@ -1,37 +1,56 @@
 extends CharacterBody2D
 
-@export var player: CharacterBody2D   # ← Перетащи сюда своего игрока в инспекторе
+# === Настройки в инспекторе ===
+@export var player: MainPerson         # Перетащи сюда своего игрока
+@export var move_speed: float = 140.0        # Скорость движения
+@export var attack_range: float = 55.0       # Расстояние, с которого начинает атаку
+
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 var is_attacking := false
 
 func _physics_process(delta: float) -> void:
-	if is_attacking and player:
-		# Поворачиваем спрайт в сторону игрока во время атаки
-		var dir_x = sign(player.global_position.x - global_position.x)
-		$AnimatedSprite2D.flip_h = (dir_x < 0)
-
-
-func start_attack() -> void:
 	if player == null:
 		return
 	
-	is_attacking = true
+	var distance = global_position.distance_to(player.global_position)
 	
-	# Сразу поворачиваем врага в сторону игрока перед атакой
-	var dir_x = sign(player.global_position.x - global_position.x)
-	$AnimatedSprite2D.flip_h = (dir_x < 0)
+	# Если враг атакует — ничего не делаем
+	if is_attacking:
+		return
 	
-	# Запускаем анимацию атаки
-	$AnimatedSprite2D.play("attack")
+	# === ПРЕСЛЕДОВАНИЕ ===
+	if distance > attack_range:
+		var direction = (player.global_position - global_position).normalized()
+		
+		velocity = direction * move_speed
+		
+		# Поворот спрайта
+		sprite.flip_h = (direction.x < 0)
+		
+		# Анимация ходьбы
+		if sprite.animation != "walk":
+			sprite.play("walk")
+		
+		move_and_slide()
 	
-	# Здесь можешь добавить логику урона, звук и т.д.
-	# Пример:
-	# await get_tree().create_timer(0.3).timeout  # если урон в середине анимации
-	# if global_position.distance_to(player.global_position) < 60:
-	#     player.take_damage(15)
+	# === АТАКА ===
+	else:
+		velocity = Vector2.ZERO
+		
+		# Поворачиваемся к игроку
+		var dir_x = sign(player.global_position.x - global_position.x)
+		sprite.flip_h = (dir_x < 0)
+		
+		# Запускаем атаку
+		if sprite.animation != "attack":
+			sprite.play("attack")
+			is_attacking = true
 
 
-# Подключаем сигнал от AnimatedSprite2D
+# Когда анимация атаки закончилась
 func _on_animated_sprite_2d_animation_finished() -> void:
-	if $AnimatedSprite2D.animation == "attack":
+	if sprite.animation == "attack":
 		is_attacking = false
+		# Можно добавить небольшую задержку перед следующей атакой
+		await get_tree().create_timer(0.8).timeout
