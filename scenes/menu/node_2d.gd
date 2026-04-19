@@ -26,3 +26,5 @@ func _on_play_pressed():
 
 func _on_depot_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/depot/depot.tscn")
+func _on_multiplayer_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/multiplayer/lobby.tscn")
