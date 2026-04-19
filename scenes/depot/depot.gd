@@ -23,6 +23,7 @@ var wagon_width = 240
 var selected_wagon = null # Храним, какой вагон сейчас нажат
 
 func _ready():
+	_apply_pending_mission_reward()
 	draw_depot_train()
 	update_ui()
 	if dst_depot_music != null:
@@ -201,4 +202,14 @@ func _on_buy_p_pressed() -> void:
 			dst_depot_no_money_audio.play()
 
 func _on_back_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/menu/node_2d.tscn")
+	get_tree().change_scene_to_file("res://scenes/main/main.tscn")
+
+func _apply_pending_mission_reward() -> void:
+	if GameManager.pending_mission_reward == 0:
+		return
+	var reward := GameManager.pending_mission_reward
+	GameManager.pending_mission_reward = 0
+	if reward >= 0:
+		print("Награда за рейс: +", reward)
+	else:
+		print("Штраф за провал рейса: ", reward)
