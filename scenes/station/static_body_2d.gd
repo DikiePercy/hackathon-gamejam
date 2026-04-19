@@ -13,15 +13,7 @@ func _process(delta: float) -> void:
 
 func _on_train_started():
 	position.x -= 3.5
-	if !$"../Timer".is_stopped():
-		pass
-	else:
-		$"../Timer".start(8)
 	
 
 func _stop_train_started():
 	position.x -= 3.5
-
-
-func _on_timer_timeout() -> void:
-	position.x = pos

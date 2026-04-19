@@ -13,7 +13,7 @@ signal stop_trein
 signal go_trein
 
 enum State {DRIVING, AT_STATION, SLOW, FAST}
-var current_state = State.DRIVING
+var current_state = State.AT_STATION
 
 @export var max_speed: float = 300.0
 @export var braking_distance: float = 500.0 # Дистанция начала торможения
