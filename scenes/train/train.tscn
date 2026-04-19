@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://qbej13o38ef5"]
 
-[ext_resource type="Script" uid="uid://i1maoo85bww7" path="res://scenes/train/train.gd" id="1_tnona"]
+[ext_resource type="Script" uid="uid://i1maoo85bww7" path="res://scenes/train_timur/train.gd" id="1_tnona"]
 [ext_resource type="PackedScene" uid="uid://b5qie8yafkesc" path="res://scenes/train/Wagon.tscn" id="2_0i8p1"]
 [ext_resource type="PackedScene" uid="uid://cw3d38st6wllx" path="res://scenes/characters/enemy.tscn" id="3_fxk1r"]
 [ext_resource type="PackedScene" path="res://scenes/characters/passenger.tscn" id="4_passenger"]

@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://dqrec2lefjx28"]
+
+[ext_resource type="Script" uid="uid://xbpif5acy8p" path="res://scenes/wagon/wagon.gd" id="1_6wpp6"]
+[ext_resource type="Texture2D" uid="uid://br3cnulbd5gid" path="res://assets/Kooky - Pixel Train assets - v0.0.1/carriage_v18_car2.png" id="3_1svnm"]
+[ext_resource type="Texture2D" uid="uid://c2visn0hhmcmj" path="res://assets/Kooky - Pixel Train assets - v0.0.1/carriage_v18_car1.png" id="3_68lq8"]
+[ext_resource type="Texture2D" uid="uid://dohr32p0sf0nf" path="res://assets/Kooky - Pixel Train assets - v0.0.1/carriage_v18_car5.png" id="4_qwgqn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6wpp6"]
+size = Vector2(420, 104)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_n4enn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_68lq8")
+}],
+"loop": true,
+"name": &"v1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_1svnm")
+}],
+"loop": true,
+"name": &"v2",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_qwgqn")
+}],
+"loop": true,
+"name": &"v3",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b8fnn"]
+size = Vector2(445, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mm4mv"]
+size = Vector2(482, 7)
+
+[node name="wagon" type="Node2D" unique_id=194281729]
+script = ExtResource("1_6wpp6")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1569752086]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1641886436]
+position = Vector2(-1, -7)
+shape = SubResource("RectangleShape2D_6wpp6")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1309619088]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="StaticBody2D" unique_id=1040948146]
+scale = Vector2(1.8867189, 1.8867189)
+sprite_frames = SubResource("SpriteFrames_n4enn")
+animation = &"v1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1041975752]
+position = Vector2(0.5, -53)
+shape = SubResource("RectangleShape2D_b8fnn")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D" unique_id=1035372555]
+position = Vector2(0, 37.5)
+shape = SubResource("RectangleShape2D_mm4mv")
+
+[node name="Marker2D" type="Marker2D" parent="." unique_id=1777439383]
+position = Vector2(-200, 24)
+
+[connection signal="clicked" from="." to="." method="_on_clicked"]
+[connection signal="input_event" from="Area2D" to="." method="_on_area_2d_input_event"]
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Area2D" to="." method="_on_area_2d_mouse_exited"]
