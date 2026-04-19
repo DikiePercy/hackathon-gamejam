@@ -37,8 +37,8 @@ shape = SubResource("Shape_ladder_det")
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1330608836]
 zoom = Vector2(1.5, 1.5)
 process_callback = 0
-limit_left = -500
-limit_right = 5000
+limit_left = -6000
+limit_right = 6000
 position_smoothing_enabled = true
 
 [connection signal="area_entered" from="LadderDetector" to="." method="_on_ladder_detector_area_entered"]
