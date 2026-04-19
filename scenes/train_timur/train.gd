@@ -56,8 +56,6 @@ func build_train_from_data():
 		# Обновляем статы
 		if new_wagon.has_method("update_wagon_stats"):
 			new_wagon.update_wagon_stats()
-		if new_wagon.has_method("sync_passengers"):
-			new_wagon.sync_passengers()
 	
 	update_wagon_list()
 

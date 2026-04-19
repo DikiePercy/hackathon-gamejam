@@ -56,7 +56,7 @@ func sync_passengers() -> void:
 		return
 
 	var seats := _seat_markers_root.get_children()
-	var spawn_count := mini(passengers, seats.size())
+	var spawn_count := min(passengers, seats.size())
 
 	for i in range(spawn_count):
 		var seat := seats[i] as Marker2D

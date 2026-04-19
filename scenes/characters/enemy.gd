@@ -30,6 +30,7 @@ enum RaidState {
 @export var knife_speed_multiplier: float = 1.4
 @export var board_speed_multiplier: float = 1.2
 @export var board_reach_threshold: float = 10.0
+@export var approach_reach_threshold: float = 24.0
 
 var _direction: int = 1
 var _damage_timer: float = 0.0
@@ -88,7 +89,7 @@ func _process_approach_train() -> void:
 	_update_direction_toward(_boarding_target)
 	velocity.x = _direction * _move_speed
 	velocity.y = 0.0
-	if absf(global_position.x - _boarding_target.x) <= 24.0:
+	if absf(global_position.x - _boarding_target.x) <= approach_reach_threshold:
 		_raid_state = RaidState.BOARD_TRAIN
 
 func _process_board_train() -> void:
