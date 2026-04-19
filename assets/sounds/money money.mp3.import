@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://vshgo8kyr5cc"
+path="res://.godot/imported/money money.mp3-8ceabfd3d7e578028328332dab211e51.mp3str"
+
+[deps]
+
+source_file="res://assets/sounds/money money.mp3"
+dest_files=["res://.godot/imported/money money.mp3-8ceabfd3d7e578028328332dab211e51.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

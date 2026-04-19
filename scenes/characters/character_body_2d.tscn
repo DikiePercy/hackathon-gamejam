@@ -1,0 +1,137 @@
+[gd_scene format=3 uid="uid://hawdyl8jh1in"]
+
+[ext_resource type="Script" uid="uid://brjd3ioessev5" path="res://scenes/characters/character_body_2d.gd" id="1_3ebvk"]
+[ext_resource type="Texture2D" uid="uid://di7jbdddgpwre" path="res://assets/Cowboy Assets/Cowboy_Attack/Cowboy Attack Animation.png" id="1_j7wjm"]
+[ext_resource type="Texture2D" uid="uid://oix2niyg277d" path="res://assets/Cowboy Assets/Cowboy_Death/Cowboy Death Animation.png" id="2_neyf4"]
+[ext_resource type="Texture2D" uid="uid://opcw5pecg12t" path="res://assets/Cowboy Assets/Cowboy_Idle/Cowboy_Idle.png" id="3_3ebvk"]
+[ext_resource type="Script" uid="uid://bbae46g7d8gg6" path="res://scenes/characters/animated_sprite_2d.gd" id="5_rqpls"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ikgq3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rqpls"]
+atlas = ExtResource("1_j7wjm")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gg7os"]
+atlas = ExtResource("1_j7wjm")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3u0l4"]
+atlas = ExtResource("1_j7wjm")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7a0a2"]
+atlas = ExtResource("1_j7wjm")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ktxr1"]
+atlas = ExtResource("1_j7wjm")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_it5q7"]
+atlas = ExtResource("2_neyf4")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jh7rg"]
+atlas = ExtResource("2_neyf4")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_daouw"]
+atlas = ExtResource("2_neyf4")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qwk3a"]
+atlas = ExtResource("2_neyf4")
+region = Rect2(192, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l5wmq"]
+atlas = ExtResource("2_neyf4")
+region = Rect2(256, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yewup"]
+atlas = ExtResource("2_neyf4")
+region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y7wtk"]
+atlas = ExtResource("2_neyf4")
+region = Rect2(384, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dij2e"]
+atlas = ExtResource("3_3ebvk")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g4jrk"]
+atlas = ExtResource("3_3ebvk")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_gcqgy"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rqpls")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gg7os")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3u0l4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7a0a2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ktxr1")
+}],
+"loop": true,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_it5q7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jh7rg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_daouw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qwk3a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l5wmq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yewup")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y7wtk")
+}],
+"loop": true,
+"name": &"death",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dij2e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g4jrk")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=1594219037]
+script = ExtResource("1_3ebvk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1438301091]
+shape = SubResource("CapsuleShape2D_ikgq3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1423501748]
+sprite_frames = SubResource("SpriteFrames_gcqgy")
+animation = &"attack"
+frame_progress = 0.31666395
+script = ExtResource("5_rqpls")

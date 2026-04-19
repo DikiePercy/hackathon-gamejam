@@ -2,9 +2,16 @@
 
 [ext_resource type="Script" uid="uid://cufm2x8mw3448" path="res://scenes/menu/node_2d.gd" id="1_wtcfe"]
 [ext_resource type="PackedScene" path="res://scenes/menu/parallax_background.tscn" id="2_w52i0"]
+[ext_resource type="AudioStream" path="res://assets/music/Adventures in Adventureland.mp3" id="3_music"]
 
 [node name="Node2D" type="Node2D" unique_id=622073271]
 script = ExtResource("1_wtcfe")
+
+[node name="MenuMusic" type="AudioStreamPlayer" parent="." unique_id=183746195]
+stream = ExtResource("3_music")
+autoplay = true
+volume_db = -12.0
+loop = true
 
 [node name="ParallaxBackground" parent="." unique_id=1199465007 instance=ExtResource("2_w52i0")]
 
