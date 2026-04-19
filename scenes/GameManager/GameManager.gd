@@ -1,6 +1,7 @@
 extends Node
 
 var total_gold = 5000
+var has_shotgun: bool = false
 var total_p = 100
 
 # Структура: [ [уровень, люди, hp], [уровень, люди, hp] ]

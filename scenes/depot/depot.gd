@@ -4,6 +4,9 @@ extends Control
 @export var locomotive_scene: PackedScene = preload("res://scenes/train_timur/train.tscn")
 
 @onready var train_preview = $TrainPreview
+@onready var weapon_label = $Camera2D.get_node_or_null("WeaponLabel")
+
+@export var shotgun_price: int = 600
 @onready var gold_label = $CanvasLayer/VBoxContainer/HBoxContainer2/GoldLabel
 @onready var p_label = $CanvasLayer/VBoxContainer/HBoxContainer2/VLabel
 @onready var v_label = $CanvasLayer/VBoxContainer/HBoxContainer2/PLabel
@@ -124,10 +127,25 @@ func _on_buy_button_pressed() -> void:
 		update_ui()
 	else:
 		print("Недостаточно золота!")
+
+func _on_buy_weapon_button_pressed() -> void:
+	if GameManager.has_shotgun:
+		print("Уже куплено ружье")
+		return
+
+	if GameManager.total_gold >= shotgun_price:
+		GameManager.total_gold -= shotgun_price
+		GameManager.has_shotgun = true
+		update_ui()
+		print("Куплено ружье!")
+	else:
+		print("Недостаточно золота для ружья!")
 	
 	
 func update_ui():
 	gold_label.text = "Золото: " + str(GameManager.total_gold)
+	if weapon_label != null:
+		weapon_label.text = "Оружие: " + ("Ружье" if GameManager.has_shotgun else "Пистолет")
 	v_label.text = "Патроны: " + str(GameManager.total_p)
 	p_label.text = "Вагоны: " + str(GameManager.train_data.size())
 
