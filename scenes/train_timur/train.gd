@@ -16,6 +16,8 @@ var _active_enemies: Array[Node2D] = []
 var _enemy_spawn_timer: Timer = null
 
 const ENEMY_BULLET_SCENE := preload("res://scenes/characters/Bullet.tscn")
+const ENEMY_SPAWN_OFFSET := Vector2(-220.0, 0.0)
+const DEFAULT_BOARDING_OFFSET := Vector2(-200.0, -206.0)
 
 func _ready():
 	# При старте уровня строим поезд по данным из GameManager
@@ -84,7 +86,7 @@ func _spawn_enemy_wave() -> void:
 		return
 
 	var board_target := _get_boarding_target_position()
-	var spawn_position := board_target + Vector2(-220.0, 0.0)
+	var spawn_position := board_target + ENEMY_SPAWN_OFFSET
 	var enemy_instance := enemy_scene.instantiate()
 	if enemy_instance == null:
 		return
@@ -103,11 +105,11 @@ func _spawn_enemy_wave() -> void:
 
 func _get_boarding_target_position() -> Vector2:
 	if wagons_container.get_child_count() == 0:
-		return global_position + Vector2(-200.0, -206.0)
+		return global_position + DEFAULT_BOARDING_OFFSET
 
 	var rear_wagon := wagons_container.get_child(wagons_container.get_child_count() - 1) as Node2D
 	if rear_wagon == null:
-		return global_position + Vector2(-200.0, -206.0)
+		return global_position + DEFAULT_BOARDING_OFFSET
 
 	var boarding_marker := rear_wagon.get_node_or_null("Marker2D") as Marker2D
 	if boarding_marker != null:
