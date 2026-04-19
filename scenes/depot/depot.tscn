@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://du4t2o4qn7xr0" path="res://scenes/depot/depot.gd" id="1_fxm1y"]
 [ext_resource type="Texture2D" uid="uid://otx3wpa248hm" path="res://assets/sprites/train/background-desert.jpg" id="2_j3mw0"]
+[ext_resource type="AudioStream" uid="uid://audiostream_depot_music" path="res://assets/music/kokoreli777-inside-old-train-169418.mp3" id="3_depot_music"]
 
 [node name="Depot" type="Control" unique_id=1590991496]
 layout_mode = 3
@@ -15,6 +16,12 @@ script = ExtResource("1_fxm1y")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1311003508]
 zoom = Vector2(0.6, 0.6)
+
+[node name="DepotMusic" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_depot_music")
+autoplay = true
+volume_db = -14.0
+loop = true
 
 [node name="BackgroundDesert" type="Sprite2D" parent="Camera2D" unique_id=1989465728]
 position = Vector2(4.5739136, 4.7500305)

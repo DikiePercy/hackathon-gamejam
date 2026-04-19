@@ -1,0 +1,110 @@
+[gd_scene format=3 uid="uid://engapg8ddtxn"]
+
+[ext_resource type="Texture2D" uid="uid://nn0bhuk3ebld" path="res://assets/sprites/parallax/7.png" id="1_lynod"]
+[ext_resource type="Texture2D" uid="uid://hqurmx6xkypi" path="res://assets/sprites/parallax/3 (4).png" id="2_gl4cf"]
+[ext_resource type="Texture2D" uid="uid://ddvc5kxsw1wse" path="res://assets/sprites/parallax/1 (4).png" id="3_gl4cf"]
+
+[node name="Paralax" type="Node2D" unique_id=993251927]
+
+[node name="ParallaxBackground2" type="ParallaxBackground" parent="." unique_id=1504233070]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxBackground2" unique_id=1053945885]
+
+[node name="7" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer" unique_id=1233819986]
+position = Vector2(261.99997, 701)
+scale = Vector2(0.9149306, 1.3055555)
+texture = ExtResource("1_lynod")
+
+[node name="8" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer" unique_id=1466954200]
+position = Vector2(789, 701)
+scale = Vector2(0.9149306, 1.3055555)
+texture = ExtResource("1_lynod")
+
+[node name="9" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer" unique_id=1541105863]
+position = Vector2(1314, 701.00006)
+scale = Vector2(0.9149306, 1.3055555)
+texture = ExtResource("1_lynod")
+
+[node name="10" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer" unique_id=885039128]
+position = Vector2(1841, 702.00006)
+scale = Vector2(0.9149306, 1.3055555)
+texture = ExtResource("1_lynod")
+
+[node name="11" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer" unique_id=904197660]
+position = Vector2(2368.5, 701.5)
+scale = Vector2(0.9149306, 1.3055555)
+texture = ExtResource("1_lynod")
+
+[node name="12" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer" unique_id=274103666]
+position = Vector2(2895.5, 701.5)
+scale = Vector2(0.9149306, 1.3055555)
+texture = ExtResource("1_lynod")
+
+[node name="13" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer" unique_id=575173924]
+position = Vector2(3420.5, 701.50006)
+scale = Vector2(0.9149306, 1.3055555)
+texture = ExtResource("1_lynod")
+
+[node name="14" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer" unique_id=1287382144]
+position = Vector2(3947.5, 702.50006)
+scale = Vector2(0.9149306, 1.3055555)
+texture = ExtResource("1_lynod")
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground2" unique_id=99401435]
+motion_scale = Vector2(1.49, 1)
+
+[node name="7" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer2" unique_id=2119590328]
+z_index = 4
+position = Vector2(391.00003, 812)
+scale = Vector2(1.3333334, 1.6666666)
+texture = ExtResource("1_lynod")
+
+[node name="8" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer2" unique_id=546468592]
+z_index = 4
+position = Vector2(1158.0001, 812.00006)
+scale = Vector2(1.3333334, 1.6666666)
+texture = ExtResource("1_lynod")
+
+[node name="9" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer2" unique_id=289021053]
+z_index = 4
+position = Vector2(1923, 814.00006)
+scale = Vector2(1.3333334, 1.6666666)
+texture = ExtResource("1_lynod")
+
+[node name="10" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer2" unique_id=456987800]
+z_index = 4
+position = Vector2(2691, 817)
+scale = Vector2(1.3333334, 1.6666666)
+texture = ExtResource("1_lynod")
+
+[node name="11" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer2" unique_id=805786958]
+z_index = 4
+position = Vector2(3458.0002, 817.00006)
+scale = Vector2(1.3333334, 1.6666666)
+texture = ExtResource("1_lynod")
+
+[node name="12" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer2" unique_id=829490564]
+z_index = 4
+position = Vector2(4223, 819.00006)
+scale = Vector2(1.3333334, 1.6666666)
+texture = ExtResource("1_lynod")
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="ParallaxBackground2" unique_id=843369384]
+motion_scale = Vector2(1.715, 1)
+
+[node name="back" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer3" unique_id=422530212]
+z_index = -3
+position = Vector2(957.99994, 542.5)
+scale = Vector2(3.329861, 3.3364198)
+texture = ExtResource("3_gl4cf")
+
+[node name="ParallaxLayer4" type="ParallaxLayer" parent="ParallaxBackground2" unique_id=1599838151]
+motion_scale = Vector2(1.41, 1.41)
+motion_mirroring = Vector2(0.205, 0)
+
+[node name="back" type="Sprite2D" parent="ParallaxBackground2/ParallaxLayer4" unique_id=323308061]
+z_index = -1
+position = Vector2(953, 756.00006)
+scale = Vector2(3.3394094, 3.7314816)
+texture = ExtResource("2_gl4cf")
+offset = Vector2(1.295, 0)
