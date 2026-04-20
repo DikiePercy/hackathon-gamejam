@@ -8,15 +8,6 @@ const MISSION_END_DELAY := 2.6
 const DEPOT_SCENE_PATH := "res://scenes/depot/depot.tscn"
 const DEFAULT_OVERLAY_SCENE_PATH := ""
 
-const STATUS_RUN_IN_PROGRESS := "RUN: IN PROGRESS"
-const STATUS_RUN_SUCCESS := "RUN SUCCESS"
-const STATUS_RUN_FAILED := "RUN FAILED"
-const REASON_ALL_PASSENGERS_LOST := "All passengers lost"
-const REASON_TRAIN_DESTROYED := "Train destroyed"
-const REASON_DESTINATION_REACHED := "Destination reached"
-const REASON_TIME_UP := "Time is up"
-const REASON_TRAIN_OBJECTIVE_BROKEN := "Train objective broken"
-
 enum MissionState {
 	IN_PROGRESS,
 	SUCCESS,
@@ -35,19 +26,13 @@ var _mission_progress: float = 0.0
 var _mission_target_distance: float = 0.0
 var _mission_end_started: bool = false
 
-var _mission_ui_layer: CanvasLayer = null
-var _mission_status_label: Label = null
-var _mission_timer_label: Label = null
-var _mission_passengers_label: Label = null
-var _mission_integrity_label: Label = null
-var _mission_progress_label: Label = null
+var station_ch = false
 
 func _ready() -> void:
 	_apply_pending_load()
 	GameManager.begin_mission_run()
 	_mission_timer = maxf(GameManager.mission_time_limit, MIN_MISSION_TIME)
 	_mission_target_distance = maxf(GameManager.mission_target_distance, MIN_TARGET_DISTANCE)
-	_setup_mission_ui()
 	_refresh_mission_ui()
 
 	if _train != null:
@@ -55,8 +40,6 @@ func _ready() -> void:
 			_train.go_trein.connect(_on_train_started)
 		if _train.has_signal("stop_trein") and not _train.stop_trein.is_connected(_on_train_stopped):
 			_train.stop_trein.connect(_on_train_stopped)
-		if _train.has_signal("train_objective_broken") and not _train.train_objective_broken.is_connected(_on_train_objective_broken):
-			_train.train_objective_broken.connect(_on_train_objective_broken)
 
 	if _player != null:
 		_player.died.connect(_on_player_died)
@@ -69,7 +52,6 @@ func _process(delta: float) -> void:
 
 	_mission_timer = maxf(_mission_timer - delta, 0.0)
 	_mission_progress += maxf(float(GameManager.train_speed), 0.0) * delta
-	_evaluate_mission_state()
 	_refresh_mission_ui()
 
 func _apply_pending_load() -> void:
@@ -91,25 +73,6 @@ func _apply_pending_load() -> void:
 		_player.max_health = int(player_data.get("max_health", _player.max_health))
 		_player.health = clampi(int(player_data.get("health", _player.health)), 0, _player.max_health)
 		_player.health_changed.emit(_player.health)
-
-func _evaluate_mission_state() -> void:
-	var alive_passengers := _get_alive_passenger_count()
-	var train_integrity := _get_train_integrity()
-	var reached_target := _mission_progress >= _mission_target_distance
-
-	if alive_passengers <= 0:
-		_finish_mission(false, REASON_ALL_PASSENGERS_LOST)
-		return
-	if train_integrity <= 0:
-		_finish_mission(false, REASON_TRAIN_DESTROYED)
-		return
-
-	if reached_target:
-		_finish_mission(true, REASON_DESTINATION_REACHED)
-		return
-
-	if _mission_timer <= 0.0:
-		_finish_mission(false, REASON_TIME_UP)
 
 func _get_alive_passenger_count() -> int:
 	if _train != null and _train.has_method("get_total_alive_passengers"):
@@ -178,9 +141,6 @@ func _stop_train_started() -> void:
 	# Compatibility wrapper: keep support for scene/editor signal links.
 	_on_train_stopped()
 
-func _on_train_objective_broken() -> void:
-	_finish_mission(false, REASON_TRAIN_OBJECTIVE_BROKEN)
-
 func _finish_mission(success: bool, reason: String) -> void:
 	if _mission_end_started or _death_flow_started:
 		return
@@ -196,47 +156,8 @@ func _finish_mission(success: bool, reason: String) -> void:
 	GameManager.autosave_current_state()
 	get_tree().change_scene_to_file(DEPOT_SCENE_PATH)
 
-func _setup_mission_ui() -> void:
-	if _mission_ui_layer != null and is_instance_valid(_mission_ui_layer):
-		return
-
-	_mission_ui_layer = CanvasLayer.new()
-	_mission_ui_layer.layer = 20
-	add_child(_mission_ui_layer)
-
-	_mission_status_label = Label.new()
-	_mission_status_label.text = STATUS_RUN_IN_PROGRESS
-	_mission_status_label.position = Vector2(12.0, 10.0)
-	_mission_ui_layer.add_child(_mission_status_label)
-
-	_mission_timer_label = Label.new()
-	_mission_timer_label.position = Vector2(12.0, 30.0)
-	_mission_ui_layer.add_child(_mission_timer_label)
-
-	_mission_passengers_label = Label.new()
-	_mission_passengers_label.position = Vector2(12.0, 50.0)
-	_mission_ui_layer.add_child(_mission_passengers_label)
-
-	_mission_integrity_label = Label.new()
-	_mission_integrity_label.position = Vector2(12.0, 70.0)
-	_mission_ui_layer.add_child(_mission_integrity_label)
-
-	_mission_progress_label = Label.new()
-	_mission_progress_label.position = Vector2(12.0, 90.0)
-	_mission_ui_layer.add_child(_mission_progress_label)
-
 func _refresh_mission_ui() -> void:
-	if _mission_timer_label == null:
-		return
-
-	var alive_passengers := _get_alive_passenger_count()
-	var train_integrity := _get_train_integrity()
-	var remaining_distance := maxf(_mission_target_distance - _mission_progress, 0.0)
-
-	_mission_timer_label.text = "Time: %.1f s" % _mission_timer
-	_mission_passengers_label.text = "Passengers alive: %d" % alive_passengers
-	_mission_integrity_label.text = "Train integrity: %d" % train_integrity
-	_mission_progress_label.text = "Distance left: %.0f" % remaining_distance
+	pass
 
 func _show_mission_result_overlay(success: bool, reason: String, result: Dictionary) -> void:
 	var layer := CanvasLayer.new()
@@ -255,7 +176,7 @@ func _show_mission_result_overlay(success: bool, reason: String, result: Diction
 	title.position = Vector2(-180.0, -45.0)
 	title.size = Vector2(360.0, 54.0)
 	title.add_theme_font_size_override("font_size", 36)
-	title.text = STATUS_RUN_SUCCESS if success else STATUS_RUN_FAILED
+	title.text = "удачно" if success else "неудачно"
 	title.modulate = Color(0.3, 0.95, 0.35, 1.0) if success else Color(0.95, 0.25, 0.25, 1.0)
 	layer.add_child(title)
 

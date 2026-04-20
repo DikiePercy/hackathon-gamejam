@@ -1,12 +1,12 @@
 extends Node
 
-const DEFAULT_TOTAL_GOLD := 5000
+const DEFAULT_TOTAL_GOLD := 100
 const DEFAULT_HAS_SHOTGUN := false
 const DEFAULT_TOTAL_P := 100
 const DEFAULT_TRAIN_SPEED := 250
 const DEFAULT_TRAIN_LEVEL := 1
 const DEFAULT_TRAIN_INTEGRITY_MAX := 300
-const DEFAULT_MISSION_TARGET_DISTANCE := 4200.0
+const DEFAULT_MISSION_TARGET_DISTANCE := 10000
 const DEFAULT_MISSION_TIME_LIMIT := 180.0
 const DEFAULT_REWARD_BASE := 220
 const DEFAULT_REWARD_PER_PASSENGER := 40
@@ -21,7 +21,7 @@ const DEFAULT_TRAIN_DATA := [
 var total_gold = 5000
 var has_shotgun: bool = false
 var total_p = 100
-var train_speed = DEFAULT_TRAIN_SPEED
+var train_speed = 0
 var train_integrity_max: int = DEFAULT_TRAIN_INTEGRITY_MAX
 var train_integrity_current: int = DEFAULT_TRAIN_INTEGRITY_MAX
 var mission_target_distance: float = DEFAULT_MISSION_TARGET_DISTANCE
@@ -31,6 +31,7 @@ var mission_reward_per_passenger: int = DEFAULT_REWARD_PER_PASSENGER
 var mission_fail_penalty: int = DEFAULT_FAIL_PENALTY
 var pending_mission_reward: int = 0
 var last_mission_result: Dictionary = {}
+var station_pos = 0
 
 # Структура: [ [уровень, люди, hp], [уровень, люди, hp] ]
 var train_data: Array = [
@@ -53,7 +54,7 @@ func reset_to_defaults() -> void:
 	total_gold = DEFAULT_TOTAL_GOLD
 	has_shotgun = DEFAULT_HAS_SHOTGUN
 	total_p = DEFAULT_TOTAL_P
-	train_speed = DEFAULT_TRAIN_SPEED
+	train_speed = 0
 	train_level = DEFAULT_TRAIN_LEVEL
 	train_data = DEFAULT_TRAIN_DATA.duplicate(true)
 	train_integrity_max = DEFAULT_TRAIN_INTEGRITY_MAX

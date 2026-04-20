@@ -19,8 +19,10 @@ const MAX_WAGON_LEVEL := 3
 
 @export var shotgun_price: int = 600
 @onready var gold_label = $CanvasLayer/VBoxContainer/HBoxContainer2/GoldLabel
-@onready var p_label = $CanvasLayer/VBoxContainer/HBoxContainer2/VLabel
-@onready var v_label = $CanvasLayer/VBoxContainer/HBoxContainer2/PLabel
+
+@onready var upg_btn = $CanvasLayer/VBoxContainer/HBoxContainer/UpgradeButton
+@onready var v_btn = $CanvasLayer/VBoxContainer/HBoxContainer/BuyButton
+@onready var p_btn = $CanvasLayer/VBoxContainer/HBoxContainer/BuyP
 
 @onready var camera = $Camera2D
 var camera_speed: float = 500.0
@@ -166,8 +168,8 @@ func update_ui() -> void:
 	gold_label.text = "Золото: " + str(GameManager.total_gold)
 	if weapon_label != null:
 		weapon_label.text = "Оружие: " + ("Ружье" if GameManager.has_shotgun else "Пистолет")
-	v_label.text = "Патроны: " + str(GameManager.total_p)
-	p_label.text = "Вагоны: " + str(GameManager.train_data.size())
+	p_btn.text = str(GameManager.total_p)
+	v_btn.text = str(GameManager.train_data.size())
 
 
 func _on_buy_p_pressed() -> void:

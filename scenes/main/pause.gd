@@ -34,10 +34,6 @@ func _on_button_4_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/menu/node_2d.tscn")
 
 
-func _on_menubutton_pressed() -> void:
-	game_paused = !game_paused
-
-
 func _on_save_button_pressed() -> void:
 	if GameManager.current_save_slot_id.is_empty():
 		GameManager.current_save_slot_id = _new_slot_id()
