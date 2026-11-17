@@ -17,7 +17,7 @@ func _ready() -> void:
 	_timer.one_shot = true
 	_timer.start()
 	_timer.timeout.connect(queue_free)
-	body_entered.connect(_on_body_entered)
+				   body_entered.connect(_on_body_entered)
 	_update_visuals()
 
 func _physics_process(delta: float) -> void:
